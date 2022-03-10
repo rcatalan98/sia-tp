@@ -6,11 +6,16 @@ class State:
         self.first_tower = []
         self.second_tower = []
         self.third_tower = []
-        self.id = hash(f"{self.first_tower} {self.second_tower} {self.third_tower}")
+
+    def __hash__(self):
+        return hash(f"{self.first_tower} {self.second_tower} {self.third_tower}")
+
+    def __eq__(self, other):
+        return hash(self) == hash(other)
 
     def is_solved(self) -> bool:
-        return self.first_tower.count() == 0 and \
-               self.second_tower.count() == 0 and \
+        return len(self.first_tower) == 0 and \
+               len(self.second_tower) == 0 and \
                is_sorted(self.third_tower)
 
     def is_valid(self) -> bool:

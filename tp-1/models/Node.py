@@ -1,4 +1,4 @@
-from models import State
+from models.State import State
 from typing import List
 from copy import deepcopy
 
@@ -24,8 +24,8 @@ class Node:
             self.children.append(Node(self, other_state))
 
         # Second tower swap
+        current_state = deepcopy(self.state)
         if len(current_state.second_tower) != 0:
-            current_state = deepcopy(self.state)
             disc = current_state.second_tower.pop()
             other_state = deepcopy(current_state)
 
@@ -36,8 +36,8 @@ class Node:
             self.children.append(Node(self, other_state))
 
         # Third tower swap
+        current_state = deepcopy(self.state)
         if len(current_state.third_tower) != 0:
-            current_state = deepcopy(self.state)
             disc = current_state.third_tower.pop()
             other_state: State = deepcopy(current_state)
 
@@ -53,3 +53,12 @@ class Node:
 
     def __str__(self) -> str:
         return f"Node with state: {self.state}"
+
+    def __eq__(self, other):
+        return self.state == other.state
+
+    @classmethod
+    def root(cls):
+        state = State()
+        state.first_tower = [3, 2, 1]
+        return Node(None, state)

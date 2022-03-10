@@ -2,6 +2,7 @@ import json
 from models.Config import Config
 from models.Node import Node
 from models.State import State
+from search_methods.BPA import BPA
 
 if __name__ == '__main__':
     config_file = open('config.json', 'r')
@@ -10,12 +11,8 @@ if __name__ == '__main__':
     algo = config.get_algorithm()
     print(algo)
 
-    state: State = State()
-    state.first_tower = [3, 2]
-    state.second_tower = [1]
-    state.third_tower = []
-    root: Node = Node(None, state)
+    result = BPA().search(Node.root())
 
-    children = root.get_children()
+    print(result)
 
 
