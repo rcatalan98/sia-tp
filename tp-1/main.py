@@ -7,7 +7,8 @@ if __name__ == '__main__':
     config_file = open('config.json', 'r')
     config_data = json.load(config_file)
     config = Config(**config_data)
-    print(config)
+    algo = config.get_algorithm()
+    print(algo)
 
     state: State = State()
     state.first_tower = [3, 2]
