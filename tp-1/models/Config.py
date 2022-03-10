@@ -7,32 +7,33 @@ from search_methods.GlobalHeuristic import GlobalHeuristic
 from search_methods.LocalHeuristic import LocalHeuristic
 
 
-def load_algorithms(algorithms: {}):
-    algorithms['BPA'] = lambda x: BPA
-    algorithms['BPP'] = lambda x: BPP
-    algorithms['BPPV'] = lambda x: BPPV
-    algorithms['AStar'] = lambda x: AStar(x)
-    algorithms['GlobalHeuristic'] = lambda x: GlobalHeuristic(x)
-    algorithms['LocalHeuristic'] = lambda x: LocalHeuristic(x)
-
-
-def load_heuristics(h: {}):
-    h['Basic'] = Basic()
-
-
 class Config:
+    dic_algorithms = {}
+    dic_heuristics = None
+
     def __init__(self, algorithm: str, heuristics: str = None):
         self.algorithm = algorithm
         self.heuristics = heuristics
         self.dic_algorithms = {}
         if heuristics is not None:
             self.dic_heuristics = {}
-            load_heuristics(self.dic_heuristics)
-        load_algorithms(self.dic_algorithms)
+            self.load_heuristics()
+        self.load_algorithms()
 
     def get_algorithm(self):
         h = self.heuristics if self.heuristics is None else self.dic_heuristics[self.heuristics]
         return self.dic_algorithms[self.algorithm](h)
+
+    def load_algorithms(self):
+        self.dic_algorithms['BPA'] = lambda x: BPA
+        self.dic_algorithms['BPP'] = lambda x: BPP
+        self.dic_algorithms['BPPV'] = lambda x: BPPV
+        self.dic_algorithms['AStar'] = lambda x: AStar(x)
+        self.dic_algorithms['GlobalHeuristic'] = lambda x: GlobalHeuristic(x)
+        self.dic_algorithms['LocalHeuristic'] = lambda x: LocalHeuristic(x)
+
+    def load_heuristics(self):
+        self.dic_heuristics['Basic'] = Basic()
 
     def __str__(self) -> str:
         return f'algorithm: {self.algorithm}\nheuristics: {self.heuristics}'
