@@ -44,7 +44,7 @@ class Node:
         other_state.second_tower.append(disc)
         self.children.append(Node(self, other_state))
 
-        self.children = filter(lambda x: x.is_valid(), self.children)
+        self.children = list(filter(lambda x: x.state.is_valid(), self.children))
 
         return self.children
 

@@ -6,7 +6,7 @@ class State:
         self.first_tower = []
         self.second_tower = []
         self.third_tower = []
-        self.id = hash([self.first_tower, self.second_tower, self.third_tower])
+        self.id = hash(f"{self.first_tower} {self.second_tower} {self.third_tower}")
 
     def is_solved(self) -> bool:
         return self.first_tower.count() == 0 and \
