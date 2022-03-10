@@ -47,6 +47,7 @@ class Node:
             other_state.second_tower.append(disc)
             self.children.append(Node(self, other_state))
 
+        # Filter only the valid child nodes (hanoi rules and our definitions)
         self.children = list(filter(lambda x: x.state.is_valid(), self.children))
 
         return self.children
