@@ -1,4 +1,3 @@
 {
-  "algorithm": "BPA",
-  "heuristics": "Basic"
+  "algorithm": "BPA"
 }

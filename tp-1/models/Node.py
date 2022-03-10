@@ -61,5 +61,5 @@ class Node:
     @classmethod
     def root(cls):
         state = State()
-        state.first_tower = [3, 2, 1]
+        state.first_tower = [7, 6, 5, 4, 3, 2, 1]
         return Node(None, state)

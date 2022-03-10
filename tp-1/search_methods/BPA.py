@@ -18,7 +18,7 @@ class BPA(Base):
             node = element[1]
             children: List[Node] = node.get_children()
             known_states.add(node.state)
-            known_states.union(map(lambda s: s.state,children))
+            known_states.union(map(lambda s: s.state, children))
 
             # See if it is the goal
 
@@ -29,7 +29,7 @@ class BPA(Base):
             explored_nodes.append(node)
 
             nodes_to_add = filter(
-                lambda n:  n.state not in known_states,
+                lambda n: n.state not in known_states,
                 children
             )
 
