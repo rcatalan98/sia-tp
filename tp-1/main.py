@@ -12,7 +12,7 @@ if __name__ == '__main__':
     state: State = State()
     state.first_tower = [3, 2]
     state.second_tower = [1]
-    state.third_tower = [4]
+    state.third_tower = []
     root: Node = Node(None, state)
 
     children = root.get_children()

@@ -10,39 +10,42 @@ class Node:
         self.children = []
 
     def get_children(self) -> List:
+        current_state: State = deepcopy(self.state)
 
         # First Tower Swap
-        current_state: State = deepcopy(self.state)
-        disc: int = current_state.first_tower.pop()
-        other_state = deepcopy(current_state)
+        if len(current_state.first_tower) != 0:
+            disc: int = current_state.first_tower.pop()
+            other_state = deepcopy(current_state)
 
-        current_state.second_tower.append(disc)
-        self.children.append(Node(self, current_state))
+            current_state.second_tower.append(disc)
+            self.children.append(Node(self, current_state))
 
-        other_state.third_tower.append(disc)
-        self.children.append(Node(self, other_state))
+            other_state.third_tower.append(disc)
+            self.children.append(Node(self, other_state))
 
         # Second tower swap
-        current_state = deepcopy(self.state)
-        disc = current_state.second_tower.pop()
-        other_state = deepcopy(current_state)
+        if len(current_state.second_tower) != 0:
+            current_state = deepcopy(self.state)
+            disc = current_state.second_tower.pop()
+            other_state = deepcopy(current_state)
 
-        current_state.first_tower.append(disc)
-        self.children.append(Node(self, current_state))
+            current_state.first_tower.append(disc)
+            self.children.append(Node(self, current_state))
 
-        other_state.third_tower.append(disc)
-        self.children.append(Node(self, other_state))
+            other_state.third_tower.append(disc)
+            self.children.append(Node(self, other_state))
 
         # Third tower swap
-        current_state = deepcopy(self.state)
-        disc = current_state.third_tower.pop()
-        other_state: State = deepcopy(current_state)
+        if len(current_state.third_tower) != 0:
+            current_state = deepcopy(self.state)
+            disc = current_state.third_tower.pop()
+            other_state: State = deepcopy(current_state)
 
-        current_state.first_tower.append(disc)
-        self.children.append(Node(self, current_state))
+            current_state.first_tower.append(disc)
+            self.children.append(Node(self, current_state))
 
-        other_state.second_tower.append(disc)
-        self.children.append(Node(self, other_state))
+            other_state.second_tower.append(disc)
+            self.children.append(Node(self, other_state))
 
         self.children = list(filter(lambda x: x.state.is_valid(), self.children))
 
