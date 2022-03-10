@@ -8,5 +8,5 @@ class Config:
     def get_algorithm(self):  # TODO return algorithm with corresponding heuristics
         return self.dic_algorithms[self.algorithm]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'algorithm: {self.algorithm}\nheuristics: {self.heuristics}'
