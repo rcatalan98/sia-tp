@@ -1,4 +1,5 @@
 from models import Node, Solution
+from models.Config import Config
 from search_methods.Base import Base
 from heuristics.Base import Base as Heuristic
 from typing import Tuple, List, Set
@@ -6,7 +7,8 @@ from typing import Tuple, List, Set
 
 class GlobalHeuristic(Base):
 
-    def __init__(self, heuristic):
+    def __init__(self, config: Config, heuristic):
+        super().__init__(config)
         self.heuristic = Heuristic(heuristic)  # FIXME: What else?
 
     def search(self, root: Node) -> Solution:

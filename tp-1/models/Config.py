@@ -24,12 +24,12 @@ class Config:
         return self.dic_algorithms[self.algorithm](h)
 
     def load_algorithms(self):
-        self.dic_algorithms['BPA'] = lambda x: BPA()
-        self.dic_algorithms['BPP'] = lambda x: BPP()
-        self.dic_algorithms['BPPV'] = lambda x: BPPV()
-        self.dic_algorithms['AStar'] = lambda x: AStar(x)
-        self.dic_algorithms['GlobalHeuristic'] = lambda x: GlobalHeuristic(x)
-        self.dic_algorithms['LocalHeuristic'] = lambda x: LocalHeuristic(x)
+        self.dic_algorithms['BPA'] = lambda x: BPA(self)
+        self.dic_algorithms['BPP'] = lambda x: BPP(self)
+        self.dic_algorithms['BPPV'] = lambda x: BPPV(self)
+        self.dic_algorithms['AStar'] = lambda x: AStar(self,x)
+        self.dic_algorithms['GlobalHeuristic'] = lambda x: GlobalHeuristic(self,x)
+        self.dic_algorithms['LocalHeuristic'] = lambda x: LocalHeuristic(self,x)
 
     def load_heuristics(self):
         self.dic_heuristics['Basic'] = Basic()
