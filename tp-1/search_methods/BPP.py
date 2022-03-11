@@ -1,7 +1,10 @@
-from models import Node, Solution
-from search_methods.Base import Base
+from typing import List, Tuple, Set
+
+from models.Node import Node
+from search_methods.NonInformedMethod import NonInformedMethod
 
 
-class BPP(Base):
-    def search(self, root: Node) -> Solution:
-        return super().search(root)
+class BPP(NonInformedMethod):
+
+    def sort_nodes(self, frontier_nodes: List[Tuple[int, Node]]) -> None:
+        frontier_nodes.sort(key=lambda n: n[0], reverse=False)
