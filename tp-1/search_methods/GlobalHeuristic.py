@@ -1,43 +1,18 @@
-from models import Node, Solution
-from models.Config import Config
-from search_methods.Base import Base
+from models import Node, Config
+from search_methods.NonInformedMethod import NonInformedMethod
 from heuristics.Base import Base as Heuristic
 from typing import Tuple, List, Set
 
 
-class GlobalHeuristic(Base):
+class GlobalHeuristic(NonInformedMethod):
 
     def __init__(self, config: Config, heuristic):
         super().__init__(config)
         self.heuristic = Heuristic(heuristic)  # FIXME: What else?
 
-    def search(self, root: Node) -> Solution:
-        frontier_nodes: List[Tuple[int, Node]] = list([(0, root)])
-        explored_nodes: Set[Node] = set()  # FIXME: Check if known_states is also needed
-        # TODO: solution = Solution(...)
-
-        while frontier_nodes:
-            element = frontier_nodes.pop(0)
-            depth = element[0]
-            node = element[1]
-
-            if node.state.is_solved():
-                return node  # TODO return solution
-
-            explored_nodes.add(node)
-            children: List[Node] = node.get_children()
-
-            nodes_to_add = filter(
-                lambda n: n not in explored_nodes,
-                children
-            )
-
-            frontier_nodes.extend(list(map(lambda x: (depth + 1, x), nodes_to_add)))
-
-            # Reorder F according to heuristic value
-            frontier_nodes.sort(key=self.sort_by_h)
-
-        return False  # TODO return solution
+    def sort_nodes(self, frontier_nodes: List[Tuple[int, Node]]) -> None:
+        # Reorder F according to heuristic value
+        frontier_nodes.sort(key=self.sort_by_h)
 
     def sort_by_h(self, n: Tuple[int, Node]):
-        return self.heuristic.h(n[1].state)  # TODO: Base.h(state) for each heuristic
+        return self.heuristic.h(n[1].state)  # TODO: Heuristic.h(state) for each heuristic
