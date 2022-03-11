@@ -24,12 +24,19 @@ class AStar(Base):
 
             explored_nodes.add(node)
             children: List[Node] = node.get_children()
-            frontier_nodes.extend(list(map(lambda x: (depth + 1, x), children)))
+
+            nodes_to_add = filter(
+                lambda n: n not in explored_nodes,
+                children
+            )
+
+            frontier_nodes.extend(list(map(lambda x: (depth + 1, x), nodes_to_add)))
 
             # Reorder F according to f(n) value
-            frontier_nodes.sort(key=self.reorder_by_fn)
+            frontier_nodes.sort(key=self.sort_by_fn)
 
         return False  # TODO return solution
 
-    def reorder_by_fn(self, n: Tuple[int, Node]):
-        return n[0] + self.heuristic.h(n[1])  # g(n) + h(n.s)
+    def sort_by_fn(self, n: Tuple[int, Node]):
+        return n[0] + self.heuristic.h(n[1].state)  # g(n) + h(n.s)
+        # TODO: Base.h(state) for each heuristic
