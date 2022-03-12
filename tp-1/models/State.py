@@ -24,4 +24,4 @@ class State:
                is_sorted(self.third_tower)
 
     def __str__(self) -> str:
-        return f"first tower: {self.first_tower}\nsecond_tower: {self.second_tower}\nthird_tower: {self.third_tower}"
+        return f"{self.first_tower} {self.second_tower} {self.third_tower}"

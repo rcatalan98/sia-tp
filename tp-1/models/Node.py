@@ -9,7 +9,22 @@ class Node:
         self.state = state
         self.children = []
 
+    def get_cost(self):
+        if self.parent:
+            return self.parent.get_cost() + 1
+        else:
+            return 0
+
+    def get_moves_until_here(self):
+        if self.parent:
+            return self.parent.get_moves_until_here() + [self]
+        else:
+            return [self]
+
     def get_children(self) -> List:
+        if len(self.children) != 0:
+            return self.children
+
         current_state: State = deepcopy(self.state)
 
         # First Tower Swap
@@ -61,5 +76,5 @@ class Node:
     @classmethod
     def root(cls):
         state = State()
-        state.first_tower = [7, 6, 5, 4, 3, 2, 1]
+        state.first_tower = [7,6,5,4,3, 2, 1]
         return Node(None, state)

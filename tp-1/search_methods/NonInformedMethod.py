@@ -1,7 +1,7 @@
 from typing import List, Tuple, Set
 
-from models import Solution
 from models.Node import Node
+from models.Solution import Solution
 from models.State import State
 from search_methods.Base import Base
 
@@ -16,6 +16,7 @@ class NonInformedMethod(Base):
         frontier_nodes: List[Tuple[int, Node]] = list([(0, root)])
         explored_nodes: List[Node] = list()
         known_states: Set[State] = set()
+        max_depth: int = 0
 
         while len(frontier_nodes) != 0:
             element = frontier_nodes.pop(0)
@@ -24,10 +25,11 @@ class NonInformedMethod(Base):
             children: List[Node] = node.get_children()
             known_states.add(node.state)
             known_states.union(map(lambda s: s.state, children))
+            max_depth = max(max_depth, depth)
 
             # See if it is the goal
             if node.state.is_solved():
-                return node
+                return Solution(self.config, True, depth, node.get_cost(), len(explored_nodes), len(frontier_nodes), node.get_moves_until_here())
 
             # Keep going
             explored_nodes.append(node)
@@ -40,6 +42,6 @@ class NonInformedMethod(Base):
             frontier_nodes.extend(list(map(lambda x: (depth + 1, x), nodes_to_add)))
             self.sort_nodes(frontier_nodes)
 
-        return False
+        return Solution(self.config, False, max_depth, float("inf"), len(explored_nodes), len(frontier_nodes), [])
 
 

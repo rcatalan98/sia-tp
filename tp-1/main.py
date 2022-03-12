@@ -16,10 +16,10 @@ if __name__ == '__main__':
     print(algo)
 
     start_time = perf_counter()
-    result = algo.search(Node.root())
+    result: Solution = algo.search(Node.root())
     end_time = perf_counter()
 
-    print(f'Time running the algorithm: {end_time-start_time}s')
+    result.set_run_time(end_time-start_time)
     print(result)
 
 
