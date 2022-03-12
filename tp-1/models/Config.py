@@ -2,7 +2,7 @@ from heuristics.Basic import Basic
 from search_methods.AStar import AStar
 from search_methods.BPA import BPA
 from search_methods.BPP import BPP
-from search_methods.BPPV import BPPV
+from search_methods.BPPV import BPPV, BPPVConfig
 from search_methods.GlobalHeuristic import GlobalHeuristic
 from search_methods.LocalHeuristic import LocalHeuristic
 
@@ -11,12 +11,16 @@ class Config:
     dic_algorithms = {}
     dic_heuristics = None
 
-    def __init__(self, algorithm: str, heuristics: str = None):
+    def __init__(self, algorithm: str, discs: int = 7, BPPV_config: BPPVConfig = None, heuristics: str = None):
         self.algorithm = algorithm
         self.heuristics = heuristics
+        self.discs = discs
+        self.BPPV_config = BPPV_config
+
         if heuristics is not None:
             self.dic_heuristics = {}
             self.load_heuristics()
+
         self.load_algorithms()
 
     def get_algorithm(self):

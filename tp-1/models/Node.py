@@ -74,7 +74,8 @@ class Node:
         return self.state == other.state
 
     @classmethod
-    def root(cls):
+    def root(cls, discs: int):
         state = State()
-        state.first_tower = [7,6,5,4,3, 2, 1]
+        state.first_tower = [i for i in range(1,1+discs)]
+        state.first_tower.sort(reverse=True)
         return Node(None, state)

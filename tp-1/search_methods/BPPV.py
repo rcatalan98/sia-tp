@@ -6,13 +6,22 @@ from models.State import State
 from search_methods.BPP import BPP
 
 
-class BPPV(BPP):
+class BPPVConfig:
+    def __init__(self, max_depth: int, depth_modifier: int):
+        self.max_depth = max_depth
+        self.depth_modifier = depth_modifier
 
+
+class BPPV(BPP):
     def __init__(self, config):
         super().__init__(config)
-        self.max_depth = 10
-        self.depth_modifier = 0.5
         self.known_states: Set[Tuple[int, State]] = set()
+
+        if config.BPPV_config is None:
+            raise "Invalid parameters: BPPV config missing"
+
+        self.max_depth = config.BPPV_config['max_depth']
+        self.depth_modifier = config.BPPV_config['depth_modifier']
 
     def search(self, root: Node) -> Solution:
         has_finished: bool = False
@@ -71,3 +80,6 @@ class BPPV(BPP):
 
     # Para decidir si tengo que expandir un nodo, tengo que ver su estado y profundidad. Si ya habia expandido un nodo
     # con ese estado, pero a una profundidad mas grande, entonces tengo que expandir a este.
+
+
+

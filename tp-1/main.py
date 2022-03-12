@@ -16,7 +16,7 @@ if __name__ == '__main__':
     print(algo)
 
     start_time = perf_counter()
-    result: Solution = algo.search(Node.root())
+    result: Solution = algo.search(Node.root(config.discs))
     end_time = perf_counter()
 
     result.set_run_time(end_time-start_time)
