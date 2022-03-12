@@ -78,8 +78,5 @@ class BPPV(BPP):
         return Solution(self.config, False, depth, float("inf"), len(explored_nodes), len(frontier_nodes), [])
 
 
-    # Para decidir si tengo que expandir un nodo, tengo que ver su estado y profundidad. Si ya habia expandido un nodo
-    # con ese estado, pero a una profundidad mas grande, entonces tengo que expandir a este.
-
 
 

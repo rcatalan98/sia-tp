@@ -15,4 +15,4 @@ class GlobalHeuristic(NonInformedMethod):
         frontier_nodes.sort(key=self.sort_by_h)
 
     def sort_by_h(self, n: Tuple[int, Node]):
-        return self.heuristic.h(n[1].state)  # TODO: Heuristic.h(state) for each heuristic
+        return self.heuristic.get_value(n[1].state)  # TODO: Heuristic.h(state) for each heuristic

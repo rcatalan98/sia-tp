@@ -2,7 +2,7 @@
   "algorithm": "BPPV",
   "discs": 3,
   "BPPV_config": {
-    "max_depth": 10,
+    "max_depth": 15,
     "depth_modifier": 0.5
   }
 }

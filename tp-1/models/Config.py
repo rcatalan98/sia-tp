@@ -1,4 +1,4 @@
-from heuristics.Basic import Basic
+from heuristics.DiscsOnTheLastTower import DiscsOnTheLastTower
 from search_methods.AStar import AStar
 from search_methods.BPA import BPA
 from search_methods.BPP import BPP
@@ -36,7 +36,7 @@ class Config:
         self.dic_algorithms['LocalHeuristic'] = lambda x: LocalHeuristic(self,x)
 
     def load_heuristics(self):
-        self.dic_heuristics['Basic'] = Basic()
+        self.dic_heuristics['Basic'] = DiscsOnTheLastTower()
 
     def __str__(self) -> str:
         return f'algorithm: {self.algorithm}\nheuristics: {self.heuristics}'
