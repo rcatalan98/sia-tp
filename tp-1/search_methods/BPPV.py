@@ -29,7 +29,7 @@ class BPPV(BPP):
         last_good_solution = Solution(self.config, False, 0, float("inf"), 0, 0, [])
 
         while not has_finished and self.max_depth > 1:
-            print(f"probando con profundidad {self.max_depth}")
+            print(f"Using max depth: {self.max_depth}")
             result = self.search_until_depth(root, self.max_depth)
 
             if result.success:
@@ -44,12 +44,10 @@ class BPPV(BPP):
 
         return last_good_solution
 
-
-    def search_until_depth(self,root: Node, max_depth: int) -> Solution:
+    def search_until_depth(self, root: Node, max_depth: int) -> Solution:
         # It's a tuple that stores the node and the depth
         frontier_nodes: List[Tuple[int, Node]] = list([(0, root)])
-        explored_nodes: List[Node] = list()
-
+        explored_nodes: int = 0
 
         while len(frontier_nodes) != 0:
             element = frontier_nodes.pop(0)
@@ -58,7 +56,8 @@ class BPPV(BPP):
 
             # See if it is the goal
             if node.state.is_solved():
-                return Solution(self.config, True, depth, node.get_cost(), len(explored_nodes), len(frontier_nodes), node.get_moves_until_here())
+                return Solution(self.config, True, depth, node.get_cost(), explored_nodes, len(frontier_nodes),
+                                node.get_moves_until_here())
 
             # See if it exceeds the max depth
             if depth >= max_depth:
@@ -67,16 +66,15 @@ class BPPV(BPP):
             # Keep going
             children: List[Node] = node.get_children()
             self.known_states.add((depth, node.state))
-            explored_nodes.append(node)
+            explored_nodes += 1
 
-            nodes_to_add = [ (depth + 1, c) for c in children if not any(c.state == n[1] and depth + 1 > n[0] for n in self.known_states)]
+            nodes_to_add = [(depth + 1, c)
+                            for c in children if
+                            not any(c.state == n[1] and depth + 1 > n[0] for n in self.known_states)
+                            ]
 
             self.known_states.union([(n[0], n[1].state) for n in nodes_to_add])
             frontier_nodes.extend(nodes_to_add)
             self.sort_nodes(frontier_nodes)
 
-        return Solution(self.config, False, max_depth, float("inf"), len(explored_nodes), len(frontier_nodes), [])
-
-
-
-
+        return Solution(self.config, False, max_depth, float("inf"), explored_nodes, len(frontier_nodes), [])

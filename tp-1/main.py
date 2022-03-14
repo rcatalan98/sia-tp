@@ -13,7 +13,6 @@ if __name__ == '__main__':
     config = Config(**config_data)
     print(config)
     algo = config.get_algorithm()
-    print(algo)
 
     start_time = perf_counter()
     result: Solution = algo.search(Node.root(config.discs))

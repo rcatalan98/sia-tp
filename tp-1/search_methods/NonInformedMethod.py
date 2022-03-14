@@ -14,7 +14,7 @@ class NonInformedMethod(Base):  # FIXME: Me parece que se podria unificar esta c
     def search(self, root: Node) -> Solution:
         # It's a tuple that stores the node and the depth
         frontier_nodes: List[Tuple[int, Node]] = list([(0, root)])
-        explored_nodes: List[Node] = list()
+        explored_nodes: int = 0
         known_states: Set[State] = set()
         max_depth: int = 0
 
@@ -23,25 +23,22 @@ class NonInformedMethod(Base):  # FIXME: Me parece que se podria unificar esta c
             depth = element[0]
             node = element[1]
             max_depth = max(max_depth, depth)
-            explored_nodes.append(node)
+            explored_nodes += 1
 
             # See if it is the goal
             if node.state.is_solved():
-                return Solution(self.config, True, depth, node.get_cost(), len(explored_nodes), len(frontier_nodes), node.get_moves_until_here())
+                return Solution(self.config, True, depth, node.get_cost(), explored_nodes, len(frontier_nodes), node.get_moves_until_here())
 
             # Keep going
             children: List[Node] = node.get_children()
             known_states.add(node.state)
 
-            nodes_to_add = filter(
-                lambda n: n.state not in known_states,
-                children
-            )
+            nodes_to_add = [n for n in children if n.state not in known_states]
 
-            known_states.union(map(lambda s: s.state, children))
-            frontier_nodes.extend(list(map(lambda x: (depth + 1, x), nodes_to_add)))
+            known_states.union([n.state for n in children])
+            frontier_nodes.extend([(depth + 1, n) for n in nodes_to_add])
             self.sort_nodes(frontier_nodes)
 
-        return Solution(self.config, False, max_depth, float("inf"), len(explored_nodes), len(frontier_nodes), [])
+        return Solution(self.config, False, max_depth, float("inf"), explored_nodes, len(frontier_nodes), [])
 
 
