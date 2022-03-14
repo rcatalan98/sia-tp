@@ -5,5 +5,6 @@ from search_methods.Base import Base
 
 class BPA(Base):
 
+    # Para BPA, no hace falta reordenar los nodos, ya que siempre va a usarlos en el orden que entraron
     def sort_nodes(self, frontier_nodes: List[Tuple[int, Node]]) -> None:
-        frontier_nodes.sort(key=lambda n: n[0], reverse=True)
+        return None

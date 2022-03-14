@@ -1,8 +1,9 @@
 {
-  "algorithm": "BPPV",
-  "discs": 3,
+  "algorithm": "BPP",
+  "heuristics":"DiscsOnTheLastTower",
+  "discs": 5,
   "BPPV_config": {
-    "max_depth": 15,
+    "max_depth": 32,
     "depth_modifier": 0.5
   }
 }

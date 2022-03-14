@@ -1,4 +1,6 @@
+from heuristics.AdmissibleEstimatedPossibleMovements import AdmissibleEstimatedPossibleMovements
 from heuristics.DiscsOnTheLastTower import DiscsOnTheLastTower
+from heuristics.EstimatedPossibleMovements import EstimatedPossibleMovements
 from search_methods.AStar import AStar
 from search_methods.BPA import BPA
 from search_methods.BPP import BPP
@@ -24,7 +26,7 @@ class Config:
         self.load_algorithms()
 
     def get_algorithm(self):
-        h = self.heuristics if self.heuristics is None else self.dic_heuristics[self.heuristics]
+        h = self.dic_heuristics[self.heuristics]() if self.heuristics is not None else None
         return self.dic_algorithms[self.algorithm](h)
 
     def load_algorithms(self):
@@ -36,7 +38,21 @@ class Config:
         self.dic_algorithms['LocalHeuristic'] = lambda x: LocalHeuristic(self, x)
 
     def load_heuristics(self):
-        self.dic_heuristics['Basic'] = DiscsOnTheLastTower()
+        self.dic_heuristics['DiscsOnTheLastTower'] = lambda: DiscsOnTheLastTower()
+        self.dic_heuristics['AdmissibleEstimatedPossibleMovements'] = lambda: AdmissibleEstimatedPossibleMovements()
+        self.dic_heuristics['EstimatedPossibleMovements'] = lambda: EstimatedPossibleMovements()
 
     def __str__(self) -> str:
-        return f'algorithm: {self.algorithm}\nheuristics: {self.heuristics}'
+        value = f"Algorithm: {self.algorithm}\n" \
+                f"Number of discs: {self.discs}\n"
+
+        value += {
+            "BPA": "",
+            "BPP": "",
+            "BPPV": f"Max Depth: {self.BPPV_config['max_depth']}\nDepth Modifier: {self.BPPV_config['depth_modifier']}",
+            "AStar": f"Heuristic: {self.heuristics}",
+            "GlobalHeuristic": f"Heuristic: {self.heuristics}",
+            "LocalHeuristic": f"Heuristic: {self.heuristics}"
+        }[self.algorithm]
+
+        return value

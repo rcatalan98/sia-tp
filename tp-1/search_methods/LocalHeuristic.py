@@ -2,6 +2,7 @@ from typing import List, Tuple, Set
 
 from models.Node import Node
 from models.Solution import Solution
+from models.State import State
 from search_methods.Base import Base
 from heuristics.Base import Base as Heuristic
 
@@ -18,11 +19,11 @@ class LocalHeuristic(Base):
     def search(self, root: Node) -> Solution:
         return self.search_aux(list([(0, root)]), 1, 0, set())
 
-    def search_aux(self, list1: List[Tuple[int, Node]], frontier_nodes_qty: int, explored_nodes_qty: int, known_states):
-        while len(list1) > 0:
+    def search_aux(self, frontier_nodes: List[Tuple[int, Node]], frontier_nodes_qty: int, explored_nodes_qty: int, known_states: Set[State]):
+        while len(frontier_nodes) > 0:
             # frontier_nodes_qty --
             # explored_nodes_qty ++
-            e = self.min_element(list1)
+            e = self.min_element(frontier_nodes)
             depth = e[0]
             node = e[1]
 
@@ -47,7 +48,7 @@ class LocalHeuristic(Base):
             if possible_sol.success:
                 return possible_sol
 
-            list1.remove(e)
+            frontier_nodes.remove(e)
 
         return Solution(self.config, False, -1, float("inf"), explored_nodes_qty, frontier_nodes_qty, [])
 
