@@ -1,0 +1,5 @@
+{
+  "algorithm": "GlobalHeuristic",
+  "heuristics":"DiscsOnTheLastTower",
+  "discs": 7
+}

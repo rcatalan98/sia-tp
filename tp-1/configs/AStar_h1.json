@@ -1,0 +1,6 @@
+{
+  "algorithm": "AStar",
+  "heuristics":"AdmissibleEstimatedPossibleMovements",
+  "discs": 7,
+  "print_to": "console"
+}

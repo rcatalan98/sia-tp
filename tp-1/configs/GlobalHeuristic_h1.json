@@ -1,0 +1,5 @@
+{
+  "algorithm": "GlobalHeuristic",
+  "heuristics":"AdmissibleEstimatedPossibleMovements",
+  "discs": 7
+}

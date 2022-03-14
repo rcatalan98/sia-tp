@@ -1,0 +1,9 @@
+{
+  "algorithm": "GlobalHeuristic",
+  "heuristics":"DiscsOnTheLastTower",
+  "discs": 7,
+  "BPPV_config": {
+    "max_depth": 130,
+    "depth_modifier": 0.5
+  }
+}
