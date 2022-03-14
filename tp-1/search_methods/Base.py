@@ -25,7 +25,6 @@ class Base(ABC):
             (depth, node) = frontier_nodes.pop(0)
             max_depth = max(max_depth, depth)
             explored_nodes += 1
-            print(depth)
 
             # See if it is the goal
             if node.state.is_solved():
