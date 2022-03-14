@@ -1,4 +1,3 @@
-from time import perf_counter
 from typing import List, Set, Tuple, Dict
 
 from models.Node import Node
@@ -17,6 +16,7 @@ class BPPVConfig:
 class BPPV(BPP):
     def __init__(self, config):
         super().__init__(config)
+        self.next_frontier_nodes = []
         self.known_states: Dict[State,Set[int]] = defaultdict(lambda: set(),{})
 
         if config.BPPV_config is None:
@@ -29,17 +29,13 @@ class BPPV(BPP):
         has_finished: bool = False
         has_found_one_solution: bool = False
         last_good_solution = Solution.NoSolution(self.config, 0, 0, 0)
-        self.known_states[root.state] = set([0])
+        self.known_states[root.state] = {0}
         self.next_frontier_nodes = []
 
-        frontier_nodes :List[Tuple[int, Node]] = [(0,root)]
+        frontier_nodes: List[Tuple[int, Node]] = [(0,root)]
 
         while not has_finished and self.max_depth > 1:
-            # print(f"Using max depth: {self.max_depth}")
-            # start_time = perf_counter()
             result = self.search_until_depth(frontier_nodes, self.max_depth,last_good_solution.n_expanded_nodes)
-            # end_time = perf_counter()
-            # print(end_time - start_time)
 
             if result.success:
                 has_found_one_solution = True
@@ -57,8 +53,6 @@ class BPPV(BPP):
         return last_good_solution
 
     def search_until_depth(self, frontier_nodes: List[Tuple[int, Node]], max_depth: int, previous_explored_nodes: int = 0) -> Solution:
-        # It's a tuple that stores the node and the depth
-        # frontier_nodes: List[Tuple[int, Node]] = list([(0, root)])
         explored_nodes: int = previous_explored_nodes
 
         while len(frontier_nodes) != 0:
@@ -70,7 +64,6 @@ class BPPV(BPP):
                 continue
 
             explored_nodes += 1
-
 
             # See if it is the goal
             if node.state.is_solved():

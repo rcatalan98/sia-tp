@@ -13,11 +13,12 @@ class Config:
     dic_algorithms = {}
     dic_heuristics = None
 
-    def __init__(self, algorithm: str, discs: int = 7, BPPV_config: BPPVConfig = None, heuristics: str = None):
+    def __init__(self, algorithm: str, discs: int = 7, BPPV_config: BPPVConfig = None, heuristics: str = None, print_to: str = "console"):
         self.algorithm = algorithm
         self.heuristics = heuristics
         self.discs = discs
         self.BPPV_config = BPPV_config
+        self.print_to = print_to
 
         if heuristics is not None:
             self.dic_heuristics = {}
@@ -41,6 +42,12 @@ class Config:
         self.dic_heuristics['DiscsOnTheLastTower'] = lambda: DiscsOnTheLastTower()
         self.dic_heuristics['AdmissibleEstimatedPossibleMovements'] = lambda: AdmissibleEstimatedPossibleMovements()
         self.dic_heuristics['EstimatedPossibleMovements'] = lambda: EstimatedPossibleMovements()
+
+    def print_to_console(self) -> bool:
+        return self.print_to == "console"
+
+    def print_to_file(self) -> bool:
+        return self.print_to != "console"
 
     def __str__(self) -> str:
         value = f"Algorithm: {self.algorithm}\n" \

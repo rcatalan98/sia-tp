@@ -10,9 +10,6 @@ class Base(ABC):
     def __init__(self, config):
         self.config = config
 
-    def __str__(self):
-        return f' Base algorithm'
-
     @abstractmethod
     def sort_nodes(self, frontier_nodes: List[Tuple[int, Node]]) -> None:
         pass
