@@ -31,9 +31,9 @@ class Config:
         self.dic_algorithms['BPA'] = lambda x: BPA(self)
         self.dic_algorithms['BPP'] = lambda x: BPP(self)
         self.dic_algorithms['BPPV'] = lambda x: BPPV(self)
-        self.dic_algorithms['AStar'] = lambda x: AStar(self,x)
-        self.dic_algorithms['GlobalHeuristic'] = lambda x: GlobalHeuristic(self,x)
-        self.dic_algorithms['LocalHeuristic'] = lambda x: LocalHeuristic(self,x)
+        self.dic_algorithms['AStar'] = lambda x: AStar(self, x)
+        self.dic_algorithms['GlobalHeuristic'] = lambda x: GlobalHeuristic(self, x)
+        self.dic_algorithms['LocalHeuristic'] = lambda x: LocalHeuristic(self, x)
 
     def load_heuristics(self):
         self.dic_heuristics['Basic'] = DiscsOnTheLastTower()

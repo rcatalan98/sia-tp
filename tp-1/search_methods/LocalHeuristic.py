@@ -1,6 +1,7 @@
 from typing import List, Tuple, Set
 
-from models import Node, Solution, State
+from models.Node import Node
+from models.Solution import Solution
 from search_methods.Base import Base
 from heuristics.Base import Base as Heuristic
 
@@ -10,6 +11,9 @@ class LocalHeuristic(Base):
     def __init__(self, config, heuristic):
         super().__init__(config)
         self.heuristic = Heuristic(heuristic)  # FIXME: What else?
+
+    def sort_nodes(self, frontier_nodes: List[Tuple[int, Node]]) -> None:
+        pass
 
     def search(self, root: Node) -> Solution:
         return self.search_aux(list([(0, root)]), 1, 0, set())

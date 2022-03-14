@@ -5,7 +5,7 @@ from models import Config
 class Solution:
     run_time = None
 
-    def __init__(self, config: Config, success: bool, depth: int, cost: int, n_expanded_nodes: int,
+    def __init__(self, config: Config, success: bool, depth: int, cost: float, n_expanded_nodes: int,
                  n_frontier_nodes: int, states: List):
         self.states = states
         self.n_frontier_nodes = n_frontier_nodes
@@ -18,6 +18,8 @@ class Solution:
     def __str__(self):
         if self.success:
             states = "".join([f"{n.state}\n" for n in self.states])
+            if self.run_time is None:
+                raise f'Solution must have an end time'
             return (f"Found solution in {self.run_time} seconds!"
                     "\n\n"
                     "It has: \n"
@@ -41,5 +43,5 @@ class Solution:
                    f"The configuration was:" \
                    f"{self.config}"
 
-    def set_run_time(self, run_time: int):
+    def set_run_time(self, run_time: float):
         self.run_time = run_time

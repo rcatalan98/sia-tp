@@ -1,10 +1,10 @@
 from models.Node import Node
-from search_methods.NonInformedMethod import NonInformedMethod
+from search_methods.Base import Base
 from heuristics.Base import Base as Heuristic
 from typing import Tuple, List, Set
 
 
-class GlobalHeuristic(NonInformedMethod):  # FIXME: Es informado y extiende a NonInformedMethod, raro
+class GlobalHeuristic(Base):  # FIXME: Es informado y extiende a Base, raro
 
     def __init__(self, config, heuristic):
         super().__init__(config)
