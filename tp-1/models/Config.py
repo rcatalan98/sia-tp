@@ -47,12 +47,12 @@ class Config:
                 f"Number of discs: {self.discs}\n"
 
         value += {
-            "BPA": "",
-            "BPP": "",
-            "BPPV": f"Max Depth: {self.BPPV_config['max_depth']}\nDepth Modifier: {self.BPPV_config['depth_modifier']}",
-            "AStar": f"Heuristic: {self.heuristics}",
-            "GlobalHeuristic": f"Heuristic: {self.heuristics}",
-            "LocalHeuristic": f"Heuristic: {self.heuristics}"
-        }[self.algorithm]
+            "BPA": lambda:"",
+            "BPP": lambda:"",
+            "BPPV": lambda: f"Max Depth: {self.BPPV_config['max_depth']}\nDepth Modifier: {self.BPPV_config['depth_modifier']}",
+            "AStar": lambda:f"Heuristic: {self.heuristics}",
+            "GlobalHeuristic": lambda:f"Heuristic: {self.heuristics}",
+            "LocalHeuristic":lambda: f"Heuristic: {self.heuristics}"
+        }[self.algorithm]()
 
         return value
