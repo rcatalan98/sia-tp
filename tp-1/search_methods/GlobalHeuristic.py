@@ -4,7 +4,7 @@ from heuristics.Base import Base as Heuristic
 from typing import Tuple, List, Set
 
 
-class GlobalHeuristic(Base):  # FIXME: Es informado y extiende a Base, raro
+class GlobalHeuristic(Base):
 
     def __init__(self, config, heuristic):
         super().__init__(config)

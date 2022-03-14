@@ -6,12 +6,14 @@ from models.State import State
 from search_methods.Base import Base
 from heuristics.Base import Base as Heuristic
 
+import sys
 
 class LocalHeuristic(Base):
 
     def __init__(self, config, heuristic):
         super().__init__(config)
         self.heuristic = heuristic
+        sys.setrecursionlimit(10 ** 6)
 
     def sort_nodes(self, frontier_nodes: List[Tuple[int, Node]]) -> None:
         pass
