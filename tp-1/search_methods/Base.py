@@ -42,7 +42,7 @@ class Base(ABC):
 
             nodes_to_add = [n for n in children if n.state not in known_states]
 
-            known_states.union([n.state for n in children])
+            known_states |= set([n.state for n in nodes_to_add])
             frontier_nodes.extend([(depth + 1, n) for n in nodes_to_add])
             self.sort_nodes(frontier_nodes)
 

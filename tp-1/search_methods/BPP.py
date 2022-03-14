@@ -9,4 +9,4 @@ from search_methods.Base import Base
     # FIXME: Investigar esto
 class BPP(Base):
     def sort_nodes(self, frontier_nodes: List[Tuple[int, Node]]) -> None:
-        frontier_nodes.sort(key=lambda n: n[0], reverse=False)
+        frontier_nodes.sort(key=lambda n: n[0], reverse=True)

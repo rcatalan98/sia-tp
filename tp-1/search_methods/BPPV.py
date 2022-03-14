@@ -73,7 +73,7 @@ class BPPV(BPP):
                             not any(c.state == n[1] and depth + 1 > n[0] for n in self.known_states)
                             ]
 
-            self.known_states.union([(n[0], n[1].state) for n in nodes_to_add])
+            self.known_states |= set(([(n[0], n[1].state) for n in nodes_to_add]))
             frontier_nodes.extend(nodes_to_add)
             self.sort_nodes(frontier_nodes)
 
