@@ -63,7 +63,7 @@ class Node:
             self.children.append(Node(self, other_state))
 
         # Filter only the valid child nodes (hanoi rules and our definitions)
-        self.children = list(filter(lambda x: x.state.is_valid(), self.children))
+        self.children = [x for x in self.children if x.state.is_valid()]
 
         return self.children
 
@@ -72,20 +72,6 @@ class Node:
 
     def __eq__(self, other):
         return self.state == other.state
-
-    def __gt__(self, other):
-        return self.state > other.state
-
-    def __ge__(self, other):
-        return self.state >= other.state
-
-
-    def __lt__(self, other):
-        return self.state < other.state
-
-    def __le__(self, other):
-        return self.state <= other.state
-
 
     @classmethod
     def root(cls, discs: int):

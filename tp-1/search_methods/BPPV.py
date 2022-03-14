@@ -1,9 +1,11 @@
-from typing import List, Set, Tuple
+from time import perf_counter
+from typing import List, Set, Tuple, Dict
 
-from models import Node
+from models.Node import Node
 from models.Solution import Solution
 from models.State import State
 from search_methods.BPP import BPP
+from collections import defaultdict
 
 
 class BPPVConfig:
@@ -15,10 +17,10 @@ class BPPVConfig:
 class BPPV(BPP):
     def __init__(self, config):
         super().__init__(config)
-        self.known_states: Set[Tuple[int, State]] = set()
+        self.known_states: Dict[State,Set[int]] = defaultdict(lambda: set(),{})
 
         if config.BPPV_config is None:
-            raise "Invalid parameters: BPPV config missing"
+            raise Exception("Invalid parameters: BPPV config missing")
 
         self.max_depth = config.BPPV_config['max_depth']
         self.depth_modifier = config.BPPV_config['depth_modifier']
@@ -27,30 +29,46 @@ class BPPV(BPP):
         has_finished: bool = False
         has_found_one_solution: bool = False
         last_good_solution = Solution.NoSolution(self.config, 0, 0, 0)
+        self.known_states[root.state] = set([0])
+        self.next_frontier_nodes = []
+
+        frontier_nodes :List[Tuple[int, Node]] = [(0,root)]
 
         while not has_finished and self.max_depth > 1:
-            print(f"Using max depth: {self.max_depth}")
-            result = self.search_until_depth(root, self.max_depth)
+            # print(f"Using max depth: {self.max_depth}")
+            # start_time = perf_counter()
+            result = self.search_until_depth(frontier_nodes, self.max_depth,last_good_solution.n_expanded_nodes)
+            # end_time = perf_counter()
+            # print(end_time - start_time)
 
             if result.success:
                 has_found_one_solution = True
                 last_good_solution = result
-                self.max_depth -= int(self.max_depth * self.depth_modifier)
+                self.max_depth = result.cost - 1
+                frontier_nodes = [(d,n) for (d,n) in frontier_nodes if d <=self.max_depth ]
             else:
                 if has_found_one_solution:
                     has_finished = True
                 else:
+                    frontier_nodes = self.next_frontier_nodes
+                    self.next_frontier_nodes = []
                     self.max_depth += int(self.max_depth * self.depth_modifier)
 
         return last_good_solution
 
-    def search_until_depth(self, root: Node, max_depth: int) -> Solution:
+    def search_until_depth(self, frontier_nodes: List[Tuple[int, Node]], max_depth: int, previous_explored_nodes: int = 0) -> Solution:
         # It's a tuple that stores the node and the depth
-        frontier_nodes: List[Tuple[int, Node]] = list([(0, root)])
-        explored_nodes: int = 0
+        # frontier_nodes: List[Tuple[int, Node]] = list([(0, root)])
+        explored_nodes: int = previous_explored_nodes
 
         while len(frontier_nodes) != 0:
             (depth, node) = frontier_nodes.pop(0)
+
+            # See if it exceeds the max depth
+            if depth >= max_depth:
+                self.next_frontier_nodes +=[(depth,node)]
+                continue
+
             explored_nodes += 1
 
 
@@ -59,21 +77,19 @@ class BPPV(BPP):
                 return Solution(self.config, True, depth, node.get_cost(), explored_nodes, len(frontier_nodes),
                                 node.get_moves_until_here())
 
-            # See if it exceeds the max depth
-            if depth >= max_depth:
-                continue
-
             # Keep going
             children: List[Node] = node.get_children()
-            self.known_states.add((depth, node.state))
+            child_depth: int = depth + 1
 
-            nodes_to_add = [(depth + 1, c)
+            nodes_to_add = [(child_depth, c)
                             for c in children if
-                            not any(c.state == n[1] and depth + 1 > n[0] for n in self.known_states)
+                            c.state not in self.known_states or child_depth < min(self.known_states[c.state])
                             ]
 
-            self.known_states |= set(([(n[0], n[1].state) for n in nodes_to_add]))
-            frontier_nodes.extend(nodes_to_add)
+            frontier_nodes += nodes_to_add
+            for (d,n) in nodes_to_add:
+                self.known_states[n.state] |= set([d])
+
             self.sort_nodes(frontier_nodes)
 
         return Solution.NoSolution(self.config, max_depth, explored_nodes, len(frontier_nodes))
