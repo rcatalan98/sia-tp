@@ -1,9 +1,0 @@
-{
-  "algorithm": "AStar",
-  "heuristics":"EstimatedPossibleMovements",
-  "discs": 5,
-  "BPPV_config": {
-    "max_depth": 10,
-    "depth_modifier": 0.5
-  }
-}
