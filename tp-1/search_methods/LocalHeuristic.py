@@ -4,7 +4,6 @@ from models.Node import Node
 from models.Solution import Solution
 from models.State import State
 from search_methods.Base import Base
-from heuristics.Base import Base as Heuristic
 
 import sys
 
@@ -23,11 +22,7 @@ class LocalHeuristic(Base):
 
     def search_aux(self, frontier_nodes: List[Tuple[int, Node]], frontier_nodes_qty: int, explored_nodes_qty: int, known_states: Set[State]):
         while len(frontier_nodes) > 0:
-            # frontier_nodes_qty --
-            # explored_nodes_qty ++
-            e = self.min_element(frontier_nodes)
-            depth = e[0]
-            node = e[1]
+            (depth, node) = self.min_element(frontier_nodes)
 
             if node.state.is_solved():
                 return Solution(self.config, True, depth, node.get_cost(), frontier_nodes_qty - 1,
@@ -36,23 +31,19 @@ class LocalHeuristic(Base):
             children: List[Node] = node.get_children()
             known_states.add(node.state)
 
-            nodes_to_add = filter(
-                lambda n: n.state not in known_states,
-                children
-            )
+            nodes_to_add = [n for n in children if n.state not in known_states]
 
-            known_states.union(map(lambda s: s.state, children))
-            l_ancestors = list(map(lambda x: (depth + 1, x), nodes_to_add))
-            # frontier_nodes_qty += len(l_ancestors)
+            known_states.union([n.state for n in children])
+            l_ancestors = [(depth + 1, x) for x in nodes_to_add]
 
             possible_sol = self.search_aux(l_ancestors, frontier_nodes_qty - 1 + len(l_ancestors),
                                            explored_nodes_qty + 1, known_states)
             if possible_sol.success:
                 return possible_sol
 
-            frontier_nodes.remove(e)
+            frontier_nodes.remove((depth,node))
 
-        return Solution(self.config, False, -1, float("inf"), explored_nodes_qty, frontier_nodes_qty, [])
+        return Solution.NoSolution(self.config, 0, explored_nodes_qty, frontier_nodes_qty)
 
     def min_element(self, list1):
         t = list1[0]
