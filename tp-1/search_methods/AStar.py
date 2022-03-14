@@ -4,7 +4,7 @@ from heuristics.Base import Base as Heuristic
 from typing import Tuple, List
 
 
-class AStar(Base):  # FIXME: Es informado y extiende a Base, raro
+class AStar(Base):
 
     def __init__(self, config, heuristic):
         super().__init__(config)

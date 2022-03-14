@@ -4,11 +4,11 @@ from heuristics.Base import Base as Heuristic
 from typing import Tuple, List, Set
 
 
-class GlobalHeuristic(Base):  # FIXME: Es informado y extiende a Base, raro
+class GlobalHeuristic(Base):
 
     def __init__(self, config, heuristic):
         super().__init__(config)
-        self.heuristic = Heuristic(heuristic)  # FIXME: What else?
+        self.heuristic = heuristic
 
     def sort_nodes(self, frontier_nodes: List[Tuple[int, Node]]) -> None:
         # Reorder F according to heuristic value
