@@ -4,9 +4,9 @@ from heuristics.Base import Base as Heuristic
 from typing import Tuple, List, Set
 
 
-class GlobalHeuristic(NonInformedMethod):
+class GlobalHeuristic(NonInformedMethod):  # FIXME: Es informado y extiende a NonInformedMethod, raro
 
-    def __init__(self, config, heuristic: Heuristic):
+    def __init__(self, config, heuristic):
         super().__init__(config)
         self.heuristic = Heuristic(heuristic)  # FIXME: What else?
 
@@ -15,4 +15,4 @@ class GlobalHeuristic(NonInformedMethod):
         frontier_nodes.sort(key=self.sort_by_h)
 
     def sort_by_h(self, n: Tuple[int, Node]):
-        return self.heuristic.get_value(n[1].state)  # TODO: Heuristic.h(state) for each heuristic
+        return self.heuristic.get_value(n[1].state)

@@ -75,7 +75,7 @@ class BPPV(BPP):
             frontier_nodes.extend(nodes_to_add)
             self.sort_nodes(frontier_nodes)
 
-        return Solution(self.config, False, depth, float("inf"), len(explored_nodes), len(frontier_nodes), [])
+        return Solution(self.config, False, max_depth, float("inf"), len(explored_nodes), len(frontier_nodes), [])
 
 
 

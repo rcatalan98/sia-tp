@@ -4,7 +4,7 @@ from heuristics.Base import Base as Heuristic
 from typing import Tuple, List
 
 
-class AStar(NonInformedMethod):
+class AStar(NonInformedMethod):  # FIXME: Es informado y extiende a NonInformedMethod, raro
 
     def __init__(self, config, heuristic):
         super().__init__(config)
@@ -15,5 +15,4 @@ class AStar(NonInformedMethod):
         frontier_nodes.sort(key=self.sort_by_fn)
 
     def sort_by_fn(self, n: Tuple[int, Node]):
-        return n[0] + self.heuristic.h(n[1].state)  # g(n) + h(n.s)
-        # TODO: Heuristic.h(state) for each heuristic
+        return n[0] + self.heuristic.get_value(n[1].state)  # g(n) + h(n.s)
