@@ -45,3 +45,7 @@ class Solution:
 
     def set_run_time(self, run_time: float):
         self.run_time = run_time
+
+    @classmethod
+    def NoSolution(cls,config, max_depth, explored_nodes, frontier_nodes):
+        return Solution(config, False, max_depth, float("inf"), explored_nodes, frontier_nodes, [])

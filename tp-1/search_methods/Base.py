@@ -25,9 +25,7 @@ class Base(ABC):
         max_depth: int = 0
 
         while len(frontier_nodes) != 0:
-            element = frontier_nodes.pop(0)
-            depth = element[0]
-            node = element[1]
+            (depth, node) = frontier_nodes.pop(0)
             max_depth = max(max_depth, depth)
             explored_nodes += 1
 
@@ -46,5 +44,4 @@ class Base(ABC):
             frontier_nodes.extend([(depth + 1, n) for n in nodes_to_add])
             self.sort_nodes(frontier_nodes)
 
-        return Solution(self.config, False, max_depth, float("inf"), explored_nodes, len(frontier_nodes), [])
-
+        return Solution.NoSolution(self.config, max_depth, explored_nodes, len(frontier_nodes))

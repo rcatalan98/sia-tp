@@ -26,7 +26,7 @@ class BPPV(BPP):
     def search(self, root: Node) -> Solution:
         has_finished: bool = False
         has_found_one_solution: bool = False
-        last_good_solution = Solution(self.config, False, 0, float("inf"), 0, 0, [])
+        last_good_solution = Solution.NoSolution(self.config, 0, 0, 0)
 
         while not has_finished and self.max_depth > 1:
             print(f"Using max depth: {self.max_depth}")
@@ -50,9 +50,9 @@ class BPPV(BPP):
         explored_nodes: int = 0
 
         while len(frontier_nodes) != 0:
-            element = frontier_nodes.pop(0)
-            depth = element[0]
-            node = element[1]
+            (depth, node) = frontier_nodes.pop(0)
+            explored_nodes += 1
+
 
             # See if it is the goal
             if node.state.is_solved():
@@ -66,7 +66,6 @@ class BPPV(BPP):
             # Keep going
             children: List[Node] = node.get_children()
             self.known_states.add((depth, node.state))
-            explored_nodes += 1
 
             nodes_to_add = [(depth + 1, c)
                             for c in children if
@@ -77,4 +76,5 @@ class BPPV(BPP):
             frontier_nodes.extend(nodes_to_add)
             self.sort_nodes(frontier_nodes)
 
-        return Solution(self.config, False, max_depth, float("inf"), explored_nodes, len(frontier_nodes), [])
+        return Solution.NoSolution(self.config, max_depth, explored_nodes, len(frontier_nodes))
+

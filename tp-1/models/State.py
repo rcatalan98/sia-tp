@@ -25,3 +25,15 @@ class State:
 
     def __str__(self) -> str:
         return f"{self.first_tower} {self.second_tower} {self.third_tower}"
+
+    def __gt__(self, other):
+        return len(self.first_tower) + 10 * len(self.second_tower) + 100 * len(self.third_tower) > len(other.first_tower) + 10 * len(other.second_tower) + 100 * len(other.third_tower)
+
+    def __ge__(self, other):
+        return len(self.first_tower) + 10 * len(self.second_tower) + 100 * len(self.third_tower) >= len(other.first_tower) + 10 * len(other.second_tower) + 100 * len(other.third_tower)
+
+    def __lt__(self, other):
+        return len(self.first_tower) + 10 * len(self.second_tower) + 100 * len(self.third_tower) < len(other.first_tower) + 10 * len(other.second_tower) + 100 * len(other.third_tower)
+
+    def __le__(self, other):
+        return len(self.first_tower) + 10 * len(self.second_tower) + 100 * len(self.third_tower) <= len(other.first_tower) + 10 * len(other.second_tower) + 100 * len(other.third_tower)

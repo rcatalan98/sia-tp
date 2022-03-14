@@ -73,6 +73,20 @@ class Node:
     def __eq__(self, other):
         return self.state == other.state
 
+    def __gt__(self, other):
+        return self.state > other.state
+
+    def __ge__(self, other):
+        return self.state >= other.state
+
+
+    def __lt__(self, other):
+        return self.state < other.state
+
+    def __le__(self, other):
+        return self.state <= other.state
+
+
     @classmethod
     def root(cls, discs: int):
         state = State()
