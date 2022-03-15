@@ -1,5 +1,4 @@
 {
-  "algorithm": "GlobalHeuristic",
-  "heuristics":"DiscsOnTheLastTower",
+  "algorithm": "BPP",
   "discs": 7
 }
