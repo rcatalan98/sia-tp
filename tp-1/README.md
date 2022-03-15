@@ -9,7 +9,7 @@
 Este trabajo practico fue realizado por:
 
 - Roberto Catalan
-- Lautaro …
+- Lautaro Galende
 - Lucas Dell’Isola
 
 ## Juego
