@@ -8,13 +8,6 @@ import random
 from Bag import Bag
 
 
-def chunks(l, n):
-    """Yield n number of striped chunks from l."""
-    for i in range(0, n):
-        yield l[i::n]
-    # ToDo check when len(l) is odd
-
-
 # Functions for breeding
 def simple_breeding(p1: Bag, p2: Bag):
     # number of elements taken from the parent 1
