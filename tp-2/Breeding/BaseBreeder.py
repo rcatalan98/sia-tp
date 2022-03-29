@@ -1,18 +1,11 @@
-from typing import List
+from typing import List, Tuple
 
 from Bag import Bag
 
 
 class BaseBreeder:
 
-    @staticmethod
-    def chunks(l, n):
-        """Yield n number of striped chunks from l."""
-        for i in range(0, n):
-            yield l[i::n]
-
-    def breed(self, bags:List[Bag]) -> List[Bag]:
-        breed_population: List[Bag] = List[Bag]()
-        for a,b in self.chunks(bags, 2):
+    def breed(self, first: Bag, second: Bag) -> Tuple[Bag, Bag]:
+        pass
 
 
