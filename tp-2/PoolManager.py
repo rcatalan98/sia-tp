@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from Bag import Bag
 from Breeding.BaseBreeder import BaseBreeder
@@ -21,11 +21,11 @@ class PoolManager:
         return [Bag.create_random(config) for _ in range(p)]
 
     def get_new_generation(self) -> List[Bag]:
-        couples = self.selector(self.population, 2)  # ToDo: select couples randomly
+        couples: List[Tuple[Bag, Bag]] = self.selector.get_random_couples(self.population)  #
         children: List[Bag] = []
         for a, b in couples:
             children.extend([self.mutator.mutate(el) for el in self.breeder.breed(a, b)])
-        new_generation = self.selector(self.population+children)
+        new_generation = self.selector.select(self.population+children)  # FIXME
         self.generation += 1
         return new_generation
         # ToDo cuando y donde nos fijamos el corte y cuando pisar la poblacion
