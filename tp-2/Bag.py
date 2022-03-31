@@ -2,6 +2,7 @@
 from typing import List
 import random
 from frozenlist import FrozenList
+
 from ConfigStore import ConfigStore
 
 
@@ -41,5 +42,5 @@ class Bag:
     @staticmethod
     def create_random(config: ConfigStore):
         total_items: int = len(config.itemStore)
-        items: List[bool] = [random.randint(0, 1) == 0 for i in range(total_items)]
+        items: List[bool] = random.choices([True, False], k=total_items)
         return Bag(items, config)
