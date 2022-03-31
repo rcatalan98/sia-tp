@@ -10,7 +10,6 @@ class ConfigStore:
         self.max_weight = 0  # info from file
         self.max_elements = 0  # info from file
 
-
     def get_item(self, item_id: int):
         return self.itemStore[item_id]
 
