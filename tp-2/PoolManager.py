@@ -25,7 +25,10 @@ class PoolManager:
         children: List[Bag] = []
         for a, b in couples:
             children.extend([self.mutator.mutate(el) for el in self.breeder.breed(a, b)])
-        new_generation = self.selector.select(self.population+children)  # FIXME
+        two_p = self.population + children
+        if len(children) != len(self.population):
+            raise 'ERROR: the amount of children should be equal to the existing population.'
+        new_generation = self.selector(two_p)
         self.generation += 1
         return new_generation
         # ToDo cuando y donde nos fijamos el corte y cuando pisar la poblacion

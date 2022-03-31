@@ -10,6 +10,6 @@ def sort_func(bag: Bag):
 
 class EliteSelection(BaseSelection):
 
-    def select(self, population: List[Bag], population_size: int, threshold: float = None) -> List[Bag]:
+    def select(self, population: List[Bag], threshold: float = None) -> List[Bag]:
         population.sort(key=sort_func)
-        return population[0:population_size]
+        return population[0:len(population)/2]

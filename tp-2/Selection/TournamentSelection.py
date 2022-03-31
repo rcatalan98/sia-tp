@@ -8,7 +8,8 @@ from Selection.BaseSelection import BaseSelection
 
 class TournamentSelection(BaseSelection):
 
-    def select(self, population: List[Bag], population_size: int, threshold: float = None) -> List[Bag]:
+    def select(self, population: List[Bag], threshold: float = None) -> List[Bag]:
+        population_size = ceil(len(population)/2)
         aux_population: List[Bag] = deepcopy(population)
         selection_bags: List[Bag] = []
         for i in range(0, population_size - 1):

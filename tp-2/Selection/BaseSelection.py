@@ -5,7 +5,7 @@ from Bag import Bag
 
 
 class BaseSelection:
-    def select(self, population: List[Bag], population_size: int, threshold: float = None) -> List[Bag]:
+    def select(self, population: List[Bag], threshold: float = None) -> List[Bag]:
         pass
 
     def get_random_couples(self, population: List[Bag]) -> List[Tuple[Bag, Bag]]:
