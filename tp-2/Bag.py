@@ -41,6 +41,6 @@ class Bag:
 
     @staticmethod
     def create_random(config: ConfigStore):
-        total_items: int = len(config.itemStore)
+        total_items: int = len(config.item_store)
         items: List[bool] = random.choices([True, False], k=total_items)
         return Bag(items, config)

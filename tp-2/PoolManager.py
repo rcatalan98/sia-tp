@@ -5,6 +5,7 @@ from Breeding.BaseBreeder import BaseBreeder
 from ConfigStore import ConfigStore
 from Mutation.Mutation import Mutation
 from Selection.BaseSelection import BaseSelection
+from StopCondition.BaseStopCondition import BaseStopCondition
 
 
 class PoolManager:
@@ -14,6 +15,7 @@ class PoolManager:
         self.mutator: Mutation = config.get_mutator()
         self.selector: BaseSelection = config.get_selector()
         self.breeder: BaseBreeder = config.get_breeder()
+        self.stop_condition: BaseStopCondition = config.get_stop_condition(self)
         self.generation = 0
 
     @staticmethod
@@ -32,6 +34,9 @@ class PoolManager:
         self.generation += 1
         return new_generation
         # ToDo cuando y donde nos fijamos el corte y cuando pisar la poblacion
+
+    def has_reached_stop_condition(self):
+        return self.stop_condition.has_to_stop()
 
 
 
