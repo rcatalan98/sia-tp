@@ -5,7 +5,7 @@ from Selection.BaseSelection import BaseSelection
 
 
 def sort_func(bag: Bag):
-    return bag.fitness()
+    return bag.fitness
 
 
 class EliteSelection(BaseSelection):
