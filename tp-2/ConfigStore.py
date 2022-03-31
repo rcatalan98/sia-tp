@@ -9,7 +9,10 @@ class ConfigStore:
         self.itemStore: List[Item] = []
         self.max_weight = 0  # info from file
         self.max_elements = 0  # info from file
+        self.population_size = 0    # info from file
 
+    def get_population_size(self) -> int:
+        return self.population_size
     def get_item(self, item_id: int):
         return self.itemStore[item_id]
 
