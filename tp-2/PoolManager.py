@@ -3,7 +3,7 @@ from typing import List, Tuple
 from Bag import Bag
 from Breeding.BaseBreeder import BaseBreeder
 from ConfigStore import ConfigStore
-from Mutation.BaseMutation import BaseMutation
+from Mutation.Mutation import Mutation
 from Selection.BaseSelection import BaseSelection
 
 
@@ -11,7 +11,7 @@ class PoolManager:
     # Todo hace falta guardar todas las generaciones o se pisa population?
     def __init__(self, config: ConfigStore):
         self.population: List[Bag] = self.create_random_population(config, config.population_size)
-        self.mutator: BaseMutation = config.get_mutator()
+        self.mutator: Mutation = config.get_mutator()
         self.selector: BaseSelection = config.get_selector()
         self.breeder: BaseBreeder = config.get_breeder()
         self.generation = 0
