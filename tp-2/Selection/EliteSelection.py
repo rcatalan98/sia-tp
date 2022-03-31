@@ -12,4 +12,4 @@ class EliteSelection(BaseSelection):
 
     def select(self, population: List[Bag], population_size: int) -> List[Bag]:
         population.sort(key=sort_func)
-        return population[0:population_size-1]
+        return population[0:population_size]
