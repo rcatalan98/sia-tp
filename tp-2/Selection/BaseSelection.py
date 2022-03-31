@@ -5,8 +5,11 @@ from Bag import Bag
 
 
 class BaseSelection:
-    def select(self, population: List[Bag], threshold: float = None) -> List[Bag]:
+    def select(self, population: List[Bag], threshold: float = None, k: int = None) -> List[Bag]:
         pass
+
+    def sort_by_fitness(self, bag: Bag):
+        return bag.fitness
 
     def get_random_couples(self, population: List[Bag]) -> List[Tuple[Bag, Bag]]:
         aux: List[Bag] = population     # so we don't modify the current population
