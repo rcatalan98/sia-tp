@@ -1,11 +1,12 @@
 import random
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 from Bag import Bag
 
 
 class BaseSelection:
-    def select(self, population: List[Bag], threshold: float = None, k: int = None) -> List[Bag]:
+    def select(self, population: List[Bag], threshold: float = None, k: int = None, arg_boltz: Dict[int] = None) \
+            -> List[Bag]:
         pass
 
     def sort_by_fitness(self, bag: Bag):
