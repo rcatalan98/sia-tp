@@ -11,7 +11,7 @@ class UniformBreeder(BaseBreeder):
         l1: List[bool] = []
         l2: List[bool] = []
 
-        for i in range(0, first.elements()):
+        for i in range(0, len(first)):
             if random.uniform(0, 1) <= 0.5:
                 l1 += first.items[i:i + 1]
                 l2 += second.items[i:i + 1]

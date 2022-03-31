@@ -12,7 +12,7 @@ class MultipleBreeder(BaseBreeder):
     def breed(self, first: Bag, second: Bag) -> Tuple[Bag, Bag]:
         # Elije multiples puntos entre 0 y elements()
         crossing_points: List[int] = sorted(
-            [0, first.elements()] + random.sample(range(1, first.elements()), self.points))
+            [0, first.elements()] + random.sample(range(1, len(first)), self.points))
 
         l1: List[bool] = []
         l2: List[bool] = []
