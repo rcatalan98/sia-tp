@@ -5,11 +5,13 @@ from Bag import Bag
 from Selection.BaseSelection import BaseSelection
 
 
-def get_rank_fitness(rank: int, population_size: int) -> int:
+def get_rank_fitness(rank: int, population_size: int) -> float:
     return (population_size - 1 - rank) / population_size
 
-def rank(bag: Bag)->int:
+
+def rank(bag: Bag) -> int:
     return bag.fitness
+
 
 class RankSelection(BaseSelection):
 
