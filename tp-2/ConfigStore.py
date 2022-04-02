@@ -15,8 +15,7 @@ class ConfigStore:
     def __init__(self, max_weight: int, max_elements: int, items: List[Item]):
         # load file
         self.stop_condition: str = ""
-        self.stop_condition_config: GenerationCountConfig | AcceptableSolutionConfig | SimilarStructureConfig | \
-                                    SameFitnessConfig | TimeBasedConfig | None = None
+        self.stop_condition_config: Dict[str,int|float] = None
         self.max_weight = max_weight  # info from file
         self.max_elements = max_elements  # info from file
         self.population_size = 0  # info from file
@@ -45,9 +44,9 @@ class ConfigStore:
 
     def get_stop_condition(self, pool_manager: PoolManager):
         return {
-            "acceptable solution": AcceptableSolution(pool_manager, self.stop_condition_config),
-            "generation count": GenerationCount(pool_manager, self.stop_condition_config),
-            "same best fitness": SameFitness(pool_manager, self.stop_condition_config),
-            "similar structure": SimilarStructure(pool_manager, self.stop_condition_config),
-            "time": TimeBased(pool_manager, self.stop_condition_config)
-        }[self.stop_condition.lower()]
+            "acceptable solution": lambda: AcceptableSolution(pool_manager, self.stop_condition_config),
+            "generation count": lambda: GenerationCount(pool_manager, self.stop_condition_config),
+            "same best fitness": lambda: SameFitness(pool_manager, self.stop_condition_config),
+            "similar structure": lambda: SimilarStructure(pool_manager, self.stop_condition_config),
+            "time": lambda: TimeBased(pool_manager, self.stop_condition_config)
+        }[self.stop_condition.lower()]()
