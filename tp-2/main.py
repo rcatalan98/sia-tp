@@ -1,13 +1,32 @@
+import json
+import sys
 
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
-
+from ConfigStore import ConfigStore
 
 # Press the green button in the gutter to run the script.
+from Item import Item
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    if len(sys.argv) < 3:
+        raise Exception("Invalid parameters. Missing config")
+
+    print("Loading configuration file and items...")
+
+    with open(sys.argv[2], 'r') as items_file:
+        lines = items_file.readlines()
+
+    first_line = lines.pop().split(" ")
+    max_elements = int(first_line[0])
+    max_weight = int(first_line[1])
+
+    items = []
+    for line in lines:
+        info = lines.pop().split(" ")
+        items.append(Item(int(info[0]), int(info[1])))
+
+    config_file = open(sys.argv[1], 'r')
+    config_data = json.load(config_file)
+    config = ConfigStore(max_weight, max_elements, items)
+    config.itemStore = items
 
 

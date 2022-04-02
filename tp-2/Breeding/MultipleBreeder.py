@@ -4,6 +4,11 @@ from typing import Tuple, List
 from Bag import Bag
 from Breeding.BaseBreeder import BaseBreeder
 
+class MultipleBreederConfig():
+
+    def __init__(self, crossing_points: int) -> None:
+        self.crossing_points = crossing_points
+
 
 class MultipleBreeder(BaseBreeder):
     def __init__(self, k: int):

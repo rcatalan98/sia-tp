@@ -11,16 +11,16 @@ from StopCondition.TimeBased import *
 
 
 class ConfigStore:
-    def __init__(self, file: str):
+
+    def __init__(self, max_weight: int, max_elements: int, items: List[Item]):
         # load file
         self.stop_condition: str = ""
         self.stop_condition_config: GenerationCountConfig | AcceptableSolutionConfig | SimilarStructureConfig | \
                                     SameFitnessConfig | TimeBasedConfig | None = None
-
-        self.item_store: List[Item] = []
-        self.max_weight = 0  # info from file
-        self.max_elements = 0  # info from file
+        self.max_weight = max_weight  # info from file
+        self.max_elements = max_elements  # info from file
         self.population_size = 0  # info from file
+        self.itemStore: List[Item] = items # info from file
 
     def get_population_size(self) -> int:
         return self.population_size
