@@ -37,10 +37,10 @@ class PoolManager:
         print([s.fitness for s in self.population])
         print([s.fitness for s in children])
 
-        new_generation = self.selector.select(self.population + children)
+        self.population = self.selector.select(self.population + children)
 
         self.generation += 1
-        return new_generation
+        return self.population
 
     def has_reached_stop_condition(self):
         return self.stop_condition.has_to_stop()

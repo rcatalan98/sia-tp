@@ -49,7 +49,6 @@ if __name__ == '__main__':
     while not pool_manager.has_reached_stop_condition():
         next_gen: List[Bag] = pool_manager.get_new_generation()
         print(pool_manager.generation)
-        print([a.fitness for a in next_gen])
 
         # all_generations += next_gen
 
