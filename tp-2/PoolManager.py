@@ -2,7 +2,6 @@ from typing import List, Tuple
 
 from Bag import Bag
 from Breeding.BaseBreeder import BaseBreeder
-from ConfigStore import ConfigStore
 from Mutation.Mutation import Mutation
 from Selection.BaseSelection import BaseSelection
 from StopCondition.BaseStopCondition import BaseStopCondition
@@ -10,16 +9,16 @@ from StopCondition.BaseStopCondition import BaseStopCondition
 
 class PoolManager:
     # Todo hace falta guardar todas las generaciones o se pisa population?
-    def __init__(self, config: ConfigStore):
+    def __init__(self, config):
         self.population: List[Bag] = self.create_random_population(config)
-        self.mutator: Mutation = config.get_mutator()
+        self.mutator: Mutation = Mutation()
         self.selector: BaseSelection = config.get_selector()
         self.breeder: BaseBreeder = config.get_breeder()
         self.stop_condition: BaseStopCondition = config.get_stop_condition(self)
         self.generation = 0
 
     @staticmethod
-    def create_random_population(config: ConfigStore) -> List[Bag]:
+    def create_random_population(config) -> List[Bag]:
         return [Bag.create_random(config) for _ in range(config.population_size)]
 
     def get_new_generation(self) -> List[Bag]:

@@ -1,5 +1,9 @@
 {
   "breeding": "SimpleBreeder",
   "selection": "EliteSelection",
-  "selection_arguments": "None"
+  "selection_arguments": "None",
+  "stop_condition": "generation count",
+  "stop_condition_config": {
+      "max generation": 500
+  }
 }
