@@ -22,10 +22,11 @@ class ConfigStore:
     breeding_algorithms = {}
     selection_algorithms = {}
 
-    def __init__(self, breeding: str, selection: str, selection_arguments: Dict[str, str], population_size: int, max_weight: int, max_elements: int,
-                 items: List[Item], stop_condition: str):
+    def __init__(self, breeding: str, selection: str, selection_arguments: Dict[str, str], population_size: int,
+                 max_weight: int, max_elements: int,
+                 items: List[Item], stop_condition: str, stop_condition_config: Dict[str, int | float]):
         # load file
-        self.stop_condition_config: Dict[str,int|float] = None
+        self.stop_condition_config: Dict[str, int | float] = stop_condition_config
         self.load_selection_algorithms()
         self.load_breeding_algorithms()
 
