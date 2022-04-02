@@ -1,9 +1,11 @@
 import json
 import sys
+from time import perf_counter
+from typing import List
 
 from ConfigStore import ConfigStore
-
-# Press the green button in the gutter to run the script.
+from PoolManager import PoolManager
+from Bag import Bag
 from Item import Item
 
 if __name__ == '__main__':
@@ -25,8 +27,20 @@ if __name__ == '__main__':
         items.append(Item(int(info[0]), int(info[1])))
 
     config_file = open(sys.argv[1], 'r')
-    config_data = json.load(config_file)
+    config_data = json.load(config_file)  # FIXME: No se usa?
     config = ConfigStore(max_weight, max_elements, items)
     config.itemStore = items
 
+    print("Running...")
+    start_time = perf_counter()
 
+    pool_manager = PoolManager(config)  # creates the initial population, called zero generation
+    all_generations: List[List[Bag]] = [pool_manager.generation]
+
+    while not pool_manager.has_reached_stop_condition():
+        next_gen: List[Bag] = pool_manager.get_new_generation()
+        all_generations += next_gen
+
+    end_time = perf_counter()
+
+    # TODO: print results
