@@ -11,7 +11,7 @@ from StopCondition.BaseStopCondition import BaseStopCondition
 class PoolManager:
     # Todo hace falta guardar todas las generaciones o se pisa population?
     def __init__(self, config: ConfigStore):
-        self.population: List[Bag] = self.create_random_population(config, config.population_size)
+        self.population: List[Bag] = self.create_random_population(config)
         self.mutator: Mutation = config.get_mutator()
         self.selector: BaseSelection = config.get_selector()
         self.breeder: BaseBreeder = config.get_breeder()
@@ -19,8 +19,8 @@ class PoolManager:
         self.generation = 0
 
     @staticmethod
-    def create_random_population(config: ConfigStore, p: int) -> List[Bag]:
-        return [Bag.create_random(config) for _ in range(p)]
+    def create_random_population(config: ConfigStore) -> List[Bag]:
+        return [Bag.create_random(config) for _ in range(config.population_size)]
 
     def get_new_generation(self) -> List[Bag]:
         couples: List[Tuple[Bag, Bag]] = self.selector.get_random_couples(self.population)  #
@@ -30,7 +30,7 @@ class PoolManager:
         two_p = self.population + children
         if len(children) != len(self.population):
             raise 'ERROR: the amount of children should be equal to the existing population.'
-        new_generation = self.selector(two_p)
+        new_generation = self.selector.select(two_p)
         self.generation += 1
         return new_generation
         # ToDo cuando y donde nos fijamos el corte y cuando pisar la poblacion
