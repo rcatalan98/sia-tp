@@ -7,13 +7,16 @@ from Bag import Bag
 
 
 class TruncatedSelection(BaseSelection):
-    def select(self, population: List[Bag], threshold: float = None, k: int = None) -> List[Bag]:
+    def __init__(self, k: int):
+        self.k = k
+
+    def select(self, population: List[Bag]) -> List[Bag]:
         p = ceil(len(population)/2)  # p can't be odd since p=len/2=2p/2
-        if k < 0 or k > p:
+        if self.k < 0 or self.k > p:
             raise Exception("k is invalid")
 
         population.sort(key=self.sort_by_fitness)
         length = 2*p
-        truncated: List[Bag] = population[length-k:length]
+        truncated: List[Bag] = population[length-self.k:length]
 
         return random.choices(truncated, k=p)

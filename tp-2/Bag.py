@@ -3,18 +3,17 @@ from typing import List
 import random
 from frozenlist import FrozenList
 
-from ConfigStore import ConfigStore
 
 
 class Bag:
-    def __init__(self, items: List[bool], config: ConfigStore):
+    def __init__(self, items: List[bool], config):
         self.items: FrozenList = FrozenList(items)
         self.items.freeze()
         self.config = config
-        self.id = str(self.items)
+        self.id = ''.join([str(int(i)) for i in self.items])
         self.weight = sum(
-            [[self.config.get_item(index).weight for index, has_item in enumerate(self.items) if has_item]])
-        self.elements = len([[has_item for has_item in self.items if has_item]])
+            [self.config.get_item(index).weight for index, has_item in enumerate(self.items) if has_item])
+        self.elements = len([has_item for has_item in self.items if has_item])
         self.fitness = self.calculate_fitness()
 
     def __hash__(self) -> int:
@@ -31,7 +30,7 @@ class Bag:
 
     def calculate_fitness(self):
         if self.is_valid():
-            return sum([[self.config.get_item(index).benefit for index, has_item in enumerate(self.items) if has_item]])
+            return sum([self.config.get_item(index).benefit for index, has_item in enumerate(self.items) if has_item])
         else:
             return 0
 
@@ -40,7 +39,16 @@ class Bag:
                self.elements <= self.config.max_elements
 
     @staticmethod
-    def create_random(config: ConfigStore):
+    def create_random(config):
         total_items: int = len(config.item_store)
-        items: List[bool] = random.choices([True, False], k=total_items)
+
+
+        items: List[bool] = [False] * total_items
+
+        # Elijo la cantidad de elementos que van a estar en la mochila
+        elements: int = random.randint(0, config.max_elements)
+        # Elijo los elementos que voy a meter en la mochila.
+        for i in random.sample(range(0, total_items), elements):
+            items[i] = True
+
         return Bag(items, config)

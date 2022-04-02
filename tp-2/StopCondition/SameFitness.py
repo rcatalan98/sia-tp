@@ -8,11 +8,11 @@ from StopCondition.BaseStopCondition import BaseStopCondition
 
 class SameFitness(BaseStopCondition):
 
-    def __init__(self, pool_manager: PoolManager, config: Dict[str, int | float]):
+    def __init__(self, pool_manager: PoolManager, generations_with_same_fitness: int):
         super().__init__(pool_manager)
         self.previous_best_fitness: int = 0
         self.generation_counter: int = 0
-        self.generations_with_same_fitness: int = config["generations with same fitness"]
+        self.generations_with_same_fitness: int = generations_with_same_fitness
 
     def has_to_stop(self):
         if max([p.fitness for p in self.pool_manager.population]) == self.previous_best_fitness:

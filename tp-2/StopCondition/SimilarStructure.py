@@ -9,12 +9,12 @@ from StopCondition.BaseStopCondition import BaseStopCondition
 
 class SimilarStructure(BaseStopCondition):
 
-    def __init__(self, pool_manager: PoolManager, config: Dict[str, int | float]):
+    def __init__(self, pool_manager: PoolManager,similarity_percentage: float,number_of_similar_generations: int ):
         super().__init__(pool_manager)
         self.similar_generations = 0
         self.previous_generation = set()
-        self.similarity_percentage: float = config['similarity percentage']
-        self.number_of_similar_generations: float = config['number of similar generations']
+        self.similarity_percentage: float = similarity_percentage
+        self.number_of_similar_generations: int = number_of_similar_generations
 
     def has_to_stop(self):
         intersection: Set[Bag] = self.previous_generation.intersection(self.pool_manager.population)

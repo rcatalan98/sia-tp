@@ -8,20 +8,14 @@ from Selection.BaseSelection import BaseSelection
 
 class BoltzmannSelection(BaseSelection):
 
-    @staticmethod
-    def boltz_fitness(bag: Bag, t: float):
-        return math.exp(bag.fitness/t)
+    def __init__(self, k: float, t0: float, tc: float, n_generation: int):
+        self.temperature: float = tc + (t0 - tc) * math.exp(-k * n_generation)
 
-    def select(self, population: List[Bag], threshold: float = None, k: int = None, arg_boltz: Dict[str, float] = None) -> \
-            List[Bag]:
-        if arg_boltz is None or len(arg_boltz) != 4:
-            raise 'Boltzmann initial arguments are missing'
-        t0 = arg_boltz['t0']
-        tc = arg_boltz['tc']
-        k = arg_boltz['k']
-        n_generation = arg_boltz['n_generation']
-        temperature: float = tc + (t0 - tc) * math.exp(-k*n_generation)
+    def boltz_fitness(self,bag: Bag):
+        return math.exp(bag.fitness/self.temperature)
 
-        final_bags = random.choices(population, weights=[BoltzmannSelection.boltz_fitness(p, temperature)
-                                                         for p in population], k=math.ceil(len(population) / 2))
-        return final_bags
+    def select(self, population: List[Bag]) -> List[Bag]:
+        return random.choices(
+            population,
+            weights=[BoltzmannSelection.boltz_fitness(bag) for bag in population],
+            k=math.ceil(len(population) / 2))
