@@ -1,0 +1,5 @@
+{
+  "breeding": "SimpleBreeder",
+  "selection": "EliteSelection",
+  "selection_arguments": "None"
+}

@@ -27,9 +27,8 @@ if __name__ == '__main__':
         items.append(Item(int(info[0]), int(info[1])))
 
     config_file = open(sys.argv[1], 'r')
-    config_data = json.load(config_file)  # FIXME: No se usa?
-    config = ConfigStore(max_weight, max_elements, items)
-    config.itemStore = items
+    config_data = json.load(config_file)
+    config = ConfigStore(max_weight=max_weight, max_elements=max_elements, items=items, **config_data)
 
     print("Running...")
     start_time = perf_counter()

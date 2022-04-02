@@ -30,3 +30,4 @@ class AlgorithmConfig:
         self.selection_algorithms['RouletteSelection'] = lambda x: RouletteSelection()
         self.selection_algorithms['TournamentSelection'] = lambda x: TournamentSelection()
         self.selection_algorithms['TruncatedSelection'] = lambda x: TruncatedSelection()
+
