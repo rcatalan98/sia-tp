@@ -3,7 +3,9 @@
   "breeding_arguments": {},
   "selection": "BoltzmannSelection",
   "selection_arguments": {
-    "threshold": 0.1
+    "k": 100,
+    "t0": 10,
+    "tc": 1800
   },
   "stop_condition": "same best fitness",
   "population_size": 1000,
