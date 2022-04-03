@@ -31,7 +31,7 @@ def load_settings(item_description_filename: str, config_filename: str) -> Confi
     with open(config_filename, 'r') as config_file:
         config_data = json.load(config_file)
 
-    return ConfigStore(max_weight=max_weight, max_elements=max_elements,items=items, **config_data)
+    return ConfigStore(max_weight=max_weight, max_elements=max_elements, items=items, **config_data)
 
 
 if __name__ == '__main__':

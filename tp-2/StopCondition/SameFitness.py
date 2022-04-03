@@ -15,9 +15,12 @@ class SameFitness(BaseStopCondition):
         self.generations_with_same_fitness: int = generations_with_same_fitness
 
     def has_to_stop(self):
-        if max([p.fitness for p in self.pool_manager.population]) == self.previous_best_fitness:
+        gen_best_fitness = max([p.fitness for p in self.pool_manager.population])
+        if gen_best_fitness == self.previous_best_fitness:
             self.generation_counter += 1
         else:
             self.generation_counter = 0
+            if gen_best_fitness > self.previous_best_fitness:
+                self.previous_best_fitness = gen_best_fitness
 
         return self.generation_counter >= self.generations_with_same_fitness

@@ -3,10 +3,10 @@
   "breeding_arguments": {},
   "selection": "EliteSelection",
   "selection_arguments": {},
-  "stop_condition": "generation count",
+  "stop_condition": "time",
   "population_size": 1000,
   "mutation_rate": 0.01,
   "stop_condition_config": {
-      "max_generation": 500
+      "runtime_in_seconds": 60
   }
 }
