@@ -15,7 +15,7 @@ class TruncatedSelection(BaseSelection):
         if self.k < 0 or self.k > p:
             raise Exception("k is invalid")
 
-        population.sort(key=self.sort_by_fitness)
+        population.sort(key=self.sort_by_fitness, reverse=True)
         length = 2*p
         truncated: List[Bag] = population[length-self.k:length]
 
