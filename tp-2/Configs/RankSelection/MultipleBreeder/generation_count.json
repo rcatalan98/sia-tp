@@ -1,0 +1,14 @@
+{
+  "breeding": "MultipleBreeder",
+  "breeding_arguments": {
+    "crossing_points": 2
+  },
+  "selection": "RankSelection",
+  "selection_arguments": {},
+  "stop_condition": "generation count",
+  "population_size": 1000,
+  "mutation_rate": 0.01,
+  "stop_condition_config": {
+      "max_generation": 100
+  }
+}

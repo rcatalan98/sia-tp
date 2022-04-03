@@ -13,7 +13,7 @@ def get_rank_fitness(rank: int, population_size: int) -> float:
 class RankSelection(BaseSelection):
 
     def select(self, population: List[Bag]) -> List[Bag]:
-        population.sort(key=self.sort_by_fitness)
+        population.sort(key=self.sort_by_fitness, reverse=True)
         population_size = ceil(len(population) / 2)
         return random.choices(
             population,
