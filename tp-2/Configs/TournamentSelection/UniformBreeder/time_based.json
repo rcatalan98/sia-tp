@@ -1,0 +1,15 @@
+{
+  "breeding": "UniformBreeder",
+  "breeding_arguments": {
+  },
+  "selection": "TournamentSelection",
+  "selection_arguments": {
+    "threshold": 0.1
+  },
+  "stop_condition": "time",
+  "population_size": 1000,
+  "mutation_rate": 0.01,
+  "stop_condition_config": {
+      "runtime_in_seconds": 60
+  }
+}
