@@ -1,0 +1,18 @@
+{
+  "breeding": "UniformBreeder",
+  "breeding_arguments": {
+  },
+  "selection": "BoltzmannSelection",
+  "selection_arguments": {
+    "k": 10,
+    "t0": 1000,
+    "tc": 3000,
+    "n_generation": 40
+  },
+  "stop_condition": "time",
+  "population_size": 1000,
+  "mutation_rate": 0.01,
+  "stop_condition_config": {
+      "runtime_in_seconds": 60
+  }
+}
