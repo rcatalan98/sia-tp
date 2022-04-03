@@ -12,8 +12,8 @@ class MultipleBreederConfig:
 
 
 class MultipleBreeder(BaseBreeder):
-    def __init__(self, k: int):
-        self.points = k
+    def __init__(self, crossing_points: int):
+        self.points = crossing_points
 
     def breed(self, first: Bag, second: Bag) -> Tuple[Bag, Bag]:
         # Elije multiples puntos entre 0 y len(first)
