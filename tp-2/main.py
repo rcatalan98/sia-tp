@@ -48,8 +48,9 @@ if __name__ == '__main__':
 
     while not pool_manager.has_reached_stop_condition():
         next_gen: List[Bag] = pool_manager.get_new_generation()
-        print(pool_manager.generation)
+        print(f"{pool_manager.generation}: best: {max([i.fitness for i in next_gen])}")
 
         # all_generations += next_gen
 
     end_time = perf_counter()
+

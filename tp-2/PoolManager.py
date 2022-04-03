@@ -34,8 +34,8 @@ class PoolManager:
         if len(children) != len(self.population):
             children.pop(random.randint(0, len(children)-1))
 
-        print([s.fitness for s in self.population])
-        print([s.fitness for s in children])
+        # print([s.fitness for s in self.population])
+        # print([s.fitness for s in children])
 
         self.population = self.selector.select(self.population + children)
 

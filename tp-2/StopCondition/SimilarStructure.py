@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from typing import Set, Dict
+from statistics import mean, median
+from typing import Set, Dict, List
 
 from Bag import Bag
 from PoolManager import PoolManager
@@ -12,18 +13,31 @@ class SimilarStructure(BaseStopCondition):
 
     def __init__(self, pool_manager: PoolManager, similarity_percentage: float, number_of_similar_generations: int ):
         super().__init__(pool_manager)
-        self.similar_generations = 0
-        self.previous_generation = set()
+        self.similar_generations:int = 0
+        self.previous_means: List[int] = []
         self.similarity_percentage: float = similarity_percentage
         self.number_of_similar_generations: int = number_of_similar_generations
 
     def has_to_stop(self):
-        intersection: Set[Bag] = self.previous_generation.intersection(self.pool_manager.population)
-        if len(self.previous_generation) != 0 and float(len(intersection) / len(self.previous_generation)) >= self.similarity_percentage:
-            self.similar_generations += 1
-        else:
-            self.similar_generations = 0
-        # TODO: Puede que esto se rompa por el tema de refrencias, y que tengamos que copiarlo en vez de asignarlo
-        self.previous_generation = set(deepcopy(self.pool_manager.population))
+        new_median: int = median([b.fitness for b in self.pool_manager.population])
 
-        return self.similar_generations >= self.number_of_similar_generations
+        if len(self.previous_means) <= self.number_of_similar_generations:
+            self.previous_means.append(new_median)
+            return False
+
+        generations_to_consider: List[int] = self.previous_means[-self.number_of_similar_generations:]
+
+        mean_of_medians: float = mean(generations_to_consider)
+
+        print(f"mean of medians: {mean_of_medians}. new_median: {new_median}")
+
+        if mean_of_medians * self.similarity_percentage <= new_median <= mean_of_medians / self.similarity_percentage:
+            return True
+        else:
+            self.previous_means.append(new_median)
+            return False
+
+
+
+
+
