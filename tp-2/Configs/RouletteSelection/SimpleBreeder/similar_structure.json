@@ -1,9 +1,8 @@
 {
   "breeding": "SimpleBreeder",
   "breeding_arguments": {},
-  "selection": "TournamentSelection",
+  "selection": "RouletteSelection",
   "selection_arguments": {
-    "threshold": 0.7
   },
   "stop_condition": "similar structure",
   "population_size": 1000,

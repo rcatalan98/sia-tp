@@ -1,15 +1,13 @@
 {
   "breeding": "SimpleBreeder",
   "breeding_arguments": {},
-  "selection": "TournamentSelection",
+  "selection": "RouletteSelection",
   "selection_arguments": {
-    "threshold": 0.7
   },
-  "stop_condition": "similar structure",
+  "stop_condition": "time",
   "population_size": 1000,
   "mutation_rate": 0.01,
   "stop_condition_config": {
-      "similarity_percentage": 0.95,
-      "number_of_similar_generations": 5
+      "runtime_in_seconds": 60
   }
 }
