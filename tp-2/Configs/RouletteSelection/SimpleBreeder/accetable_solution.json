@@ -1,0 +1,13 @@
+{
+  "breeding": "SimpleBreeder",
+  "breeding_arguments": {},
+  "selection": "RouletteSelection",
+  "selection_arguments": {
+  },
+  "stop_condition": "acceptable solution",
+  "population_size": 1000,
+  "mutation_rate": 0.01,
+  "stop_condition_config": {
+      "acceptable_benefit": 8000
+  }
+}
