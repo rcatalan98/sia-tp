@@ -5,15 +5,15 @@
   },
   "selection": "BoltzmannSelection",
   "selection_arguments": {
-    "k": 100,
-    "t0": 10,
-    "tc": 1800
+    "k": 0.3,
+    "t0": 1750,
+    "tc": 100
   },
   "stop_condition": "similar structure",
-  "population_size": 1000,
+  "population_size": 500,
   "mutation_rate": 0.01,
   "stop_condition_config": {
       "similarity_percentage": 0.95,
-      "number_of_similar_generations": 5
+      "number_of_similar_generations": 30
   }
 }

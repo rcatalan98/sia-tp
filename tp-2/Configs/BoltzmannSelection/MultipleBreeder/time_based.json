@@ -5,12 +5,12 @@
   },
   "selection": "BoltzmannSelection",
   "selection_arguments": {
-    "k": 100,
-    "t0": 10,
-    "tc": 1800
+    "k": 0.3,
+    "t0": 1750,
+    "tc": 100
   },
   "stop_condition": "time",
-  "population_size": 1000,
+  "population_size": 500,
   "mutation_rate": 0.01,
   "stop_condition_config": {
       "runtime_in_seconds": 60

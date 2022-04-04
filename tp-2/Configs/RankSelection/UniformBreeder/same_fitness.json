@@ -5,7 +5,7 @@
   "selection": "RankSelection",
   "selection_arguments": {},
   "stop_condition": "same best fitness",
-  "population_size": 1000,
+  "population_size": 500,
   "mutation_rate": 0.01,
   "stop_condition_config": {
       "generations_with_same_fitness": 40

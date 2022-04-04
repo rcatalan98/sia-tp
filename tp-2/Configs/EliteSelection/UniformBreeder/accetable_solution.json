@@ -5,7 +5,7 @@
   "selection": "EliteSelection",
   "selection_arguments": {},
   "stop_condition": "acceptable solution",
-  "population_size": 1000,
+  "population_size": 500,
   "mutation_rate": 0.01,
   "stop_condition_config": {
       "acceptable_benefit": 9000

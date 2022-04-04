@@ -4,14 +4,14 @@
   },
   "selection": "BoltzmannSelection",
   "selection_arguments": {
-    "k": 100,
-    "t0": 10,
-    "tc": 1800
+    "k": 0.3,
+    "t0": 1750,
+    "tc": 100
   },
   "stop_condition": "acceptable solution",
-  "population_size": 1000,
+  "population_size": 500,
   "mutation_rate": 0.01,
   "stop_condition_config": {
-      "acceptable_benefit": 8000
+      "acceptable_benefit": 9000
   }
 }
