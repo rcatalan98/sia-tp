@@ -19,7 +19,7 @@ class TournamentSelection(BaseSelection):
         next_population_size = ceil(len(population)/2)
         selection_bags: List[Bag] = []
 
-        for i in range(next_population_size-1):
+        for i in range(next_population_size):
             first_couple: List[Bag] = sorted(
                 [
                     population[random.randint(0, len(population) - 1)],
@@ -45,5 +45,4 @@ class TournamentSelection(BaseSelection):
                 reverse=True
             )
             selection_bags.append(self.run_match(final_match))
-
         return selection_bags

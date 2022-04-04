@@ -13,4 +13,5 @@ class TimeBased(BaseStopCondition):
         self.runtime_in_seconds: int = runtime_in_seconds
 
     def has_to_stop(self):
+        # print(time.time() - self.start_time)
         return (time.time() - self.start_time) >= self.runtime_in_seconds

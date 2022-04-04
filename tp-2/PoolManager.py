@@ -18,6 +18,7 @@ class PoolManager:
         self.stop_condition: BaseStopCondition = config.get_stop_condition(self)
         self.generation = 0
         self.all_fitness: List[int] = []
+        self.all_weights: List[int] = []
 
     @staticmethod
     def create_random_population(config) -> List[Bag]:
@@ -35,9 +36,15 @@ class PoolManager:
         if len(children) != len(self.population):
             children.pop(random.randint(0, len(children)-1))
 
+        # assert len(children) == 500
         self.population = self.selector.select(self.population + children)
-        self.all_fitness.append(max([i.fitness for i in self.population]))
+
+        (max_fitness, weight) = max([(i.fitness, i.weight) for i in self.population], key=lambda x: x[0])
+        self.all_fitness.append(max_fitness)
+        self.all_weights.append(weight)
         self.generation += 1
+
+        # assert len(self.population) == 500
         return self.population
 
     def has_reached_stop_condition(self):

@@ -54,7 +54,7 @@ def run(config: ConfigStore) -> str:
            f"{config.selection},{config.selection_arguments}," \
            f"{config.stop_condition}, {config.stop_condition_config}," \
            f"{config.population_size},{config.mutation_rate}," \
-           f"{end_time-start_time},{pool_manager.all_fitness[-1]},{pool_manager.generation}," \
+           f"{pool_manager.all_weights[-1]},{pool_manager.all_fitness[-1]},{pool_manager.generation}," \
            f"[{';'.join(str(i) for i in pool_manager.all_fitness)}]"
 
 if __name__ == '__main__':
@@ -76,7 +76,7 @@ if __name__ == '__main__':
 
     report: str = "breeder, breeder args, selector, selector_args," \
                   "stop condition,stop condition args, population size," \
-                  "mutation rate, time elapsed, max fitness, max generation," \
+                  "mutation rate, final weight, final fitness, max generation," \
                   "fitness per generation\n"
 
     for config in settings:
