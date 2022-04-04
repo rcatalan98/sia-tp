@@ -10,8 +10,6 @@ from Item import Item
 
 
 def load_settings(item_description_filename: str, config_filename: str) -> ConfigStore:
-    print("Loading configuration file and items...")
-
     with open(item_description_filename, 'r') as items_file:
         lines = items_file.readlines()
 
@@ -33,13 +31,7 @@ def load_settings(item_description_filename: str, config_filename: str) -> Confi
 
     return ConfigStore(max_weight=max_weight, max_elements=max_elements, items=items, **config_data)
 
-
-if __name__ == '__main__':
-    if len(sys.argv) < 3:
-        raise Exception("Invalid parameters. Missing config")
-
-    config: ConfigStore = load_settings(sys.argv[1], sys.argv[2])
-    print("Running...")
+def run(config: ConfigStore) -> str:
     start_time = perf_counter()
 
     pool_manager = PoolManager(config)  # creates the initial population, called zero generation
@@ -48,9 +40,34 @@ if __name__ == '__main__':
 
     while not pool_manager.has_reached_stop_condition():
         next_gen: List[Bag] = pool_manager.get_new_generation()
-        print(f"{pool_manager.generation}: best: {max([i.fitness for i in next_gen])}")
-
-        # all_generations += next_gen
+        print(f"{pool_manager.generation}: {pool_manager.all_fitness[-1]}")
 
     end_time = perf_counter()
+    return f"{config.breeder},{config.breeding_arguments}," \
+           f"{config.selection},{config.selection_arguments}," \
+           f"{config.stop_condition}, {config.stop_condition_config}," \
+           f"{config.population_size},{config.mutation_rate}," \
+           f"{end_time-start_time},{pool_manager.all_fitness[-1]},{pool_manager.generation}"
+
+if __name__ == '__main__':
+    if len(sys.argv) < 3:
+        raise Exception("Invalid parameters. Missing config")
+
+    config: ConfigStore = load_settings(sys.argv[1], sys.argv[2])
+
+    runs: int = int(sys.argv[3])
+    mutation_rates: List[float] = [0.1, 0.05, 0.01]
+
+    report: str = "breeder, breeder args, selector, selector_args," \
+                  "stop condition,stop condition args, population size," \
+                  "mutation rate, time elapsed, max fitness, max generation\n"
+    # print(report)
+    # for rate in mutation_rates:
+    #     config.mutation_rate = rate
+    #     for i in range(runs):
+    #         a = run(config)
+    #         print(a)
+    #         report += a
+    print(run(config))
+
 

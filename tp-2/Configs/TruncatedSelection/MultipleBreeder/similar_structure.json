@@ -1,15 +1,15 @@
 {
   "breeding": "MultipleBreeder",
   "breeding_arguments": {
-      "crossing_points": 5
+      "crossing_points": 2
   },
-  "selection": "EliteSelection",
+  "selection": "TruncatedSelection",
   "selection_arguments": {},
   "stop_condition": "similar structure",
-  "population_size": 500,
+  "population_size": 1000,
   "mutation_rate": 0.01,
   "stop_condition_config": {
       "similarity_percentage": 0.95,
-      "number_of_similar_generations": 20
+      "number_of_similar_generations": 5
   }
 }

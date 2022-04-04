@@ -29,8 +29,6 @@ class SimilarStructure(BaseStopCondition):
 
         mean_of_medians: float = mean(generations_to_consider)
 
-        print(f"mean of medians: {mean_of_medians}. new_median: {new_median}")
-
         if mean_of_medians * self.similarity_percentage <= new_median <= mean_of_medians / self.similarity_percentage:
             return True
         else:

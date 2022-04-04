@@ -16,6 +16,7 @@ class PoolManager:
         self.breeder: BaseBreeder = config.get_breeder()
         self.stop_condition: BaseStopCondition = config.get_stop_condition(self)
         self.generation = 0
+        self.all_fitness: List[int] = []
 
     @staticmethod
     def create_random_population(config) -> List[Bag]:
@@ -27,18 +28,14 @@ class PoolManager:
 
         children: List[Bag] = []
         for (a, b) in couples:
-            # children.extend(self.breeder.breed(a, b))
             children.extend([self.mutator.mutate(el) for el in self.breeder.breed(a, b)])
 
         # Si hay un pibe extra, matamos a uno al azar
         if len(children) != len(self.population):
             children.pop(random.randint(0, len(children)-1))
 
-        # print([s.fitness for s in self.population])
-        # print([s.fitness for s in children])
-
         self.population = self.selector.select(self.population + children)
-
+        self.all_fitness.append(max([i.fitness for i in self.population]))
         self.generation += 1
         return self.population
 
