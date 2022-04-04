@@ -1,0 +1,16 @@
+{
+  "breeding": "MultipleBreeder",
+  "breeding_arguments": {
+    "crossing_points": 2
+  },
+  "selection": "TournamentSelection",
+  "selection_arguments": {
+    "threshold": 0.85
+  },
+  "stop_condition": "same best fitness",
+  "population_size": 500,
+  "mutation_rate": 0.01,
+  "stop_condition_config": {
+      "generations_with_same_fitness": 40
+  }
+}

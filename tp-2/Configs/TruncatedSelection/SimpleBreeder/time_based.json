@@ -2,7 +2,9 @@
   "breeding": "SimpleBreeder",
   "breeding_arguments": {},
   "selection": "TruncatedSelection",
-  "selection_arguments": {},
+  "selection_arguments": {
+    "k": 500
+  },
   "stop_condition": "time",
   "population_size": 1000,
   "mutation_rate": 0.01,

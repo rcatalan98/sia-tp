@@ -7,6 +7,7 @@ from typing import Set, Dict, List
 from Bag import Bag
 from PoolManager import PoolManager
 from StopCondition.BaseStopCondition import BaseStopCondition
+from StopCondition.TimeBased import TimeBased
 
 
 class SimilarStructure(BaseStopCondition):
@@ -17,6 +18,8 @@ class SimilarStructure(BaseStopCondition):
         self.previous_means: List[int] = []
         self.similarity_percentage: float = similarity_percentage
         self.number_of_similar_generations: int = number_of_similar_generations
+        self.max_time = TimeBased(runtime_in_seconds=500, pool_manager=self)
+
 
     def has_to_stop(self):
         new_median: int = median([b.fitness for b in self.pool_manager.population])
@@ -33,7 +36,7 @@ class SimilarStructure(BaseStopCondition):
             return True
         else:
             self.previous_means.append(new_median)
-            return False
+            return self.max_time.has_to_stop()
 
 
 

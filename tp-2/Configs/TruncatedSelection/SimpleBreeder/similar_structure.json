@@ -3,13 +3,13 @@
   "breeding_arguments": {},
   "selection": "TruncatedSelection",
   "selection_arguments": {
-    "k":20
+    "k": 500
   },
   "stop_condition": "similar structure",
   "population_size": 1000,
   "mutation_rate": 0.01,
   "stop_condition_config": {
       "similarity_percentage": 0.95,
-      "number_of_similar_generations": 20
+      "number_of_similar_generations": 30
   }
 }

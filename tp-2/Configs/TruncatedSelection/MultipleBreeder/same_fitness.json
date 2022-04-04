@@ -4,11 +4,12 @@
     "crossing_points": 2
   },
   "selection": "TruncatedSelection",
-  "selection_arguments": {},
-  "stop_condition": "same best fitness",
+  "selection_arguments": {
+    "k": 500
+  },  "stop_condition": "same best fitness",
   "population_size": 1000,
   "mutation_rate": 0.01,
   "stop_condition_config": {
-      "generations_with_same_fitness": 10
+      "generations_with_same_fitness": 40
   }
 }

@@ -5,12 +5,12 @@
   },
   "selection": "TournamentSelection",
   "selection_arguments": {
-    "threshold": 0.7
+    "threshold": 0.85
   },
   "stop_condition": "acceptable solution",
   "population_size": 1000,
   "mutation_rate": 0.01,
   "stop_condition_config": {
-      "acceptable_benefit": 8000
+      "acceptable_benefit": 9000
   }
 }

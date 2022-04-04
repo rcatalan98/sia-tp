@@ -6,6 +6,7 @@ from Breeding.BaseBreeder import BaseBreeder
 from Mutation.Mutation import Mutation
 from Selection.BaseSelection import BaseSelection
 from StopCondition.BaseStopCondition import BaseStopCondition
+from StopCondition.TimeBased import TimeBased
 
 
 class PoolManager:

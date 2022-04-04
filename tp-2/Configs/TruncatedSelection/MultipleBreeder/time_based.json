@@ -4,8 +4,9 @@
     "crossing_points": 2
   },
   "selection": "TruncatedSelection",
-  "selection_arguments": {},
-  "stop_condition": "time",
+  "selection_arguments": {
+    "k": 500
+  },  "stop_condition": "time",
   "population_size": 1000,
   "mutation_rate": 0.01,
   "stop_condition_config": {

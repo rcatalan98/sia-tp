@@ -5,13 +5,13 @@
   },
   "selection": "TournamentSelection",
   "selection_arguments": {
-    "threshold": 0.7
+    "threshold": 0.85
   },
   "stop_condition": "similar structure",
   "population_size": 1000,
   "mutation_rate": 0.01,
   "stop_condition_config": {
-      "similarity_percentage": 0.99,
+      "similarity_percentage": 0.95,
       "number_of_similar_generations": 30
   }
 }

@@ -3,11 +3,13 @@
   "breeding_arguments": {
   },
   "selection": "TruncatedSelection",
-  "selection_arguments": {},
+  "selection_arguments": {
+    "k": 500
+  },
   "stop_condition": "acceptable solution",
   "population_size": 1000,
   "mutation_rate": 0.01,
   "stop_condition_config": {
-      "acceptable_benefit": 8000
+      "acceptable_benefit": 9000
   }
 }

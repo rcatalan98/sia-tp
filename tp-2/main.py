@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 from time import perf_counter
 from typing import List
@@ -31,6 +32,11 @@ def load_settings(item_description_filename: str, config_filename: str) -> Confi
 
     return ConfigStore(max_weight=max_weight, max_elements=max_elements, items=items, **config_data)
 
+def load_multiple_settings(item_description_filename: str, config_directory: str) -> List[ConfigStore]:
+    a = [load_settings(item_description_filename,val) for sublist in [[os.path.join(i[0], j) for j in i[2]] for i in os.walk(config_directory)] for val in sublist]
+
+    return a
+
 def run(config: ConfigStore) -> str:
     start_time = perf_counter()
 
@@ -38,36 +44,49 @@ def run(config: ConfigStore) -> str:
     # TODO: Por que necesitamos guardar todas las generaciones???
     # all_generations: List[List[Bag]] = [pool_manager.generation]
 
+
     while not pool_manager.has_reached_stop_condition():
         next_gen: List[Bag] = pool_manager.get_new_generation()
-        print(f"{pool_manager.generation}: {pool_manager.all_fitness[-1]}")
+        # print(f"{pool_manager.generation}: {pool_manager.all_fitness[-1]}")
 
     end_time = perf_counter()
     return f"{config.breeder},{config.breeding_arguments}," \
            f"{config.selection},{config.selection_arguments}," \
            f"{config.stop_condition}, {config.stop_condition_config}," \
            f"{config.population_size},{config.mutation_rate}," \
-           f"{end_time-start_time},{pool_manager.all_fitness[-1]},{pool_manager.generation}"
+           f"{end_time-start_time},{pool_manager.all_fitness[-1]},{pool_manager.generation}," \
+           f"[{';'.join(str(i) for i in pool_manager.all_fitness)}]"
 
 if __name__ == '__main__':
     if len(sys.argv) < 3:
         raise Exception("Invalid parameters. Missing config")
 
-    config: ConfigStore = load_settings(sys.argv[1], sys.argv[2])
+    settings: List[ConfigStore] = []
+    runs: int = 1
+    if sys.argv[2] == 'multiple':
+        settings = load_multiple_settings(sys.argv[1],sys.argv[3])
+        if len(sys.argv) == 5:
+            runs = int(sys.argv[4])
+    else:
+        settings.append(load_settings(sys.argv[1],sys.argv[2]))
+        if len(sys.argv) == 4:
+            runs = int(sys.argv[3])
 
-    runs: int = int(sys.argv[3])
-    mutation_rates: List[float] = [0.1, 0.05, 0.01]
+
 
     report: str = "breeder, breeder args, selector, selector_args," \
                   "stop condition,stop condition args, population size," \
-                  "mutation rate, time elapsed, max fitness, max generation\n"
-    # print(report)
-    # for rate in mutation_rates:
-    #     config.mutation_rate = rate
-    #     for i in range(runs):
-    #         a = run(config)
-    #         print(a)
-    #         report += a
-    print(run(config))
+                  "mutation rate, time elapsed, max fitness, max generation," \
+                  "fitness per generation\n"
 
+    for config in settings:
+        for i in range(runs):
+            print(config.stop_condition)
+            a = run(config)
+            print(a)
+            report += f"{a}\n"
+
+    f = open("results.csv",'w')
+    f.write(report)
+    f.close()
 

@@ -5,12 +5,12 @@
   },
   "selection": "TournamentSelection",
   "selection_arguments": {
-    "threshold": 0.8
+    "threshold": 0.85
   },
   "stop_condition": "generation count",
   "population_size": 1000,
   "mutation_rate": 0.01,
   "stop_condition_config": {
-      "max_generation": 100
+      "max_generation": 500
   }
 }

@@ -5,7 +5,7 @@
   },
   "selection": "TournamentSelection",
   "selection_arguments": {
-    "threshold": 0.7
+    "threshold": 0.85
   },
   "stop_condition": "time",
   "population_size": 1000,
