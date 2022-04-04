@@ -1,0 +1,19 @@
+{
+  "breeding": "MultipleBreeder",
+  "breeding_arguments": {
+      "crossing_points": 5
+  },
+  "selection": "BoltzmannSelection",
+  "selection_arguments": {
+    "k": 100,
+    "t0": 10,
+    "tc": 1800
+  },
+  "stop_condition": "similar structure",
+  "population_size": 1000,
+  "mutation_rate": 0.01,
+  "stop_condition_config": {
+      "similarity_percentage": 0.95,
+      "number_of_similar_generations": 20
+  }
+}

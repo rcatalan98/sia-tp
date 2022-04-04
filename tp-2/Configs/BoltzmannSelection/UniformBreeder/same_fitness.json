@@ -1,0 +1,17 @@
+{
+  "breeding": "UniformBreeder",
+  "breeding_arguments": {
+  },
+  "selection": "BoltzmannSelection",
+  "selection_arguments": {
+    "k": 100,
+    "t0": 10,
+    "tc": 1800
+  },
+  "stop_condition": "same best fitness",
+  "population_size": 1000,
+  "mutation_rate": 0.01,
+  "stop_condition_config": {
+      "generations_with_same_fitness": 10
+  }
+}
