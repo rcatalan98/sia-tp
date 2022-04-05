@@ -1,7 +1,7 @@
 {
   "breeding": "MultipleBreeder",
   "breeding_arguments": {
-      "crossing_points": 2
+    "crossing_points": 2
   },
   "selection": "EliteSelection",
   "selection_arguments": {},
@@ -9,6 +9,6 @@
   "population_size": 500,
   "mutation_rate": 0.01,
   "stop_condition_config": {
-      "acceptable_benefit": 9000
+    "acceptable_benefit": 9000
   }
 }

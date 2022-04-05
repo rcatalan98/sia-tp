@@ -4,10 +4,11 @@
   "selection": "TruncatedSelection",
   "selection_arguments": {
     "k": 40
-  },  "stop_condition": "acceptable solution",
+  },
+  "stop_condition": "acceptable solution",
   "population_size": 500,
   "mutation_rate": 0.01,
   "stop_condition_config": {
-      "acceptable_benefit": 8900
+    "acceptable_benefit": 8900
   }
 }

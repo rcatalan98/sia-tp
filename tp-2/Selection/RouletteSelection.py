@@ -12,5 +12,5 @@ class RouletteSelection(BaseSelection):
         return random.choices(
             population,
             weights=[p.fitness for p in population],
-            k=ceil(len(population)/2)
+            k=ceil(len(population) / 2)
         )

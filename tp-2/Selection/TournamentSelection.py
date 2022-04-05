@@ -1,7 +1,6 @@
 import random
-from copy import deepcopy
 from math import ceil
-from typing import List, Dict, Tuple
+from typing import List
 
 from Bag import Bag
 from Selection.BaseSelection import BaseSelection
@@ -12,11 +11,11 @@ class TournamentSelection(BaseSelection):
     def __init__(self, threshold: float):
         self.threshold = threshold
 
-    def run_match(self,couple: List[Bag]):
-        return couple[0] if random.uniform(0,1) < self.threshold else couple[1]
+    def run_match(self, couple: List[Bag]):
+        return couple[0] if random.uniform(0, 1) < self.threshold else couple[1]
 
     def select(self, population: List[Bag]) -> List[Bag]:
-        next_population_size = ceil(len(population)/2)
+        next_population_size = ceil(len(population) / 2)
         selection_bags: List[Bag] = []
 
         for i in range(next_population_size):
@@ -25,7 +24,7 @@ class TournamentSelection(BaseSelection):
                     population[random.randint(0, len(population) - 1)],
                     population[random.randint(0, len(population) - 1)]
                 ],
-                key= lambda b: b.fitness,
+                key=lambda b: b.fitness,
                 reverse=True
             )
             second_couple: List[Bag] = sorted(
@@ -36,7 +35,7 @@ class TournamentSelection(BaseSelection):
                 key=lambda b: b.fitness,
                 reverse=True
             )
-            final_match: List[Bag]=sorted(
+            final_match: List[Bag] = sorted(
                 [
                     self.run_match(first_couple),
                     self.run_match(second_couple),

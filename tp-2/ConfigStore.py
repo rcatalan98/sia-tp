@@ -1,22 +1,22 @@
 from __future__ import annotations
 
-from typing import List, Dict
+from typing import Dict
 
-from Item import Item
-from Selection.BoltzmannSelection import BoltzmannSelection
-from StopCondition.AcceptableSolution import *
-from StopCondition.GenerationCount import *
-from StopCondition.SameFitness import *
-from StopCondition.SimilarStructure import *
-from StopCondition.TimeBased import *
 from Breeding.MultipleBreeder import MultipleBreeder
 from Breeding.SimpleBreeder import SimpleBreeder
 from Breeding.UniformBreeder import UniformBreeder
+from Item import Item
+from Selection.BoltzmannSelection import BoltzmannSelection
 from Selection.EliteSelection import EliteSelection
 from Selection.RankSelection import RankSelection
 from Selection.RouletteSelection import RouletteSelection
 from Selection.TournamentSelection import TournamentSelection
 from Selection.TruncatedSelection import TruncatedSelection
+from StopCondition.AcceptableSolution import *
+from StopCondition.GenerationCount import *
+from StopCondition.SameFitness import *
+from StopCondition.SimilarStructure import *
+from StopCondition.TimeBased import *
 
 
 class ConfigStore:

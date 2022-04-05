@@ -1,7 +1,6 @@
 {
   "breeding": "UniformBreeder",
   "breeding_arguments": {
-
   },
   "selection": "TruncatedSelection",
   "selection_arguments": {
@@ -11,7 +10,7 @@
   "population_size": 500,
   "mutation_rate": 0.01,
   "stop_condition_config": {
-      "similarity_percentage": 0.95,
-      "number_of_similar_generations": 30
+    "similarity_percentage": 0.95,
+    "number_of_similar_generations": 30
   }
 }

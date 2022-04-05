@@ -1,7 +1,6 @@
-from typing import List
+import random
 
 from Bag import Bag
-import random
 
 
 class Mutation:
@@ -21,6 +20,3 @@ class Mutation:
                 l += [not item]
 
         return Bag(l, subject.config)
-        # return Bag([self.mutate_gen(item) for item in subject.items], subject.config)
-
-

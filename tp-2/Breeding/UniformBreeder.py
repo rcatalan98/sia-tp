@@ -1,8 +1,8 @@
+import random
 from typing import Tuple, List
 
 from Bag import Bag
 from Breeding.BaseBreeder import BaseBreeder
-import random
 
 
 class UniformBreeder(BaseBreeder):

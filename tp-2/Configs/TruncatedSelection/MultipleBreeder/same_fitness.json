@@ -6,10 +6,11 @@
   "selection": "TruncatedSelection",
   "selection_arguments": {
     "k": 40
-  },  "stop_condition": "same best fitness",
+  },
+  "stop_condition": "same best fitness",
   "population_size": 500,
   "mutation_rate": 0.01,
   "stop_condition_config": {
-      "generations_with_same_fitness": 40
+    "generations_with_same_fitness": 40
   }
 }

@@ -8,6 +8,6 @@
   "population_size": 500,
   "mutation_rate": 0.01,
   "stop_condition_config": {
-      "max_generation": 500
+    "max_generation": 500
   }
 }

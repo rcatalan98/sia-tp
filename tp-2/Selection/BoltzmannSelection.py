@@ -1,6 +1,6 @@
 import math
 import random
-from typing import List, Dict
+from typing import List
 
 from Bag import Bag
 from Selection.BaseSelection import BaseSelection
@@ -18,7 +18,7 @@ class BoltzmannSelection(BaseSelection):
         return self.tc + (self.t0 - self.tc) * math.exp(-self.k * n_generation)
 
     def boltz_fitness(self, bag: Bag):
-        return math.exp(bag.fitness/self.temperature(self.current_gen))
+        return math.exp(bag.fitness / self.temperature(self.current_gen))
 
     def select(self, population: List[Bag]) -> List[Bag]:
         self.current_gen += 1

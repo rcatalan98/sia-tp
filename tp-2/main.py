@@ -1,13 +1,11 @@
 import json
 import os
 import sys
-from time import perf_counter
 from typing import List, Dict
 
 from ConfigStore import ConfigStore
-from PoolManager import PoolManager
-from Bag import Bag
 from Item import Item
+from PoolManager import PoolManager
 
 
 def load_settings(item_description_filename: str, config_filename: str) -> ConfigStore:
@@ -45,17 +43,12 @@ def format_dict(d: Dict):
 
 
 def run(config: ConfigStore) -> str:
-    start_time = perf_counter()
-
     pool_manager = PoolManager(config)  # creates the initial population, called zero generation
-    # TODO: Por que necesitamos guardar todas las generaciones???
-    # all_generations: List[List[Bag]] = [pool_manager.generation]
 
     while not pool_manager.has_reached_stop_condition():
-        next_gen: List[Bag] = pool_manager.get_new_generation()
+        pool_manager.get_new_generation()
         print(f"{pool_manager.generation}: {pool_manager.all_fitness[-1]}")
 
-    end_time = perf_counter()
     return f"{config.breeder},{format_dict(config.breeding_arguments)}," \
            f"{config.selection},{format_dict(config.selection_arguments)}," \
            f"{config.stop_condition}, {format_dict(config.stop_condition_config)}," \
@@ -86,6 +79,7 @@ if __name__ == '__main__':
             "mutation rate, final weight, final fitness, max generation,"
             "fitness per generation\n"
         ]
+
         for i in range(runs):
             print(config.stop_condition)
             a = run(config)

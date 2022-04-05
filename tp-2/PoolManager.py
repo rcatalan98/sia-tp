@@ -6,7 +6,6 @@ from Breeding.BaseBreeder import BaseBreeder
 from Mutation.Mutation import Mutation
 from Selection.BaseSelection import BaseSelection
 from StopCondition.BaseStopCondition import BaseStopCondition
-from StopCondition.TimeBased import TimeBased
 
 
 class PoolManager:
@@ -32,11 +31,9 @@ class PoolManager:
         for (a, b) in couples:
             children.extend([self.mutator.mutate(el) for el in self.breeder.breed(a, b)])
 
-        # Si hay un pibe extra, matamos a uno al azar
         if len(children) != len(self.population):
-            children.pop(random.randint(0, len(children)-1))
+            children.pop(random.randint(0, len(children) - 1))
 
-        # assert len(children) == 500
         self.population = self.selector.select(self.population + children)
 
         (max_fitness, weight) = max([(i.fitness, i.weight) for i in self.population], key=lambda x: x[0])
@@ -44,12 +41,7 @@ class PoolManager:
         self.all_weights.append(weight)
         self.generation += 1
 
-        # assert len(self.population) == 500
         return self.population
 
     def has_reached_stop_condition(self):
         return self.stop_condition.has_to_stop()
-
-
-
-

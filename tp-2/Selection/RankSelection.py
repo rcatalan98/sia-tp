@@ -1,6 +1,6 @@
 import random
 from math import ceil
-from typing import List, Dict
+from typing import List
 
 from Bag import Bag
 from Selection.BaseSelection import BaseSelection

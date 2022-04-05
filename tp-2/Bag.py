@@ -1,8 +1,8 @@
 # Subject
-from typing import List
 import random
-from frozenlist import FrozenList
+from typing import List
 
+from frozenlist import FrozenList
 
 
 class Bag:
@@ -41,7 +41,6 @@ class Bag:
     @staticmethod
     def create_random(config):
         total_items: int = len(config.item_store)
-
 
         items: List[bool] = [False] * total_items
 

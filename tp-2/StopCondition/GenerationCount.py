@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Dict
-
 from PoolManager import PoolManager
 from StopCondition.BaseStopCondition import BaseStopCondition
 
@@ -14,5 +12,3 @@ class GenerationCount(BaseStopCondition):
 
     def has_to_stop(self):
         return self.max_generation <= self.pool_manager.generation
-
-

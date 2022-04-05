@@ -1,6 +1,6 @@
 import random
 from copy import deepcopy
-from typing import List, Tuple, Dict
+from typing import List, Tuple
 
 from Bag import Bag
 
@@ -34,11 +34,11 @@ class BaseSelection:
         r2 = 0
         while r1 == r2:  # just in case randint returns the same value both times
             # random.randint incluye tanto el inicio como el final
-            r1 = random.randint(0, len(population)-1)
-            r2 = random.randint(0, len(population)-1)
+            r1 = random.randint(0, len(population) - 1)
+            r2 = random.randint(0, len(population) - 1)
 
         # En algun momento, esto tira error
         try:
             return population[r1], population[r2]
         except IndexError:
-            raise IndexError("Se va a la mierda")
+            raise IndexError("Invalid index")
