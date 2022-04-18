@@ -1,6 +1,6 @@
-# TP: Algoritmos Genéticos
+# TP 2: Algoritmos Genéticos
 
-## Grupo
+## Grupo 5
 
 Este trabajo practico fue realizado por:
 
@@ -105,7 +105,7 @@ los resultados, por lo que encontramos un buen balance utilizando el valor 0.01.
 Se han implementado 3 mecanismos de reproducción, siendo uno de estos un caso especial de otro:
 
 - **MultipleBreeder**: Este mecanismo realiza varios puntos de corten en los padres para poder dividirlo entre los
-  hijos. PAra poder ejecutarlo se deben pasar argumentos indicando la cantidad de puntos de corte:
+  hijos. Para poder ejecutarlo se deben pasar argumentos indicando la cantidad de puntos de corte:
 
   ```json
   {
