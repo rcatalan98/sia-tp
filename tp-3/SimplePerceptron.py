@@ -14,18 +14,12 @@ class SimplePerceptron:
 
     @staticmethod
     def activation(excitement_value):
-        return 1 if excitement_value.all(0) else -1
+        return 1 if excitement_value else -1
 
     def estimate_error(self, train_dataset, expected_results, w):
-        # func = np.vectorize(lambda x: self.activation(self.excitement(w, x)))
-        aux = np.zeros(4)
-        i = 0
-        for point in train_dataset:
-            aux[i] = self.activation(self.excitement(w,point))
-            i += 1
-        # misclassified = np.count_nonzero(func(train_dataset) == expected_results)
-        misclassified = len(expected_results) - np.count_nonzero(aux == expected_results)
-        return misclassified / len(expected_results)
+        results = np.array([self.activation(self.excitement(w, x)) for x in train_dataset])
+        misclassified = np.count_nonzero(results != expected_results)
+        return float(misclassified / len(expected_results))
 
     def train(self, train_dataset, expected_results, max_iteration, learning_rate):
         error = 1
@@ -43,7 +37,7 @@ class SimplePerceptron:
             h = self.excitement(w, train_dataset[i_x])
             o = self.activation(h)
             delta_w = np.dot(learning_rate * (expected_results[i_x] - o), train_dataset[i_x])
-            np.add(w, delta_w)
+            w = np.add(w, delta_w)
             error = self.estimate_error(train_dataset, expected_results, w)
 
             if error < error_min:
