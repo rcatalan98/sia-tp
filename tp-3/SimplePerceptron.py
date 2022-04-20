@@ -4,16 +4,16 @@ import numpy as np
 
 
 class SimplePerceptron:
-    def __init__(self):
+    def __init__(self, dimensions, threshold = 1):
         self.w = None
+        self.dimensions = dimensions
+        self.threshold = threshold
 
     # Calcula la funcion w_1 *x_1 + w_2 * x_2 ...
-    @staticmethod
-    def excitement(w, datapoint):
-        return np.dot(datapoint,w) #esto no calcula lo que queremos!
+    def excitement(self,w, datapoint):
+        return np.dot(datapoint,w)
 
-    @staticmethod
-    def activation(excitement_value):
+    def activation(self, excitement_value):
         return 1 if excitement_value >= 0 else -1
 
     def estimate_error(self, train_dataset, expected_results, w):
@@ -21,15 +21,18 @@ class SimplePerceptron:
         misclassified = np.count_nonzero(results != expected_results)
         return float(misclassified / len(expected_results))
 
-    def augment_dataset(self, train_dataset, position=2 ,value = 1):
-        return np.insert(train_dataset, position, value, axis=1)
+    def augment_dataset(self, train_dataset):
+        return np.insert(train_dataset, self.dimensions, self.threshold, axis=1)
+
+    def delta_w(self,learning_rate, expected, observed, datapoint):
+        return learning_rate * np.dot(expected - observed, datapoint)
 
     def train(self, train_dataset, expected_results, max_iteration, learning_rate):
         p = len(expected_results)
         error = 1
         error_min = 2 * p
         train_dataset = self.augment_dataset(train_dataset)
-        w = np.zeros(3)
+        w = np.zeros(self.dimensions + 1)
         self.w = np.copy(w)
         it = 0
         while error > 0 and it < max_iteration:
@@ -37,7 +40,7 @@ class SimplePerceptron:
             i_x = random.randint(0, p - 1)
             h = self.excitement(w,train_dataset[i_x])
             o = self.activation(h)
-            delta_w = learning_rate * np.dot(expected_results[i_x] - o, train_dataset[i_x])
+            delta_w = self.delta_w(learning_rate,expected_results[i_x],o,train_dataset[i_x])
             w = np.add(w,delta_w)
             error = self.estimate_error(train_dataset, expected_results, w)
             if error < error_min:
