@@ -5,9 +5,10 @@ if __name__ == '__main__':
 
     def g(x):
         try:
-            return math.e ** x / (1 + math.e ** x)
+            return math.exp(x) / (1 + math.exp(x))
         except OverflowError:
             return 1
+
 
     def F(W, w, w0, E):
         return g(sum(

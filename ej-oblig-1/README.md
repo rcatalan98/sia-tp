@@ -28,6 +28,12 @@ Navegamos a la carpeta del ejercicio obligatorio 1:
 $ cd sia-tp/ej-oblig-1
 ```
 
+Instalamos las dependencias:
+
+```bash
+$ pip3 install -r requirements.txt
+```
+
 ### Ejecución
 
 Para ejecutar el programa, simplemente tenemos que correr el siguiente comando:
