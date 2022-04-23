@@ -7,11 +7,17 @@ class SimplePerceptron:
     def __init__(self, dimensions, threshold = 1):
         self.w = None
         self.dimensions = dimensions
+
         self.threshold = threshold
 
     # Calcula la funcion w_1 *x_1 + w_2 * x_2 ...
     def excitement(self,w, datapoint):
-        return np.dot(datapoint,w)
+        value = 0
+        for i in range(self.dimensions + 1):
+            value += w[i] * datapoint[i]
+
+        return value
+        # return np.dot(datapoint,w)
 
     def activation(self, excitement_value):
         return 1 if excitement_value >= 0 else -1
@@ -22,21 +28,21 @@ class SimplePerceptron:
         return float(misclassified / len(expected_results))
 
     def augment_dataset(self, train_dataset):
-        return np.insert(train_dataset, self.dimensions, self.threshold, axis=1)
+        return np.insert(train_dataset,0, self.threshold, axis=1)
 
+    # TODO: Deberia devolver un vector esto
     def delta_w(self,learning_rate, expected, observed, datapoint):
         return learning_rate * np.dot(expected - observed, datapoint)
 
     def train(self, train_dataset, expected_results, max_iteration, learning_rate):
         p = len(expected_results)
         error = 1
-        error_min = 2 * p
+        error_min = float("inf")
         train_dataset = self.augment_dataset(train_dataset)
         w = np.zeros(self.dimensions + 1)
         self.w = np.copy(w)
         it = 0
         while error > 0 and it < max_iteration:
-            # print(f'Iteration number:{it}, error: {error}, w: {w}')
             i_x = random.randint(0, p - 1)
             h = self.excitement(w,train_dataset[i_x])
             o = self.activation(h)
@@ -50,10 +56,11 @@ class SimplePerceptron:
                 w = np.copy(self.w)
 
             it += 1
+            print(f'Iteration number:{it}, error: {error}, w: {w}')
 
         print(f'Iteration number:{it}, error: {error}, w: {w}')
 
         return self.w
 
     def perform(self,value):
-        return self.activation(self.excitement(self.w,self.augment_dataset(np.array([value]))))
+        return self.activation(self.excitement(self.w,self.augment_dataset(np.array([value]))[0]))
