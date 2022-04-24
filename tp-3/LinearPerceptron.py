@@ -1,6 +1,6 @@
 import numpy as np
 import random
-
+# Todo remove weight from biases.
 from SimplePerceptron import SimplePerceptron
 
 

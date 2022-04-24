@@ -2,7 +2,7 @@ import random
 
 import numpy as np
 
-
+# Todo remove weight from biases.
 class SimplePerceptron:
     def __init__(self, dimensions, threshold = 1):
         self.w = None

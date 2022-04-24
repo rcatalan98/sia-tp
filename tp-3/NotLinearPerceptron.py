@@ -1,7 +1,5 @@
 import math
-import mpmath
-import numpy as np
-
+# Todo remove weight from biases.
 from LinearPerceptron import LinearPerceptron
 
 
