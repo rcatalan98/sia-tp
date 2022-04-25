@@ -3,9 +3,11 @@
 # Press ⌃R to execute it or replace it with your code.
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 import math
+import random
 
 import numpy as np
 
+from Ej3 import MultilayerPerceptronXor
 from LinearPerceptron import LinearPerceptron
 from NeuralNetwork import NeuralNetwork, NNBuilder
 from NotLinearPerceptron import NotLinearPerceptron
@@ -49,41 +51,28 @@ if __name__ == '__main__':
     # for i in range(180,200):
     #     print(f"expected; {results[i]}, got: {perceptron.perform(input[i])}")
 
-    sigmoid = lambda e: 1 / (1 + math.exp(-e))
-    sigmoid_derived = lambda e: sigmoid(e) * (1 - sigmoid(e))
-
-
-
-
-    # a = nn.train([1,0],1,0.1)
-
-    nn2 = NNBuilder\
-                    .with_input(2)\
-                    .with_hidden_layer(4,sigmoid, sigmoid_derived)\
-                    .with_output_layer(3,sigmoid, sigmoid_derived)
-
-    a2 = nn2.train2([0,0],[1,0,0],0.1)
+    MultilayerPerceptronXor()
 
     # Ahi CREO que funciona el backtracking. Al menos no explota.
     # No se si el gradiente deberia ser un escalar, una matriz o un vector
     # falta tocar el tema de los biases, lo tengo hecho a medias pero tengo que terminar el
     # video del chabon
 
-    xor_data_set = np.array([[0, 1], [1, 0], [0, 0], [1, 1]])
-    xor_expected_results = np.array([1, 1, 0, 0])
-    perceptron_xor = NeuralNetwork(2, 2, 1, 0.01, 1)
+    # xor_data_set = np.array([[0, 1], [1, 0], [0, 0], [1, 1]])
+    # xor_expected_results = np.array([1, 1, 0, 0])
+    # perceptron_xor = NeuralNetwork(2, 2, 1, 0.01, 1)
+    #
+    # for i in range(500):
+    #     perceptron_xor.train(xor_data_set, xor_expected_results)
+    #     error = perceptron_xor.estimate_error(xor_data_set,xor_expected_results)
+    #     print(f"error: {error}")
+    #     if error < 0.001:
+    #         break
 
-    for i in range(500):
-        perceptron_xor.train(xor_data_set, xor_expected_results)
-        error = perceptron_xor.estimate_error(xor_data_set,xor_expected_results)
-        print(f"error: {error}")
-        if error < 0.001:
-            break
-
-    for val in xor_data_set:
-        # Math.abs(Math.round(result))
-        a = abs(perceptron_xor.perform(val).flatten().round())
-        print(f"\t{val[0]} \txor \t{val[1]} \tis \t{a}")
+    # for val in xor_data_set:
+    #     # Math.abs(Math.round(result))
+    #     a = abs(perceptron_xor.perform(val).flatten().round())
+    #     print(f"\t{val[0]} \txor \t{val[1]} \tis \t{a}")
         # print(f"\t{val[0]} \txor \t{val[1]} \tis \t{ 'false' if perceptron_xor.perform(val) < 0.5 else 'true'}")
 
 

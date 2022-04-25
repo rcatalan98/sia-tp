@@ -71,61 +71,11 @@ class NeuralNetwork:
         # replace for numpy
         return entry.reshape(entry.size)
 
+    # Este es el generico!!!!
     def train(self, data_point, result, learning_rate: float):
 
         data_point = np.array(data_point).reshape((len(data_point), 1))
-        result = np.array(result)
-
-        # Feed forward
-        excitement_values = []
-        output_values = []
-
-        entry = data_point
-        for i in range(self.layer_count):
-            value = np.dot(self.w[i], entry) + self.bias[i]
-            excitement_values.append(value)
-            output = self.activation_functions[i](value)
-            output_values.append(output)
-            entry = output
-
-        final_output = output_values[-1].reshape(entry.size)
-        output_error = result - final_output
-
-        # Backpropagation
-
-        # Output layer
-        whoT = self.w[-1].T
-        hidden_errors = np.dot(whoT, output_error)
-
-        # Gradient descent
-        gradient_output = self.derived_functions[-1](excitement_values[-1])
-        gradient_output = np.dot(gradient_output, output_error)
-        gradient_output = gradient_output * learning_rate
-        self.bias[-1] += gradient_output
-
-        # Gradient next layer
-        gradient_hidden = self.derived_functions[-2](excitement_values[-2])
-        gradient_hidden = np.dot(gradient_hidden, hidden_errors.reshape(1,2))
-        gradient_hidden = gradient_hidden * learning_rate
-        self.bias[-2] += gradient_hidden
-
-        # Change weight for output
-        hidden_output_t = output_values[-2].T
-        delta_w_output = np.dot(gradient_output, hidden_output_t)
-        self.w[-1] += delta_w_output
-
-        # Change weights for hidden
-        inputs_t = data_point
-        delta_w_hidden = np.dot(gradient_hidden, inputs_t)
-        self.w[-2] += delta_w_hidden
-
-        return self.w
-
-    # Este es el generico!!!!
-    def train2(self, data_point, result, learning_rate: float):
-
-        data_point = np.array(data_point).reshape((len(data_point), 1))
-        result = np.array(result)
+        result = np.array(result, ndmin=2)
 
         # Feed forward
         excitement_values = []
@@ -152,7 +102,6 @@ class NeuralNetwork:
         errors.reverse()
 
         input_for_each_layer = [data_point] + output_values
-        # El gradiente tiene que ser un numero o una matriz??
         for i in reversed(range(self.layer_count)):
             gradient = self.derived_functions[i](excitement_values[i])
             gradient = gradient * errors[i]
@@ -163,10 +112,6 @@ class NeuralNetwork:
 
         return self.w
 
-#Metemos durante crupto? o que hacemos?
-    # yo diria que comamos y lo veamos antes que cripto
-    # despues quiero empezar a meterle a esa materia
-    # otra cosa, aca
 
 
     # def __init__(self, input_nodes: int, hidden_nodes: int, output_nodes: int, learning_rate: float, bias: int = 1,
