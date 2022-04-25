@@ -2,15 +2,12 @@
 
 # Press ⌃R to execute it or replace it with your code.
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-import math
-import random
 
-import numpy as np
 
+from Ej1 import SimplePerceptronAnd, SimplePerceptronOr
+from Ej2 import LinearPerceptron, NotLinearPerceptron
 from Ej3 import MultilayerPerceptronXor
-from LinearPerceptron import LinearPerceptron
 from NeuralNetwork import NeuralNetwork, NNBuilder
-from NotLinearPerceptron import NotLinearPerceptron
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
@@ -51,8 +48,11 @@ if __name__ == '__main__':
     # for i in range(180,200):
     #     print(f"expected; {results[i]}, got: {perceptron.perform(input[i])}")
 
-    MultilayerPerceptronXor()
-
+    # MultilayerPerceptronXor()
+    # SimplePerceptronAnd()
+    # SimplePerceptronOr()
+    # LinearPerceptron()
+    NotLinearPerceptron()
     # Ahi CREO que funciona el backtracking. Al menos no explota.
     # No se si el gradiente deberia ser un escalar, una matriz o un vector
     # falta tocar el tema de los biases, lo tengo hecho a medias pero tengo que terminar el
