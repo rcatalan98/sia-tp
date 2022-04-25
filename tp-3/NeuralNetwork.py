@@ -1,20 +1,180 @@
 import math
+import random
+from typing import List, Tuple, Callable
 
 import numpy as np
 
 
+class NNBuilder:
+    def __init__(self):
+        self.layers = []
+        self.input_nodes = 0
+
+    def with_input(n: int):
+        builder = NNBuilder()
+        builder.input_nodes = n
+        return builder
+
+    def with_hidden_layer(self, n: int, activation_function, derived):
+        self.layers.append((n, activation_function, derived))
+        return self
+
+    def with_output_layer(self, n: int, activation_function, derived):
+        self.layers.append((n, activation_function, derived))
+        return self.build()
+
+    def build(self):
+        return NeuralNetwork(self.input_nodes, self.layers)
+
+
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+
+# TODO: 1. Add bias
+# TODO: 2. See if it works for 1
+# TODO: 3. Generalize
 class NeuralNetwork:
-    def __init__(self, input_nodes: int, hidden_nodes: int, output_nodes: int, learning_rate: float, bias: int,
-                 activation_function=None, threshold: float = 0.01) -> None:
-        self.threshold = threshold
-        self.input_nodes = input_nodes
-        self.output_nodes = output_nodes
-        self.hidden_nodes = hidden_nodes
-        self.learning_rate = learning_rate
-        self.bias = bias
-        self.activation_function = activation_function
-        self.wih = np.random.uniform(-1.0, 1.0, (input_nodes, hidden_nodes))
-        self.who = np.random.uniform(-1.0, 1.0, (hidden_nodes, output_nodes))
+    def __init__(self, input_nodes: int, layers: List[Tuple[int, Callable, Callable]]):
+        all_layers = [(input_nodes, None, None)] + layers
+
+        a = [[e, e] for e in all_layers]
+        b = [item for sublist in a for item in sublist]
+        c = b[1:-1]
+        d = chunks(c, 2)
+
+        self.w = []
+
+        for (prev, next) in d:
+            self.w.append(np.zeros((next[0],prev[0]))) #np.random.uniform(-1.0, 1.0, (next[0], prev[0])))
+
+        self.bias = []
+        self.activation_functions = []
+        self.derived_functions = []
+        for layer in layers:
+            self.bias.append(np.ones((layer[0], 1)))
+            self.activation_functions.append(np.vectorize(layer[1]))
+            self.derived_functions.append(np.vectorize(layer[2]))
+
+        self.layer_count = len(layers)
+
+    def feed_forward(self, data_point):
+        data_point = np.array(data_point).reshape((len(data_point), 1))
+
+        entry = data_point
+        for i in range(self.layer_count):
+            value = np.dot(self.w[i], entry) + self.bias[i]
+            entry = self.activation_functions[i](value)
+
+        # replace for numpy
+        return entry.reshape(entry.size)
+
+    def train(self, data_point, result, learning_rate: float):
+
+        data_point = np.array(data_point).reshape((len(data_point), 1))
+        result = np.array(result)
+
+        # Feed forward
+        excitement_values = []
+        output_values = []
+
+        entry = data_point
+        for i in range(self.layer_count):
+            value = np.dot(self.w[i], entry) + self.bias[i]
+            excitement_values.append(value)
+            output = self.activation_functions[i](value)
+            output_values.append(output)
+            entry = output
+
+        final_output = output_values[-1].reshape(entry.size)
+        output_error = result - final_output
+
+        # Backpropagation
+
+        # Output layer
+        whoT = self.w[-1].T
+        hidden_errors = np.dot(whoT, output_error)
+
+        # Gradient descent
+        gradient_output = self.derived_functions[-1](excitement_values[-1])
+        gradient_output = np.dot(gradient_output, output_error)
+        gradient_output = gradient_output * learning_rate
+        self.bias[-1] += gradient_output
+
+        # Gradient next layer
+        gradient_hidden = self.derived_functions[-2](excitement_values[-2])
+        gradient_hidden = np.dot(gradient_hidden, hidden_errors.reshape(1,2))
+        gradient_hidden = gradient_hidden * learning_rate
+        self.bias[-2] += gradient_hidden
+
+        # Change weight for output
+        hidden_output_t = output_values[-2].T
+        delta_w_output = np.dot(gradient_output, hidden_output_t)
+        self.w[-1] += delta_w_output
+
+        # Change weights for hidden
+        inputs_t = data_point
+        delta_w_hidden = np.dot(gradient_hidden, inputs_t)
+        self.w[-2] += delta_w_hidden
+
+        return self.w
+
+    # Este es el generico!!!!
+    def train2(self, data_point, result, learning_rate: float):
+
+        data_point = np.array(data_point).reshape((len(data_point), 1))
+        result = np.array(result)
+
+        # Feed forward
+        excitement_values = []
+        output_values = []
+
+        entry = data_point
+        for i in range(self.layer_count):
+            value = np.dot(self.w[i], entry) + self.bias[i]
+            excitement_values.append(value)
+            output = self.activation_functions[i](value)
+            output_values.append(output)
+            entry = output
+
+        final_output = output_values[-1]
+        output_error = result - final_output
+
+        # Backpropagation
+
+        # Output layer
+        errors = [output_error]
+        for i in reversed(range(self.layer_count-1)):
+            error = np.dot(self.w[i+1].T, errors[-1])
+            errors.append(error)
+        errors.reverse()
+
+        input_for_each_layer = [data_point] + output_values
+        # El gradiente tiene que ser un numero o una matriz??
+        for i in reversed(range(self.layer_count)):
+            gradient = self.derived_functions[i](excitement_values[i])
+            gradient = np.dot(gradient.T, errors[i])
+            gradient = gradient * learning_rate
+            self.bias[i] = self.bias[i] + gradient
+            delta_w = np.dot(input_for_each_layer[i],gradient)
+            self.w[i] += delta_w.T
+
+        return self.w
+
+
+    # def __init__(self, input_nodes: int, hidden_nodes: int, output_nodes: int, learning_rate: float, bias: int = 1,
+    #              activation_function=None, threshold: float = 0.01) -> None:
+    #     self.threshold = threshold
+    #     self.input_nodes = input_nodes
+    #     self.output_nodes = output_nodes
+    #     self.hidden_nodes = hidden_nodes
+    #     self.learning_rate = learning_rate
+    #     self.bias = bias
+    #     self.activation_function = activation_function
+    #     self.wih = np.random.uniform(-1.0, 1.0, (hidden_nodes, input_nodes + 1))
+    #     self.who = np.random.uniform(-1.0, 1.0, (output_nodes, hidden_nodes + 1))
 
     @staticmethod
     def logistic_function(excitement_value):
@@ -28,30 +188,61 @@ class NeuralNetwork:
     def activation(self, excitement_value):
         return NeuralNetwork.logistic_function(excitement_value)
 
-    def estimate_error(self, signals_output_results, expected_results):
-        return 0.5 * np.sum(np.power(expected_results - signals_output_results, 2))
+    def estimate_error(self, input_dataset, expected_results):
+        error = 0
+        for mu in range(len(input_dataset)):
+            input_data = input_dataset[mu]
+            expected_output = expected_results[mu]
+            output = self.perform(input_data)
+            error += np.sum(np.power(expected_output - output, 2))
+        return error / len(input_dataset)
 
-    def train(self, train_dataset, expected_results, max_iteration):
+    # def train(self, train_dataset, expected_results):
+    #
+    #     for a in range(100):
+    #         i = random.randint(0, len(train_dataset) - 1)
+    #         # Adding the bias
+    #         train_element = np.append(train_dataset[i], self.bias).reshape(self.wih.shape[1], 1)
+    #
+    #         assert train_element.shape == (self.wih.shape[1], 1)
+    #         signals_input_hidden = np.dot(self.wih, train_element)
+    #
+    #         assert signals_input_hidden.shape == (self.wih.shape[0], 1)
+    #         signals_hidden_output = np.array([self.activation(e) for e in signals_input_hidden], ndmin=2)
+    #         # Adding the bias
+    #         signals_hidden_output = np.append(signals_hidden_output, self.bias).reshape(self.who.shape[1], 1)
+    #
+    #         assert signals_hidden_output.shape == (self.who.shape[1], 1)
+    #
+    #         signals_output = np.dot(self.who, signals_hidden_output)
+    #         signals_output_results = np.array([self.activation(e) for e in signals_output], ndmin=2)
+    #
+    #         g_prime = np.array([NeuralNetwork.g_prime(e) for e in signals_output], ndmin=2)
+    #         results_diff = (expected_results[i] - signals_output_results)
+    #         greek_delta_output = np.dot(g_prime, results_diff).reshape(1, 1)
+    #
+    #         g_prime_hidden = np.array([NeuralNetwork.g_prime(e) for e in signals_input_hidden], ndmin=2)
+    #         propagated_diff = np.dot(greek_delta_output, self.who)
+    #         greek_delta_hidden = np.dot(g_prime_hidden.T, propagated_diff)
+    #
+    #         self.who += self.learning_rate * np.dot(signals_hidden_output, greek_delta_output).T
+    #         self.wih += self.learning_rate * np.dot(greek_delta_hidden, train_element)
 
-        for i in range(len(train_dataset)):
+    def perform(self, input):
 
-            train_element = train_dataset[i]
-            signals_input_hidden = np.dot(self.wih, train_element)
-            signals_hidden_output = np.array([self.activation(e) for e in signals_input_hidden])
+        input = np.append(input, self.bias).reshape(self.wih.shape[1], 1)
 
-            signals_output = np.dot(signals_hidden_output, self.who)
-            signals_output_results = np.array([self.activation(e) for e in signals_output])
+        assert input.shape == (self.wih.shape[1], 1)
+        signals_input_hidden = np.dot(self.wih, input)
 
-            greek_delta_output = np.dot(np.array([NeuralNetwork.g_prime(e) for e in signals_output]),
-                                        expected_results[i] - signals_output_results)
+        assert signals_input_hidden.shape == (self.wih.shape[0], 1)
+        signals_hidden_output = np.array([self.activation(e) for e in signals_input_hidden], ndmin=2)
+        # Adding the bias
+        signals_hidden_output = np.append(signals_hidden_output, self.bias).reshape(self.who.shape[1], 1)
 
-            greek_delta_hidden = np.dot(np.array([[NeuralNetwork.g_prime(e) for e in signals_input_hidden]]).T,
-                                        np.dot(self.who, greek_delta_output).T)
+        assert signals_hidden_output.shape == (self.who.shape[1], 1)
 
-            self.who += np.array([self.learning_rate * np.dot(greek_delta_output, signals_hidden_output)]).T
-            self.wih += np.array([self.learning_rate * np.dot(greek_delta_hidden, train_element)]).T
+        signals_output = np.dot(self.who, signals_hidden_output)
+        signals_output_results = np.array([self.activation(e) for e in signals_output], ndmin=2)
 
-            error = self.estimate_error(signals_output_results, expected_results[i])
-
-            if error < self.threshold:
-                return
+        return signals_output_results
