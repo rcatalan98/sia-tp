@@ -52,21 +52,22 @@ if __name__ == '__main__':
     sigmoid = lambda e: 1 / (1 + math.exp(-e))
     sigmoid_derived = lambda e: sigmoid(e) * (1 - sigmoid(e))
 
-    nn = NNBuilder\
-                    .with_input(2)\
-                    .with_hidden_layer(2,sigmoid, sigmoid_derived)\
-                    .with_output_layer(1,sigmoid, sigmoid_derived)
+
 
 
     # a = nn.train([1,0],1,0.1)
 
     nn2 = NNBuilder\
                     .with_input(2)\
-                    .with_hidden_layer(2,sigmoid, sigmoid_derived)\
-                    .with_output_layer(2,sigmoid, sigmoid_derived)
+                    .with_hidden_layer(4,sigmoid, sigmoid_derived)\
+                    .with_output_layer(3,sigmoid, sigmoid_derived)
 
-    a2 = nn2.train2([1,0],[1,1],0.1)
+    a2 = nn2.train2([0,0],[1,0,0],0.1)
 
+    # Ahi CREO que funciona el backtracking. Al menos no explota.
+    # No se si el gradiente deberia ser un escalar, una matriz o un vector
+    # falta tocar el tema de los biases, lo tengo hecho a medias pero tengo que terminar el
+    # video del chabon
 
     xor_data_set = np.array([[0, 1], [1, 0], [0, 0], [1, 1]])
     xor_expected_results = np.array([1, 1, 0, 0])

@@ -48,13 +48,13 @@ class NeuralNetwork:
         self.w = []
 
         for (prev, next) in d:
-            self.w.append(np.zeros((next[0],prev[0]))) #np.random.uniform(-1.0, 1.0, (next[0], prev[0])))
+            self.w.append(np.random.uniform(-1.0, 1.0, (next[0], prev[0])))
 
         self.bias = []
         self.activation_functions = []
         self.derived_functions = []
         for layer in layers:
-            self.bias.append(np.ones((layer[0], 1)))
+            self.bias.append(np.random.uniform(-1.0, 1.0, (layer[0], 1)))
             self.activation_functions.append(np.vectorize(layer[1]))
             self.derived_functions.append(np.vectorize(layer[2]))
 
@@ -140,7 +140,7 @@ class NeuralNetwork:
             entry = output
 
         final_output = output_values[-1]
-        output_error = result - final_output
+        output_error = result.reshape((result.size,1)) - final_output
 
         # Backpropagation
 
@@ -155,13 +155,18 @@ class NeuralNetwork:
         # El gradiente tiene que ser un numero o una matriz??
         for i in reversed(range(self.layer_count)):
             gradient = self.derived_functions[i](excitement_values[i])
-            gradient = np.dot(gradient.T, errors[i])
+            gradient = gradient * errors[i]
             gradient = gradient * learning_rate
             self.bias[i] = self.bias[i] + gradient
-            delta_w = np.dot(input_for_each_layer[i],gradient)
-            self.w[i] += delta_w.T
+            delta_w = np.dot(gradient, input_for_each_layer[i].T)
+            self.w[i] += delta_w
 
         return self.w
+
+#Metemos durante crupto? o que hacemos?
+    # yo diria que comamos y lo veamos antes que cripto
+    # despues quiero empezar a meterle a esa materia
+    # otra cosa, aca
 
 
     # def __init__(self, input_nodes: int, hidden_nodes: int, output_nodes: int, learning_rate: float, bias: int = 1,
