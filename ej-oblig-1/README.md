@@ -36,4 +36,4 @@ $ pip3 install -r requirements.txt
 
 ### Ejecución
 
-Para ejecutar el programa, simplemente tenemos que correr el siguiente comando:
+Para ejecutar el programa, simplemente correr el archivo Ej1.ipynb
