@@ -37,3 +37,11 @@ $ pip3 install -r requirements.txt
 ### Ejecución
 
 Para ejecutar el programa, simplemente correr el archivo Ej1.ipynb
+
+## Resultados
+
+![WhatsApp Image 2022-04-25 at 10.33.29 PM](Resources/README/WhatsApp Image 2022-04-25 at 10.33.29 PM.jpeg)
+
+![WhatsApp Image 2022-04-25 at 10.33.36 PM](Resources/README/WhatsApp Image 2022-04-25 at 10.33.36 PM.jpeg)
+
+![WhatsApp Image 2022-04-25 at 10.33.45 PM](Resources/README/WhatsApp Image 2022-04-25 at 10.33.45 PM.jpeg)
