@@ -4,6 +4,8 @@ from typing import List, Tuple, Callable
 
 import numpy as np
 
+from Utils import chunks, flatten_array
+
 
 class NNBuilder:
     def __init__(self):
@@ -27,21 +29,13 @@ class NNBuilder:
         return NeuralNetwork(self.input_nodes, self.layers)
 
 
-def chunks(lst, n):
-    """Yield successive n-sized chunks from lst."""
-    for i in range(0, len(lst), n):
-        yield lst[i:i + n]
 
-
-# TODO: 1. Add bias
-# TODO: 2. See if it works for 1
-# TODO: 3. Generalize
 class NeuralNetwork:
     def __init__(self, input_nodes: int, layers: List[Tuple[int, Callable, Callable]]):
         all_layers = [(input_nodes, None, None)] + layers
 
         a = [[e, e] for e in all_layers]
-        b = [item for sublist in a for item in sublist]
+        b = flatten_array(a)
         c = b[1:-1]
         d = chunks(c, 2)
 
@@ -68,11 +62,9 @@ class NeuralNetwork:
             value = np.dot(self.w[i], entry) + self.bias[i]
             entry = self.activation_functions[i](value)
 
-        # replace for numpy
         return entry.reshape(entry.size)
 
-    # Este es el generico!!!!
-    def train(self, data_point, result, learning_rate: float):
+    def train_on_datapoint(self, data_point, result, learning_rate: float):
 
         data_point = np.array(data_point).reshape((len(data_point), 1))
         result = np.array(result, ndmin=2)
@@ -90,11 +82,9 @@ class NeuralNetwork:
             entry = output
 
         final_output = output_values[-1]
-        output_error = result.reshape((result.size,1)) - final_output
+        output_error = self.get_error_on_datapoint(final_output,result.reshape((result.size,1)))
 
         # Backpropagation
-
-        # Output layer
         errors = [output_error]
         for i in reversed(range(self.layer_count-1)):
             error = np.dot(self.w[i+1].T, errors[-1])
@@ -112,87 +102,21 @@ class NeuralNetwork:
 
         return self.w
 
+    def train_on_dataset(self, dataset, expected_results, iterations, epochs, learning_rate):
+        errors = []
+        for _ in range(iterations):
+            for _ in range(epochs):
+                i = random.randint(0, len(expected_results) - 1)
+                self.train_on_datapoint(dataset[i], expected_results[i], learning_rate)
+            errors.append(self.get_error_on_dataset(dataset,expected_results))
+            # print(errors[-1])
+        # print(errors[-1])
+        return errors
 
+    def get_error_on_datapoint(self,observed_result, expected_result):
+        return (expected_result - observed_result)
 
-    # def __init__(self, input_nodes: int, hidden_nodes: int, output_nodes: int, learning_rate: float, bias: int = 1,
-    #              activation_function=None, threshold: float = 0.01) -> None:
-    #     self.threshold = threshold
-    #     self.input_nodes = input_nodes
-    #     self.output_nodes = output_nodes
-    #     self.hidden_nodes = hidden_nodes
-    #     self.learning_rate = learning_rate
-    #     self.bias = bias
-    #     self.activation_function = activation_function
-    #     self.wih = np.random.uniform(-1.0, 1.0, (hidden_nodes, input_nodes + 1))
-    #     self.who = np.random.uniform(-1.0, 1.0, (output_nodes, hidden_nodes + 1))
+    def get_error_on_dataset(self, dataset, results):
+        errors = [(self.feed_forward(dataset[i]) - results[i])**2/2 for i in range(len(results))]
+        return sum(errors) / len(results)
 
-    @staticmethod
-    def logistic_function(excitement_value):
-        return 1 / (1 + math.exp(-4 * excitement_value))
-
-    @staticmethod
-    def g_prime(excitement):
-        exp = math.exp(-4 * excitement)
-        return (4 * exp) / math.pow((1 + exp), 2)
-
-    def activation(self, excitement_value):
-        return NeuralNetwork.logistic_function(excitement_value)
-
-    def estimate_error(self, input_dataset, expected_results):
-        error = 0
-        for mu in range(len(input_dataset)):
-            input_data = input_dataset[mu]
-            expected_output = expected_results[mu]
-            output = self.perform(input_data)
-            error += np.sum(np.power(expected_output - output, 2))
-        return error / len(input_dataset)
-
-    # def train(self, train_dataset, expected_results):
-    #
-    #     for a in range(100):
-    #         i = random.randint(0, len(train_dataset) - 1)
-    #         # Adding the bias
-    #         train_element = np.append(train_dataset[i], self.bias).reshape(self.wih.shape[1], 1)
-    #
-    #         assert train_element.shape == (self.wih.shape[1], 1)
-    #         signals_input_hidden = np.dot(self.wih, train_element)
-    #
-    #         assert signals_input_hidden.shape == (self.wih.shape[0], 1)
-    #         signals_hidden_output = np.array([self.activation(e) for e in signals_input_hidden], ndmin=2)
-    #         # Adding the bias
-    #         signals_hidden_output = np.append(signals_hidden_output, self.bias).reshape(self.who.shape[1], 1)
-    #
-    #         assert signals_hidden_output.shape == (self.who.shape[1], 1)
-    #
-    #         signals_output = np.dot(self.who, signals_hidden_output)
-    #         signals_output_results = np.array([self.activation(e) for e in signals_output], ndmin=2)
-    #
-    #         g_prime = np.array([NeuralNetwork.g_prime(e) for e in signals_output], ndmin=2)
-    #         results_diff = (expected_results[i] - signals_output_results)
-    #         greek_delta_output = np.dot(g_prime, results_diff).reshape(1, 1)
-    #
-    #         g_prime_hidden = np.array([NeuralNetwork.g_prime(e) for e in signals_input_hidden], ndmin=2)
-    #         propagated_diff = np.dot(greek_delta_output, self.who)
-    #         greek_delta_hidden = np.dot(g_prime_hidden.T, propagated_diff)
-    #
-    #         self.who += self.learning_rate * np.dot(signals_hidden_output, greek_delta_output).T
-    #         self.wih += self.learning_rate * np.dot(greek_delta_hidden, train_element)
-
-    def perform(self, input):
-
-        input = np.append(input, self.bias).reshape(self.wih.shape[1], 1)
-
-        assert input.shape == (self.wih.shape[1], 1)
-        signals_input_hidden = np.dot(self.wih, input)
-
-        assert signals_input_hidden.shape == (self.wih.shape[0], 1)
-        signals_hidden_output = np.array([self.activation(e) for e in signals_input_hidden], ndmin=2)
-        # Adding the bias
-        signals_hidden_output = np.append(signals_hidden_output, self.bias).reshape(self.who.shape[1], 1)
-
-        assert signals_hidden_output.shape == (self.who.shape[1], 1)
-
-        signals_output = np.dot(self.who, signals_hidden_output)
-        signals_output_results = np.array([self.activation(e) for e in signals_output], ndmin=2)
-
-        return signals_output_results
