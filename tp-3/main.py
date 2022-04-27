@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 
 from Ej1 import SimplePerceptronAnd, SimplePerceptronOr, SimplePerceptronXor
 from Ej2 import LinearPerceptron, NotLinearPerceptron
-from Ej3 import MultilayerPerceptronXor, MultilayerPerceptronMnist
+from Ej3 import MultilayerPerceptronXor, MultilayerPerceptronMnistEvenOrOdd, MultilayerPerceptronMnistRecognizeNumber
 from NeuralNetwork import NeuralNetwork, NNBuilder
 
 # Press the green button in the gutter to run the script.
@@ -18,7 +18,8 @@ if __name__ == '__main__':
     # NotLinearPerceptron()
     # LinearPerceptron()
 
-    MultilayerPerceptronMnist()
+    # MultilayerPerceptronMnistEvenOrOdd()
+    MultilayerPerceptronMnistRecognizeNumber(0.02)
 
     # # lrs = [0.001,0.01]
     # epochs = [10, 50, 75, 100, 150, 200]

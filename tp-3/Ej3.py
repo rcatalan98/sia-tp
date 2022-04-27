@@ -25,7 +25,7 @@ def MultilayerPerceptronXor():
 
     return errors
 
-def MultilayerPerceptronMnist():
+def MultilayerPerceptronMnistEvenOrOdd():
     nn = NNBuilder \
         .with_input(7*5) \
         .with_hidden_layer(30, sigmoid, sigmoid_derived) \
@@ -34,7 +34,7 @@ def MultilayerPerceptronMnist():
     with open("numbers.txt", 'r') as file:
         input = np.array(flatten_array([[float(a) for a in i.replace("\n","").split(' ')] for i in file.readlines()]))
 
-        digits_input = input.reshape((10,7*5))
+        digits_input = input.reshape((10, 7*5))
 
         dataset = []
         results = []
@@ -42,25 +42,54 @@ def MultilayerPerceptronMnist():
         for i in range(10):
             digit = digits_input[i]
             dataset.append(digit)
-            expected = [1 if i % 2 == 0 else 0, 0 if i % 2 == 0 else 1]
+            expected = [(i + 1) % 2, i % 2]
             results.append(expected)
 
-        dataset, result = shuffle_data(dataset,results)
+        dataset, result = shuffle_data(dataset, results)  # FIXME: pisar results? (falto la s?)
 
         training_input = dataset[:9]
         training_output = result[:9]
         test_input = dataset[9:]
         test_output = result[9:]
 
-        nn.train_on_dataset(training_input,training_output, 100,30,0.1)
+        nn.train_on_dataset(training_input, training_output, 100, 30, 0.1)
 
         for i in range(len(test_output)):
-            print(test_input[i].reshape(7,5))
+            print(test_input[i].reshape(7, 5))
             print(f"expected; {test_output[i]}, got: {nn.feed_forward(test_input[i])}")
 
+def MultilayerPerceptronMnistRecognizeNumber(probability):
+    nn = NNBuilder \
+        .with_input(7*5) \
+        .with_hidden_layer(30, sigmoid, sigmoid_derived) \
+        .with_output_layer(10, sigmoid, sigmoid_derived)
 
+    with open("numbers.txt", 'r') as file:
+        input = np.array(flatten_array([[float(a) for a in i.replace("\n","").split(' ')] for i in file.readlines()]))
 
+        digits_input = input.reshape((10, 7*5))
 
+        dataset = []
+        results = []
 
+        for i in range(10):
+            digit = digits_input[i]
+            dataset.append(digit)
+            expected = [[1 if i == j else 0 for j in range(10)]]
+            results.append(expected)
 
+        training_input, training_output = shuffle_data(dataset, results)
+        test_input = []
+
+        for d in dataset:
+            d_with_noise = np.array([i if random.uniform(0, 1) > probability else (i+1) % 2 for i in d])  # noise
+            test_input.append(d_with_noise)
+
+        test_output = results
+
+        nn.train_on_dataset(training_input, training_output, 100, 30, 0.1)
+
+        for i in range(len(test_output)):
+            print(test_input[i].reshape(7, 5))
+            print(f"expected; {test_output[i]}, got: {nn.feed_forward(test_input[i])}")
 
