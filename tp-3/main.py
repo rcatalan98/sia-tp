@@ -12,12 +12,16 @@ from NeuralNetwork import NeuralNetwork, NNBuilder
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    # Ej 1
     # SimplePerceptronAnd()
     # SimplePerceptronOr()
     # SimplePerceptronXor()
+
+    # Ej 2
     # NotLinearPerceptron()
     # LinearPerceptron()
 
+    # Ej3
     # MultilayerPerceptronMnistEvenOrOdd()
     MultilayerPerceptronMnistRecognizeNumber(0.02)
 

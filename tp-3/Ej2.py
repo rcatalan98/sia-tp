@@ -40,7 +40,7 @@ def NotLinearPerceptron():
     with open("expected_output.txt", 'r') as file:
         results = normalize_array([float(i) for i in file.readlines()])
 
-    input, results = shuffle_data(input,results)
+    input, results = shuffle_data(input, results)
     training_data_input = input[:180]
     training_data_output = results[:180]
     test_data_input = input[180:]
@@ -48,7 +48,7 @@ def NotLinearPerceptron():
 
     nn = NNBuilder.with_input(3).with_output_layer(1, sigmoid, sigmoid_derived)
 
-    errors = nn.train_on_dataset(training_data_input, training_data_output, 100, 5000,0.01)
+    errors = nn.train_on_dataset(training_data_input, training_data_output, 100, 5000, 0.01)
     #
     for i in range(len(test_data_output)):
         print(f"expected; {test_data_output[i] * 100}, got: {nn.feed_forward(test_data_input[i])*100}")
