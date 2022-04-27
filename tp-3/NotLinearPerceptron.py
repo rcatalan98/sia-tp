@@ -12,8 +12,6 @@ class NotLinearPerceptron(LinearPerceptron):
         return 1 / (1 + math.exp(-self.beta * excitement_value))
         # return math.tanh(self.beta * excitement_value)
 
-
-
     def g_prime(self, excitement):
         exp = math.exp(-self.beta * excitement)
         return (self.beta * exp) / math.pow((1+exp),2)

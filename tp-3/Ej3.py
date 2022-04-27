@@ -8,6 +8,7 @@ from Utils import flatten_array, shuffle_data
 sigmoid = lambda e: 1 / (1 + math.exp(-e))
 sigmoid_derived = lambda e: sigmoid(e) * (1 - sigmoid(e))
 
+
 def MultilayerPerceptronXor():
     nn = NNBuilder\
                     .with_input(2)\
@@ -24,6 +25,7 @@ def MultilayerPerceptronXor():
         print(f"\t{val[0]} \txor \t{val[1]} \tis \t{round(nn.feed_forward(val)[0])}")
 
     return errors
+
 
 def MultilayerPerceptronMnistEvenOrOdd():
     nn = NNBuilder \
@@ -57,6 +59,7 @@ def MultilayerPerceptronMnistEvenOrOdd():
         for i in range(len(test_output)):
             print(test_input[i].reshape(7, 5))
             print(f"expected; {test_output[i]}, got: {nn.feed_forward(test_input[i])}")
+
 
 def MultilayerPerceptronMnistRecognizeNumber(probability):
     nn = NNBuilder \

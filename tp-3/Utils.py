@@ -15,6 +15,7 @@ def normalize_array(array):
 
     return [(res - min) / (max - min) for res in array]
 
+
 def chunks(lst, n):
     for i in range(0, len(lst), n):
         yield lst[i:i + n]

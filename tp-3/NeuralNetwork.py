@@ -29,7 +29,6 @@ class NNBuilder:
         return NeuralNetwork(self.input_nodes, self.layers)
 
 
-
 class NeuralNetwork:
     def __init__(self, input_nodes: int, layers: List[Tuple[int, Callable, Callable]]):
         all_layers = [(input_nodes, None, None)] + layers
@@ -65,7 +64,6 @@ class NeuralNetwork:
         return entry.reshape(entry.size)
 
     def train_on_datapoint(self, data_point, result, learning_rate: float):
-
         data_point = np.array(data_point).reshape((len(data_point), 1))
         result = np.array(result, ndmin=2)
 

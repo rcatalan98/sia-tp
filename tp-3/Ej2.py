@@ -14,21 +14,20 @@ def LinearPerceptron():
     with open("expected_output.txt", 'r') as file:
         results = [float(i) for i in file.readlines()]
 
-    input, results = shuffle_data(input,results)
+    input, results = shuffle_data(input, results)
     training_data_input = input[180:]
     training_data_output = results[180:]
     test_data_input = input[:180]
     test_data_output = results[:180]
 
-
     nn = NNBuilder.with_input(3).with_output_layer(1, lambda x: x, lambda x: 1)
 
-    errors = nn.train_on_dataset(training_data_input, training_data_output,500,100,0.0001)
+    errors = nn.train_on_dataset(training_data_input, training_data_output, 500, 100, 0.0001)
 
     for i in range(len(test_data_output)):
         print(f"expected; {test_data_output[i]}, got: {nn.feed_forward(test_data_input[i])}")
 
-    test_error = nn.get_error_on_dataset(test_data_input,test_data_output)
+    test_error = nn.get_error_on_dataset(test_data_input, test_data_output)
     print(f"Test error:{test_error}")
 
 sigmoid = lambda e: 1 / (1 + math.exp(-e))
