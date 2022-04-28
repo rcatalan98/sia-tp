@@ -22,8 +22,9 @@ if __name__ == '__main__':
     # LinearPerceptron()
 
     # Ej3
+    MultilayerPerceptronXor()
     # MultilayerPerceptronMnistEvenOrOdd()
-    MultilayerPerceptronMnistRecognizeNumber(0.02)
+    # MultilayerPerceptronMnistRecognizeNumber(0.02)
 
     # # lrs = [0.001,0.01]
     # epochs = [10, 50, 75, 100, 150, 200]

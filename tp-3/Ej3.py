@@ -12,7 +12,7 @@ sigmoid_derived = lambda e: sigmoid(e) * (1 - sigmoid(e))
 def MultilayerPerceptronXor():
     nn = NNBuilder\
                     .with_input(2)\
-                    .with_hidden_layer(4,sigmoid, sigmoid_derived)\
+                    .with_hidden_layer(5,sigmoid, sigmoid_derived)\
                     .with_output_layer(1,sigmoid, sigmoid_derived)
 
     xor_data_set = [[0, 1], [1, 0], [0, 0], [1, 1]]

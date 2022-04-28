@@ -1,3 +1,4 @@
+import copy
 import math
 import random
 from typing import List, Tuple, Callable
@@ -102,13 +103,19 @@ class NeuralNetwork:
 
     def train_on_dataset(self, dataset, expected_results, iterations, epochs, learning_rate):
         errors = []
+        best_w = None
+        min_error = float("inf")
+        w = []
         for _ in range(iterations):
             for _ in range(epochs):
                 i = random.randint(0, len(expected_results) - 1)
-                self.train_on_datapoint(dataset[i], expected_results[i], learning_rate)
+                w = self.train_on_datapoint(dataset[i], expected_results[i], learning_rate)
             errors.append(self.get_error_on_dataset(dataset,expected_results))
-            # print(errors[-1])
-        # print(errors[-1])
+            if errors[-1] < min_error:
+                min_error = errors[-1]
+                best_w = copy.deepcopy(w)
+
+        self.w = best_w
         return errors
 
     def get_error_on_datapoint(self,observed_result, expected_result):
