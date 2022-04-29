@@ -23,3 +23,7 @@ def chunks(lst, n):
 
 def flatten_array(arr):
     return [item for sublist in arr for item in sublist]
+
+
+def avg(arr):
+    return sum(arr) / len(arr)
