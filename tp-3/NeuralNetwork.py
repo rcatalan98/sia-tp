@@ -110,9 +110,9 @@ class NeuralNetwork:
             for _ in range(epochs):
                 i = random.randint(0, len(expected_results) - 1)
                 w = self.train_on_datapoint(dataset[i], expected_results[i], learning_rate)
-            errors.append(self.get_error_on_dataset(dataset,expected_results))
-            if errors[-1] < min_error:
-                min_error = errors[-1]
+            errors.append(self.get_error_on_dataset(dataset, expected_results))
+            if errors[-1].max() < min_error:
+                min_error = errors[-1].max()
                 best_w = copy.deepcopy(w)
 
         self.w = best_w
