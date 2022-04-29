@@ -111,15 +111,16 @@ class NeuralNetwork:
                 i = random.randint(0, len(expected_results) - 1)
                 w = self.train_on_datapoint(dataset[i], expected_results[i], learning_rate)
             errors.append(self.get_error_on_dataset(dataset, expected_results))
-            if errors[-1].max() < min_error:
-                min_error = errors[-1].max()
+            aux = sum(errors[-1]) / len(errors[-1])  # average, in case there is more than one element in errors[-1]
+            if aux < min_error:
+                min_error = aux
                 best_w = copy.deepcopy(w)
 
         self.w = best_w
         return errors
 
-    def get_error_on_datapoint(self,observed_result, expected_result):
-        return (expected_result - observed_result)
+    def get_error_on_datapoint(self, observed_result, expected_result):
+        return expected_result - observed_result
 
     def get_error_on_dataset(self, dataset, results):
         errors = [(self.feed_forward(dataset[i]) - results[i])**2/2 for i in range(len(results))]
