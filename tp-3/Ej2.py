@@ -7,7 +7,7 @@ from NeuralNetwork import NNBuilder
 from Utils import shuffle_data, normalize_array
 
 
-def LinearPerceptron():
+def LinearPerceptron(iterations=500, epochs=100, learning_rate=0.0001):
     with open("train_dataset.txt", 'r') as file:
         input = [[float(a) for a in i.split(',')] for i in file.readlines()]
 
@@ -22,7 +22,7 @@ def LinearPerceptron():
 
     nn = NNBuilder.with_input(3).with_output_layer(1, lambda x: x, lambda x: 1)
 
-    errors = nn.train_on_dataset(training_data_input, training_data_output, 500, 100, 0.0001)
+    errors = nn.train_on_dataset(training_data_input, training_data_output, iterations, epochs, learning_rate)
 
     for i in range(len(test_data_output)):
         print(f"expected; {test_data_output[i]}, got: {nn.feed_forward(test_data_input[i])}")
@@ -33,7 +33,7 @@ def LinearPerceptron():
 sigmoid = lambda e: 1 / (1 + math.exp(-e))
 sigmoid_derived = lambda e: sigmoid(e) * (1 - sigmoid(e))
 
-def NotLinearPerceptron():
+def NotLinearPerceptron(iterations=100, epochs=5000, learning_rate=0.01):
     with open("train_dataset.txt", 'r') as file:
         input = [[float(a) for a in i.split(',')] for i in file.readlines()]
 
@@ -48,7 +48,7 @@ def NotLinearPerceptron():
 
     nn = NNBuilder.with_input(3).with_output_layer(1, sigmoid, sigmoid_derived)
 
-    errors = nn.train_on_dataset(training_data_input, training_data_output, 100, 5000, 0.01)
+    errors = nn.train_on_dataset(training_data_input, training_data_output, iterations, epochs, learning_rate)
     #
     for i in range(len(test_data_output)):
         print(f"expected; {test_data_output[i] * 100}, got: {nn.feed_forward(test_data_input[i])*100}")

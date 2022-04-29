@@ -13,18 +13,22 @@ from NeuralNetwork import NeuralNetwork, NNBuilder
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     # Ej 1
-    # SimplePerceptronAnd()
+    # iterations=500, epochs=100, learning_rate=0.1
+    print("Running exercise 1...")
+    SimplePerceptronAnd()
     # SimplePerceptronOr()
-    # SimplePerceptronXor()
+    SimplePerceptronXor()
 
     # Ej 2
-    # NotLinearPerceptron()
-    # LinearPerceptron()
+    print("Running exercise 2...")
+    LinearPerceptron()      # iterations=500, epochs=100, learning_rate=0.0001
+    NotLinearPerceptron()   # iterations=100, epochs=5000, learning_rate=0.01
 
     # Ej3
-    MultilayerPerceptronXor()
-    # MultilayerPerceptronMnistEvenOrOdd()
-    # MultilayerPerceptronMnistRecognizeNumber(0.02)
+    print("Running exercise 3...")
+    MultilayerPerceptronXor()   # hidden_layer_nodes=5, iterations=600, epochs=75, learning_rate=0.7
+    MultilayerPerceptronMnistEvenOrOdd()    # hidden_layer_nodes=30, iterations=100, epochs=30, learning_rate=0.1
+    MultilayerPerceptronMnistRecognizeNumber(probability=0.02)  # hidden_layer_nodes=30, iterations=100, epochs=30, learning_rate=0.1
 
     # # lrs = [0.001,0.01]
     # epochs = [10, 50, 75, 100, 150, 200]

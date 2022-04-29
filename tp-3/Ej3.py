@@ -9,16 +9,16 @@ sigmoid = lambda e: 1 / (1 + math.exp(-e))
 sigmoid_derived = lambda e: sigmoid(e) * (1 - sigmoid(e))
 
 
-def MultilayerPerceptronXor():
+def MultilayerPerceptronXor(hidden_layer_nodes: int = 5, iterations=600, epochs=75, learning_rate=0.7):
     nn = NNBuilder\
                     .with_input(2)\
-                    .with_hidden_layer(5,sigmoid, sigmoid_derived)\
-                    .with_output_layer(1,sigmoid, sigmoid_derived)
+                    .with_hidden_layer(hidden_layer_nodes, sigmoid, sigmoid_derived)\
+                    .with_output_layer(1, sigmoid, sigmoid_derived)
 
     xor_data_set = [[0, 1], [1, 0], [0, 0], [1, 1]]
     xor_expected_results = [1, 1, 0, 0]
 
-    errors = nn.train_on_dataset(xor_data_set,xor_expected_results,600,75,0.7)
+    errors = nn.train_on_dataset(xor_data_set, xor_expected_results, iterations, epochs, learning_rate)
 
     print(errors[-1])
     for val in xor_data_set:
@@ -27,10 +27,10 @@ def MultilayerPerceptronXor():
     return errors
 
 
-def MultilayerPerceptronMnistEvenOrOdd():
+def MultilayerPerceptronMnistEvenOrOdd(hidden_layer_nodes: int = 30, iterations=100, epochs=30, learning_rate=0.1):
     nn = NNBuilder \
         .with_input(7*5) \
-        .with_hidden_layer(30, sigmoid, sigmoid_derived) \
+        .with_hidden_layer(hidden_layer_nodes, sigmoid, sigmoid_derived) \
         .with_output_layer(2, sigmoid, sigmoid_derived)
 
     with open("numbers.txt", 'r') as file:
@@ -54,17 +54,17 @@ def MultilayerPerceptronMnistEvenOrOdd():
         test_input = dataset[9:]
         test_output = result[9:]
 
-        nn.train_on_dataset(training_input, training_output, 100, 30, 0.1)
+        nn.train_on_dataset(training_input, training_output, iterations, epochs, learning_rate)
 
         for i in range(len(test_output)):
             print(test_input[i].reshape(7, 5))
             print(f"expected; {test_output[i]}, got: {nn.feed_forward(test_input[i])}")
 
 
-def MultilayerPerceptronMnistRecognizeNumber(probability):
+def MultilayerPerceptronMnistRecognizeNumber(probability, hidden_layer_nodes: int = 30, iterations=100, epochs=30, learning_rate=0.1):
     nn = NNBuilder \
         .with_input(7*5) \
-        .with_hidden_layer(30, sigmoid, sigmoid_derived) \
+        .with_hidden_layer(hidden_layer_nodes, sigmoid, sigmoid_derived) \
         .with_output_layer(10, sigmoid, sigmoid_derived)
 
     with open("numbers.txt", 'r') as file:
@@ -90,7 +90,7 @@ def MultilayerPerceptronMnistRecognizeNumber(probability):
 
         test_output = results
 
-        nn.train_on_dataset(training_input, training_output, 100, 30, 0.1)
+        nn.train_on_dataset(training_input, training_output, iterations, epochs, learning_rate)
 
         for i in range(len(test_output)):
             print(test_input[i].reshape(7, 5))
