@@ -1,7 +1,9 @@
 import math
 import random
 import numpy as np
+from enum import Enum
 
+import Metrics
 from NeuralNetwork import NNBuilder
 from Utils import flatten_array, shuffle_data, avg
 
@@ -71,18 +73,21 @@ def MultilayerPerceptronMnistEvenOrOdd(hidden_layer_nodes: int = 30, epochs=100,
         return results
 
 
-def normalize_number(observed):
-    return np.where(observed < 0.5, 0, 1)
 
-def recognize_number_error(observed, result):
-    normalized = normalize_number(observed)
-    # a = elegimos la posicion con mayor puntaje. [0.123,0.67,0.4]
-    # b = Elegimos la posicion con el segundo mayor puntaje
-    # si la diferencia entra a y b es mayor a x (ponele 0.15), entonces la neurona a esta prendida y el resto apagados
-    return np.count_nonzero(result != normalized)
+def normalize_number(observed, threshold = 0.15):
+    sorted = np.sort(observed)
+    a = sorted[-1]
+    b = sorted[-2]
+    normalized = np.zeros(len(observed))
+    if a - b > threshold:
+        normalized[np.where(observed == a)[0][0]] = 1
+    return normalized
+
+def recognize_number_error(observed, result, threshold):
+    return np.count_nonzero(result != normalize_number(observed,threshold))
 
 
-def MultilayerPerceptronMnistRecognizeNumber(probability, hidden_layer_nodes: int = 30, epochs=100, epoch_size=30,
+def MultilayerPerceptronMnistRecognizeNumber(probability, hidden_layer_nodes: int = 30, epochs=200, epoch_size=30,
                                              learning_rate=0.1):
     nn = NNBuilder \
         .with_input(7 * 5) \
@@ -112,76 +117,32 @@ def MultilayerPerceptronMnistRecognizeNumber(probability, hidden_layer_nodes: in
 
         test_output = results
 
-        (training_errors, ws, bs) = nn.train_on_dataset(training_input, training_output, epochs, epoch_size, learning_rate)
-
-        # for i in range(len(test_output)):
-        #     print(test_input[i].reshape(7, 5))
-        #     print(f"expected; {test_output[i]}, got: {nn.feed_forward(test_input[i])}")
-
-        # Calculamos los F1 Score para cada epoca
-
-        # Por cada epoca
-        # tomo w en ese instante
-        # Calculo F1 Score para esta epoca
+        (training_errors, ws, bs) = nn.train_on_dataset(training_input, training_output, epochs, epoch_size,
+                                                        learning_rate)
 
         results = dict()
         results['training_error'] = training_errors
-        results['testing_error'] = [nn.get_error_on_dataset(test_input, test_output,w=ws[i],b=bs[i]) for i in range(len(ws))]
-        estimations_across_epochs = []
-        for i in range(len(ws)):
-            estimations_across_epochs.append([])
-            for j in range(len(test_output)):
-                estimations_across_epochs[i].append(normalize_number(nn.feed_forward(test_input[j], w=ws[i], b=bs[i])))
-        print(estimations_across_epochs)
-        # results['test_precision'] = np.array()
-        # results['test_recall'] = np.array()
-        #
-        # results['test_f1'] = np.array()
+        results['testing_error'] = [nn.get_error_on_dataset(test_input, test_output, w=ws[i], b=bs[i]) for i in
+                                    range(len(ws))]
 
+        mm = Metrics.get_base_metrics_per_epoch(nn,ws[-1],bs[-1],test_input,test_output,normalize_number)
 
+        base_metrics = Metrics.get_base_metrics(nn,ws,bs,test_input,test_output,normalize_number)
 
-        # Me paro en el numero 1
-        # pruebo con todas las entradas de nuestro set de testeo:
-        # es positivo si la RN dice que es un 1 y estoy parado en el numero 1
-        # Si la entrada es 1 y la RN dice que es 1, entonces es verdadero
+        results['test_precision'] = np.array(Metrics.get_precision(base_metrics))
+        results['test_recall'] = np.array(Metrics.get_recall(base_metrics))
+        results['test_f1'] = np.array(Metrics.get_f1(results['test_precision'],results['test_recall']))
 
-        # Me paro en el numero 3
-        # pruebo con la entrada 3
-        # RN dice 3 y estoy parado en el 3 => es positivo
-        # RN dice 3 y la entrada es 3 => es verdadero
-
-        # Me paro en el numero 3
-        # pruebo con la entrada 4
-        # RN dice 3 y estoy parado en el 3 => es positivo
-        # RN dice 3 y la entrada es 4 => es falso
-
-        # Me paro en el numero 3
-        # pruebo con la entrada 4
-        # RN dice 4 y estoy parado en el 3 => es falso
-        # RN dice 4 y la entrada es 4 => es verdadero
-
-        # Me paro en el numero 3
-        # pruebo con la entrada 4
-        # RN dice 5 y estoy parado en el 3 => es falso
-        # RN dice 5 y la entrada es 4 => es negativo
-
-        # testing_error = nn.get_error_on_dataset(test_input, test_output)
         return results
 
 
-def is_positive(nn_says,current_number):
-    return np.count_nonzero(nn_says != current_number) == 0
 
 
 
 
-def is_true_negative(observed, expected):
-    return np.count_nonzero(expected != observed) != 0
 
 
-def is_false_positive(observed, expected):
-    return False
 
 
-def is_false_negative(observed, expected):
-    return False
+
+

@@ -133,6 +133,7 @@ class NeuralNetwork:
     def get_distance_on_datapoint(self, observed_result, expected_result):
         return expected_result - observed_result
 
-    def get_error_on_dataset(self, dataset, results,w=None,b=None):
-        errors = [self.error_function(self.feed_forward(dataset[i],w=w,b=b), results[i]) for i in range(len(results))]
+    def get_error_on_dataset(self, dataset, results, w=None, b=None, threshold=0.15):
+        errors = [self.error_function(self.feed_forward(dataset[i], w=w, b=b), results[i], threshold) for i in
+                  range(len(results))]
         return np.average(errors)
