@@ -85,7 +85,7 @@ def recognize_number_error(observed, result, threshold):
     return np.count_nonzero(result != normalize_number(observed,threshold))
 
 
-def MultilayerPerceptronMnistRecognizeNumber(probability, hidden_layer_nodes: int = 30, epochs=100, epoch_size=30,
+def MultilayerPerceptronMnistRecognizeNumber(probability, hidden_layer_nodes: int = 30, epochs=200, epoch_size=30,
                                              learning_rate=0.1):
     nn = NNBuilder \
         .with_input(7 * 5) \
@@ -122,6 +122,8 @@ def MultilayerPerceptronMnistRecognizeNumber(probability, hidden_layer_nodes: in
         results['training_error'] = training_errors
         results['testing_error'] = [nn.get_error_on_dataset(test_input, test_output, w=ws[i], b=bs[i]) for i in
                                     range(len(ws))]
+
+        mm = Metrics.get_base_metrics_per_epoch(nn,ws[-1],bs[-1],test_input,test_output,normalize_number)
 
         base_metrics = Metrics.get_base_metrics(nn,ws,bs,test_input,test_output,normalize_number)
 

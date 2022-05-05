@@ -34,12 +34,12 @@ def classify_result(current_number, input_number, nn_says):
 def get_base_metrics_per_epoch(nn, w, b, dataset_input, dataset_output, normalize_func):
     results = []
     for i in range(10):
-        current_number = np.zeros(9)
+        current_number = np.zeros(10)
         current_number[i] = 1
-        current_number = current_number.reshape(9, 1)
         for t in range(len(dataset_input)):
             input_number = dataset_output[t]
-            nn_says = normalize_func(nn.feed_forward(dataset_input[t], w=w, b=b))
+            nn_raw = nn.feed_forward(dataset_input[t], w=w, b=b)
+            nn_says = normalize_func(nn_raw)
             results.append(classify_result(current_number, input_number, nn_says))
 
     d = dict()
@@ -63,10 +63,10 @@ def get_base_metrics(nn, ws, bs, dataset_input, dataset_output, normalize_func):
 
 
 def get_precision(base_metrics):
-    return [m[Result.TRUE_POSITIVE] / (m[Result.TRUE_POSITIVE] + m[Result.FALSE_POSITIVE]) for m in base_metrics]
+    return [m[Result.TRUE_POSITIVE] / (1 + m[Result.TRUE_POSITIVE] + m[Result.FALSE_POSITIVE]) for m in base_metrics]
 
 def get_recall(base_metrics):
-    return [m[Result.TRUE_POSITIVE] / (m[Result.TRUE_POSITIVE] + m[Result.FALSE_NEGATIVE]) for m in base_metrics]
+    return [m[Result.TRUE_POSITIVE] / (1 + m[Result.TRUE_POSITIVE] + m[Result.FALSE_NEGATIVE]) for m in base_metrics]
 
 def get_f1(precision,recall):
     return [(2*precision[i]*recall[i])/(precision[i]+recall[i]) for i in range(len(precision))]

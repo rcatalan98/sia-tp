@@ -4,8 +4,7 @@ import Plots
 
 from Ej1 import SimplePerceptronAnd, SimplePerceptronOr, SimplePerceptronXor
 from Ej2 import LinearPerceptron, NotLinearPerceptron
-from Ej3 import MultilayerPerceptronXor, MultilayerPerceptronMnistEvenOrOdd, MultilayerPerceptronMnistRecognizeNumber, \
-    classify_result
+from Ej3 import MultilayerPerceptronXor, MultilayerPerceptronMnistEvenOrOdd, MultilayerPerceptronMnistRecognizeNumber
 
 
 def ej1():
@@ -33,7 +32,7 @@ def ej3():
     # errors_even = np.array([MultilayerPerceptronMnistEvenOrOdd(epochs=e) for e in epoch_sizes])
     #
     # # recognize_number --> hidden_layer_nodes=30, epochs=100, epoch_size=30, learning_rate=0.1
-    errors_recognize = np.array([MultilayerPerceptronMnistRecognizeNumber(probability=0.2, epoch_size=e) for e in epoch_sizes])
+    # errors_recognize = np.array([MultilayerPerceptronMnistRecognizeNumber(probability=0.2, epoch_size=e) for e in epoch_sizes])
     #
     # print(errors_xor)
     # print(errors_even)
@@ -45,6 +44,7 @@ def ej3():
     # Plots.epoch_size_vs_error(epoch_sizes, errors_recognize, "Multilayer perceptron recognize number")
 
     # ws = MultilayerPerceptronMnistRecognizeNumber(probability=0.02,)
+    MultilayerPerceptronMnistRecognizeNumber(probability=0.2, epoch_size=30)
 
 
 # Press the green button in the gutter to run the script.
