@@ -64,9 +64,11 @@ def MultilayerPerceptronMnistEvenOrOdd(hidden_layer_nodes: int = 30, iterations=
 
         return avg(training_errors[-1]), avg(testing_error)
 
+def normalize_number(observed):
+    return np.where(observed < 0.5, 0, 1)
 
 def recognize_number_error(observed, result):
-    normalized = np.where(observed < 0.5, 0, 1)
+    normalized = normalize_number(observed)
     # a = elegimos la posicion con mayor puntaje. [0.123,0.67,0.4]
     # b = Elegimos la posicion con el segundo mayor puntaje
     # si la diferencia entra a y b es mayor a x (ponele 0.15), entonces la neurona a esta prendida y el resto apagados
@@ -122,12 +124,14 @@ def MultilayerPerceptronMnistRecognizeNumber(probability, hidden_layer_nodes: in
         for i in range(len(ws)):
             estimations_across_epochs.append([])
             for j in range(len(test_output)):
-                estimations_across_epochs[i].append(np.where(nn.feed_forward(test_input[j], w=ws[i],b=bs[i]) < 0.5, 0, 1))
+                estimations_across_epochs[i].append(normalize_number(nn.feed_forward(test_input[j], w=ws[i], b=bs[i])))
         print(estimations_across_epochs)
         # results['test_precision'] = np.array()
         # results['test_recall'] = np.array()
         #
         # results['test_f1'] = np.array()
+
+
 
         # Me paro en el numero 1
         # pruebo con todas las entradas de nuestro set de testeo:
@@ -158,8 +162,10 @@ def MultilayerPerceptronMnistRecognizeNumber(probability, hidden_layer_nodes: in
         return results
 
 
-def is_true_positive(observed, expected):
-    return np.count_nonzero(expected != observed) == 0
+def is_positive(nn_says,current_number):
+    return np.count_nonzero(nn_says != current_number) == 0
+
+
 
 
 def is_true_negative(observed, expected):
