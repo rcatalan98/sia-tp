@@ -22,10 +22,10 @@ def LinearPerceptron(iterations=500, epochs=100, learning_rate=0.0001):
 
     nn = NNBuilder.with_input(3).with_output_layer(1, lambda x: x, lambda x: 1)
 
-    training_errors = nn.train_on_dataset(training_data_input, training_data_output, iterations, epochs, learning_rate)
+    (training_errors,ws,bs) = nn.train_on_dataset(training_data_input, training_data_output, iterations, epochs, learning_rate)
 
-    for i in range(len(test_data_output)):
-        print(f"expected; {test_data_output[i]}, got: {nn.feed_forward(test_data_input[i])}")
+    # for i in range(len(test_data_output)):
+    #     print(f"expected; {test_data_output[i]}, got: {nn.feed_forward(test_data_input[i])}")
 
     test_error = nn.get_error_on_dataset(test_data_input, test_data_output)
     print(f"Test error:{test_error}")
@@ -60,7 +60,7 @@ def NotLinearPerceptron(iterations=100, epochs=5000, learning_rate=0.01):
 
     nn = NNBuilder.with_input(3).with_output_layer(1, sigmoid, sigmoid_derived)
 
-    training_errors = nn.train_on_dataset(training_data_input, training_data_output, iterations, epochs, learning_rate)
+    (training_errors,ws) = nn.train_on_dataset(training_data_input, training_data_output, iterations, epochs, learning_rate)
 
     for i in range(len(test_data_output)):
         print(f"expected; {test_data_output[i] * 100}, got: {nn.feed_forward(test_data_input[i]) * 100}")

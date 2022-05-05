@@ -1,7 +1,7 @@
 from matplotlib import pyplot as plt
 
 
-def epoch_vs_error(epochs, errors, title: str = None):
+def epoch_size_vs_error(epochs, errors, title: str = None):
     training_errors = []
     testing_errors = []
 
@@ -12,7 +12,7 @@ def epoch_vs_error(epochs, errors, title: str = None):
     plt.plot(epochs, training_errors, label="training")
     plt.plot(epochs, testing_errors, label="testing")
 
-    plt.xlabel('epoch')
+    plt.xlabel('epoch size')
     plt.ylabel('error')
     plt.title(title)
 

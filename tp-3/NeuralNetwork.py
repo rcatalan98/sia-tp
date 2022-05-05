@@ -22,17 +22,20 @@ class NNBuilder:
         self.layers.append((n, activation_function, derived))
         return self
 
-    def with_output_layer(self, n: int, activation_function, derived):
+    def with_output_layer(self, n: int, activation_function, derived, error_function=None):
         self.layers.append((n, activation_function, derived))
+        self.error_function = error_function
         return self.build()
 
     def build(self):
-        return NeuralNetwork(self.input_nodes, self.layers)
+        return NeuralNetwork(self.input_nodes, self.layers, self.error_function)
 
 
 class NeuralNetwork:
-    def __init__(self, input_nodes: int, layers: List[Tuple[int, Callable, Callable]]):
+    def __init__(self, input_nodes: int, layers: List[Tuple[int, Callable, Callable]], error_function: Callable = None):
         all_layers = [(input_nodes, None, None)] + layers
+
+        self.error_function = (lambda a, b: 0.5 * (a - b) ** 2) if error_function is None else error_function
 
         a = [[e, e] for e in all_layers]
         b = flatten_array(a)
@@ -54,12 +57,15 @@ class NeuralNetwork:
 
         self.layer_count = len(layers)
 
-    def feed_forward(self, data_point):
+    def feed_forward(self, data_point, w=None, b=None):
+        w = self.w if w is None else w
+        b = self.w if b is None else b
+
         data_point = np.array(data_point).reshape((len(data_point), 1))
 
         entry = data_point
         for i in range(self.layer_count):
-            value = np.dot(self.w[i], entry) + self.bias[i]
+            value = np.dot(w[i], entry) + b[i]
             entry = self.activation_functions[i](value)
 
         return entry.reshape(entry.size)
@@ -81,12 +87,12 @@ class NeuralNetwork:
             entry = output
 
         final_output = output_values[-1]
-        output_error = self.get_error_on_datapoint(final_output,result.reshape((result.size,1)))
+        output_error = self.get_distance_on_datapoint(final_output, result.reshape((result.size, 1)))
 
         # Backpropagation
         errors = [output_error]
-        for i in reversed(range(self.layer_count-1)):
-            error = np.dot(self.w[i+1].T, errors[-1])
+        for i in reversed(range(self.layer_count - 1)):
+            error = np.dot(self.w[i + 1].T, errors[-1])
             errors.append(error)
         errors.reverse()
 
@@ -99,30 +105,34 @@ class NeuralNetwork:
             delta_w = np.dot(gradient, input_for_each_layer[i].T)
             self.w[i] += delta_w
 
-        return self.w
+        return self.w, self.bias
 
-    def train_on_dataset(self, dataset, expected_results, iterations, epochs, learning_rate):
+    def train_on_dataset(self, dataset, expected_results, epochs, epoch_size, learning_rate):
         errors = []
         best_w = None
         min_error = float("inf")
         w = []
-        for _ in range(iterations):
-            for _ in range(epochs):
+        b = []
+        ws = []
+        bs = []
+        for _ in range(epochs):
+            for _ in range(epoch_size):
                 i = random.randint(0, len(expected_results) - 1)
-                w = self.train_on_datapoint(dataset[i], expected_results[i], learning_rate)
+                (w, b) = self.train_on_datapoint(dataset[i], expected_results[i], learning_rate)
             errors.append(self.get_error_on_dataset(dataset, expected_results))
-            aux = sum(errors[-1]) / len(errors[-1])  # average, in case there is more than one element in errors[-1]
-            if aux < min_error:
-                min_error = aux
+            ws.append(copy.deepcopy(w))
+            bs.append(copy.deepcopy(b))
+
+            if errors[-1] < min_error:
+                min_error = errors[-1]
                 best_w = copy.deepcopy(w)
 
         self.w = best_w
-        return errors
+        return errors, ws, bs
 
-    def get_error_on_datapoint(self, observed_result, expected_result):
+    def get_distance_on_datapoint(self, observed_result, expected_result):
         return expected_result - observed_result
 
-    def get_error_on_dataset(self, dataset, results):
-        errors = [(self.feed_forward(dataset[i]) - results[i])**2/2 for i in range(len(results))]
-        return sum(errors) / len(results)
-
+    def get_error_on_dataset(self, dataset, results,w=None,b=None):
+        errors = [self.error_function(self.feed_forward(dataset[i]), results[i],w=w,b=b) for i in range(len(results))]
+        return np.average(errors)
