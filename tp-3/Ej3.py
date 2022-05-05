@@ -9,7 +9,7 @@ sigmoid = lambda e: 1 / (1 + math.exp(-e))
 sigmoid_derived = lambda e: sigmoid(e) * (1 - sigmoid(e))
 
 
-def MultilayerPerceptronXor(hidden_layer_nodes: int = 5, iterations=600, epochs=75, learning_rate=0.7):
+def MultilayerPerceptronXor(hidden_layer_nodes: int = 5, epochs=600, iterations=75, learning_rate=0.7):
     nn = NNBuilder \
         .with_input(2) \
         .with_hidden_layer(hidden_layer_nodes, sigmoid, sigmoid_derived) \
@@ -18,16 +18,20 @@ def MultilayerPerceptronXor(hidden_layer_nodes: int = 5, iterations=600, epochs=
     xor_data_set = [[0, 1], [1, 0], [0, 0], [1, 1]]
     xor_expected_results = [1, 1, 0, 0]
 
-    (training_errors, ws,bs) = nn.train_on_dataset(xor_data_set, xor_expected_results, iterations, epochs, learning_rate)
+    (training_errors, ws, bs) = nn.train_on_dataset(xor_data_set, xor_expected_results, epochs, iterations, learning_rate)
 
     print(training_errors[-1])
     for val in xor_data_set:
         print(f"\t{val[0]} \txor \t{val[1]} \tis \t{round(nn.feed_forward(val)[0])}")
 
-    return training_errors[-1], nn.get_error_on_dataset(xor_data_set, xor_expected_results)
+    results = dict()
+    results['training_error'] = training_errors
+    results['testing_error'] = [nn.get_error_on_dataset(xor_data_set, xor_expected_results, w=ws[i], b=bs[i]) for i in range(len(ws))]
+
+    return results
 
 
-def MultilayerPerceptronMnistEvenOrOdd(hidden_layer_nodes: int = 30, iterations=100, epochs=30, learning_rate=0.1):
+def MultilayerPerceptronMnistEvenOrOdd(hidden_layer_nodes: int = 30, epochs=100, iterations=30, learning_rate=0.1):
     nn = NNBuilder \
         .with_input(7 * 5) \
         .with_hidden_layer(hidden_layer_nodes, sigmoid, sigmoid_derived) \
@@ -54,15 +58,18 @@ def MultilayerPerceptronMnistEvenOrOdd(hidden_layer_nodes: int = 30, iterations=
         test_input = dataset[9:]
         test_output = result[9:]
 
-        (training_errors, ws,bs) = nn.train_on_dataset(training_input, training_output, iterations, epochs, learning_rate)
+        (training_errors, ws, bs) = nn.train_on_dataset(training_input, training_output, epochs, iterations, learning_rate)
 
         for i in range(len(test_output)):
             print(test_input[i].reshape(7, 5))
             print(f"expected; {test_output[i]}, got: {nn.feed_forward(test_input[i])}")
 
-        testing_error = nn.get_error_on_dataset(test_input, test_output)
+        results = dict()
+        results['training_error'] = training_errors
+        results['testing_error'] = [nn.get_error_on_dataset(test_input, test_output, w=ws[i], b=bs[i]) for i in range(len(ws))]
 
-        return avg(training_errors[-1]), avg(testing_error)
+        return results
+
 
 def normalize_number(observed):
     return np.where(observed < 0.5, 0, 1)

@@ -59,7 +59,7 @@ class NeuralNetwork:
 
     def feed_forward(self, data_point, w=None, b=None):
         w = self.w if w is None else w
-        b = self.w if b is None else b
+        b = self.bias if b is None else b
 
         data_point = np.array(data_point).reshape((len(data_point), 1))
 
@@ -134,5 +134,5 @@ class NeuralNetwork:
         return expected_result - observed_result
 
     def get_error_on_dataset(self, dataset, results,w=None,b=None):
-        errors = [self.error_function(self.feed_forward(dataset[i]), results[i],w=w,b=b) for i in range(len(results))]
+        errors = [self.error_function(self.feed_forward(dataset[i],w=w,b=b), results[i]) for i in range(len(results))]
         return np.average(errors)
