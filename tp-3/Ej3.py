@@ -72,16 +72,17 @@ def MultilayerPerceptronMnistEvenOrOdd(hidden_layer_nodes: int = 30, iterations=
         return avg(training_errors[-1]), avg(testing_error)
 
 
-def normalize_number(observed):
-    return np.where(observed < 0.5, 0, 1)
+def normalize_number(observed, threshold = 0.15):
+    sorted = np.sort(observed)
+    a = sorted[-1]
+    b = sorted[-2]
+    normalized = np.zeros(len(observed))
+    if a - b > threshold:
+        normalized[np.where(observed == a)[0][0]] = 1
+    return normalized
 
-
-def recognize_number_error(observed, result):
-    normalized = normalize_number(observed)
-    # a = elegimos la posicion con mayor puntaje. [0.123,0.67,0.4]
-    # b = Elegimos la posicion con el segundo mayor puntaje
-    # si la diferencia entra a y b es mayor a x (ponele 0.15), entonces la neurona a esta prendida y el resto apagados
-    return np.count_nonzero(result != normalized)
+def recognize_number_error(observed, result, threshold):
+    return np.count_nonzero(result != normalize_number(observed,threshold))
 
 
 def MultilayerPerceptronMnistRecognizeNumber(probability, hidden_layer_nodes: int = 30, epochs=100, epoch_size=30,
