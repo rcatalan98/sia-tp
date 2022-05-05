@@ -4,7 +4,8 @@ import Plots
 
 from Ej1 import SimplePerceptronAnd, SimplePerceptronOr, SimplePerceptronXor
 from Ej2 import LinearPerceptron, NotLinearPerceptron
-from Ej3 import MultilayerPerceptronXor, MultilayerPerceptronMnistEvenOrOdd, MultilayerPerceptronMnistRecognizeNumber
+from Ej3 import MultilayerPerceptronXor, MultilayerPerceptronMnistEvenOrOdd, MultilayerPerceptronMnistRecognizeNumber, \
+    classify_result
 
 
 def ej1():
