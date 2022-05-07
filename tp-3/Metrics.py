@@ -63,10 +63,19 @@ def get_base_metrics(nn, ws, bs, dataset_input, dataset_output, normalize_func):
 
 
 def get_precision(base_metrics):
-    return [m[Result.TRUE_POSITIVE] / (1 + m[Result.TRUE_POSITIVE] + m[Result.FALSE_POSITIVE]) for m in base_metrics]
+    return [
+        m[Result.TRUE_POSITIVE] / (1 + m[Result.TRUE_POSITIVE] + m[Result.FALSE_POSITIVE])
+        if m[Result.FALSE_POSITIVE] != 0
+        else 1
+        for m in base_metrics]
 
 def get_recall(base_metrics):
-    return [m[Result.TRUE_POSITIVE] / (1 + m[Result.TRUE_POSITIVE] + m[Result.FALSE_NEGATIVE]) for m in base_metrics]
+    return [
+        m[Result.TRUE_POSITIVE] / (m[Result.TRUE_POSITIVE] + m[Result.FALSE_NEGATIVE])
+        if m[Result.FALSE_POSITIVE] != 0
+        else 1
+        for m in base_metrics
+    ]
 
 def get_f1(precision,recall):
     return [(2*precision[i]*recall[i])/(precision[i]+recall[i]) for i in range(len(precision))]
