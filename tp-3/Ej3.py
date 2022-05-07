@@ -74,17 +74,17 @@ def MultilayerPerceptronMnistEvenOrOdd(hidden_layer_nodes: int = 30, epochs=100,
 
 
 
-def normalize_number(observed, threshold = 0.15):
+def normalize_number(observed):
     sorted = np.sort(observed)
     a = sorted[-1]
     b = sorted[-2]
     normalized = np.zeros(len(observed))
-    if a - b > threshold:
+    if a - b > 0.15:
         normalized[np.where(observed == a)[0][0]] = 1
     return normalized
 
-def recognize_number_error(observed, result, threshold):
-    return np.count_nonzero(result != normalize_number(observed,threshold))
+def recognize_number_error(observed, result):
+    return np.count_nonzero(result != normalize_number(observed))
 
 
 def MultilayerPerceptronMnistRecognizeNumber(probability, hidden_layer_nodes: int = 30, epochs=200, epoch_size=30,

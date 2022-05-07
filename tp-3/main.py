@@ -39,9 +39,14 @@ def ej3():
         probability=0.2, epochs=mnist_epochs, epoch_size=it) for it in iterations])
 
     # plots
-    Plots.iterations_vs_error(iterations, results_xor, xor_epochs, "Multilayer perceptron xor")
-    Plots.iterations_vs_error(iterations, results_even, mnist_epochs, "Multilayer perceptron even or odd")
-    Plots.iterations_vs_error(iterations, results_recognize, mnist_epochs, "Multilayer perceptron recognize number")
+    Plots.iterations_vs_error_training(iterations, results_xor, xor_epochs, "Multilayer perceptron xor")
+    Plots.iterations_vs_error_training(iterations, results_even, mnist_epochs, "Multilayer perceptron even or odd")
+    Plots.iterations_vs_error_training(iterations, results_recognize, mnist_epochs, "Multilayer perceptron recognize number")
+    Plots.iterations_vs_error_testing(iterations, results_xor, xor_epochs, "Multilayer perceptron xor")
+    Plots.iterations_vs_error_testing(iterations, results_even, mnist_epochs, "Multilayer perceptron even or odd")
+    Plots.iterations_vs_error_testing(iterations, results_recognize, mnist_epochs, "Multilayer perceptron recognize number")
+
+    # Plots.epoch_vs_metric(results[], xor_epochs, , f'Multilayer perceptron xor {}')
 
     # ws = MultilayerPerceptronMnistRecognizeNumber(probability=0.02,)
 
