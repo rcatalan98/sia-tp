@@ -1,6 +1,17 @@
 from matplotlib import pyplot as plt, colors as mcolors
-
-
+import numpy as np
+def hyperplane(w,b):
+    points_x = [-1,-1,1,1]
+    points_y = [-1,1,-1,1]
+    plt.scatter(points_x,points_y)
+    x = np.array([-1,1])
+    print(w)
+    m = - w[0]/w[1]
+    bias = -b/w[1]
+    range_x = np.array([-1,-0.5,0,0.5,1])
+    plt.plot(range_x,m*range_x+bias)
+    plt.draw()
+    plt.show()
 def iterations_vs_error_training(iterations, results, epochs, title: str = None):
     css4, xkcd = get_colors(len(iterations))
 
