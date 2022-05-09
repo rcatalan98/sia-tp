@@ -17,8 +17,37 @@ def ej1():
 
 def ej2():
     print("Running exercise 2...")
-    LinearPerceptron()  # iterations=500, epochs=100, learning_rate=0.0001
-    NotLinearPerceptron()  # iterations=100, epochs=5000, learning_rate=0.01
+    iterations = [1, 5, 10, 50, 75, 100, 200]
+    learning_rates = [0.001,0.005, 0.008,0.01]
+    betas = [0.25,0.5, 1]
+    epochs_non_linear = 1000
+    epochs_linear = 100
+    # LinearPerceptron()      # iterations=500, epochs=100, learning_rate=0.0001
+    #to define the number of iterations
+    results_linear = np.array([LinearPerceptron(epochs=epochs_linear,iterations=it, learning_rate=lr)
+                                for it in iterations
+                                for lr in learning_rates
+                                ])
+    print("Linear Calculations ended")
+    # results_non_linear = [NotLinearPerceptron(epochs=epochs_non_linear)]
+    results_non_linear = np.array(
+        [NotLinearPerceptron(iterations=it, learning_rate=lr, b=beta,epochs=epochs_non_linear)
+         for it in iterations
+         for lr in learning_rates
+         for beta in betas
+         ]
+    )
+    print("Non Linear Calculations ended")
+    Plots.iterations_vs_error_testing(iterations,results_linear,epochs_linear,"Linear Perceptron", "")
+    Plots.iterations_vs_error_testing(learning_rates,results_linear,epochs_linear, "Linear Perceptron Learning rate")
+
+    Plots.iterations_vs_error_testing(iterations,results_non_linear,epochs_non_linear,"NonLinear Iterations")
+    Plots.iterations_vs_error_testing(learning_rates, results_non_linear, epochs_non_linear, "NonLinear Learning Rates")
+    Plots.iterations_vs_error_testing(betas, results_non_linear, epochs_non_linear, "NonLinear Betas")
+
+    #to define learning rate
+    
+    # NotLinearPerceptron()   # iterations=100, epochs=5000, learning_rate=0.01
 
 
 def ej3():
@@ -111,5 +140,5 @@ def ej3():
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     # ej1()
-    # ej2()
-    ej3()
+    ej2()
+    # ej3()
