@@ -15,6 +15,23 @@ def hyperplane(w,b):
     plt.draw()
     plt.show()
 
+def testing_and_training_vs_error(iterations_or_beta, results, epochs, title: str = None, suptitle: str = None,
+                                 legend_title: str = None):
+    css4, xkcd = get_colors(len(iterations_or_beta)*2)
+
+    epochs_x = [i for i in range(1, epochs + 1)]
+    for i in range(len(iterations_or_beta)):
+        plt.plot(epochs_x, results[i]["training_error"], label=f"Training", color=css4[i])
+        plt.plot(epochs_x,results[i]["testing_error"],label=f"Testing", color=css4[i+1])
+
+    plt.xlabel('epoch')
+    plt.ylabel('error')
+    plt.title(f'{title} - training set')
+    plt.suptitle(suptitle)
+
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), title=legend_title)
+    plt.tight_layout()
+    plt.show()
 
 def iterations_vs_error_training(iterations_or_beta, results, epochs, title: str = None, suptitle: str = None,
                                  legend_title: str = None):
