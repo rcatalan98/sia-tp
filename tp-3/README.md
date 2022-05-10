@@ -34,14 +34,9 @@ $ pip3 install -r requirements.txt
 
 ## Ejecución
 
-[comment]: <> (TODO: completar)
-
-
-## Configuración
-
-[comment]: <> (TODO: completar)
-
-
+```bash
+$ python3 main.py
+```
   
 
 
