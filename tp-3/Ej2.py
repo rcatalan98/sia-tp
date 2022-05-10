@@ -43,7 +43,7 @@ def LinearPerceptron(iterations=500, epochs=100, learning_rate=0.0001, training_
 
 
 
-def NotLinearPerceptron(iterations=100, epochs=5000, learning_rate=0.01, b=beta):
+def NotLinearPerceptron(iterations=100, epochs=5000, learning_rate=0.01, b=beta, training_ratio= 0.8):
     with open("train_dataset.txt", 'r') as file:
         input = [[float(a) for a in i.split(',')] for i in file.readlines()]
 
@@ -52,11 +52,12 @@ def NotLinearPerceptron(iterations=100, epochs=5000, learning_rate=0.01, b=beta)
 
     list_of_globals = globals()
     list_of_globals['beta'] = b
+    limit = math.floor(len(input) * training_ratio)
     input, results = shuffle_data(input, results)
-    training_data_input = input[:180]
-    training_data_output = results[:180]
-    test_data_input = input[180:]
-    test_data_output = results[180:]
+    training_data_input = input[:limit]
+    training_data_output = results[:limit]
+    test_data_input = input[limit:]
+    test_data_output = results[limit:]
 
     nn = NNBuilder.with_input(3).with_output_layer(1, sigmoid, sigmoid_derived)
 

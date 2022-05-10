@@ -18,12 +18,16 @@ def ej1():
 def ej2():
     print("Running exercise 2...")
     iterations = [5, 10, 50, 75, 100, 200]
+    iterations = [100]  # 200 para lineal, 100 para no lineal
     learning_rates = [0.005, 0.008, 0.01, 0.015]
+    learning_rates = [0.01]     # 0.01 en ambos casos
     betas = [0.5, 0.8, 1]
-    training_ratios = [0.1, 0.3, 0.5, 0.7, 0.8,0.9]
-    epochs_non_linear = 100
+    betas = [1]     # 1 para no lineal, nada para lineal
+    training_ratios = [0.3, 0.5, 0.7, 0.8, 0.9]
+    # training_ratios = [0.8]     # 0.8 en ambos casos
+    epochs_non_linear = 50
     epochs_linear = 100
-    # LinearPerceptron()      # iterations=500, epochs=100, learning_rate=0.0001
+
     # to define the number of iterations
     results_linear = np.array(
         [LinearPerceptron(epochs=epochs_linear, iterations=it, learning_rate=lr, training_ratio=tr_ratio)
@@ -34,28 +38,31 @@ def ej2():
     best_linear = np.array([LinearPerceptron(epochs=epochs_linear, iterations=200, learning_rate=0.01, training_ratio=0.8)])
     print("Linear Calculations ended")
     # results_non_linear = [NotLinearPerceptron(epochs=epochs_non_linear)]
-    # results_non_linear = np.array(
-    #     [NotLinearPerceptron(iterations=it, learning_rate=lr, b=beta,epochs=epochs_non_linear)
-    #      for it in iterations
-    #      for lr in learning_rates
-    #      for beta in betas
-    #      ]
-    # )
-    # best_non_linear = np.array([NotLinearPerceptron(100, epochs_non_linear, 0.01, 1)])
+    results_non_linear = np.array(
+        [NotLinearPerceptron(iterations=it, learning_rate=lr, b=beta,epochs=epochs_non_linear, training_ratio=tr)
+         for it in iterations
+         for lr in learning_rates
+         for beta in betas
+         for tr in [1]
+         ]
+    )
+    best_non_linear = np.array([NotLinearPerceptron(100, epochs_non_linear, 0.01, 1)])
     print("Non Linear Calculations ended")
-    Plots.iterations_vs_error_testing(iterations,results_linear,epochs_linear,"Linear Perceptron", "Choosing iterations", "Iterations")
-    Plots.iterations_vs_error_testing(learning_rates,results_linear,epochs_linear, "Linear Perceptron", "Choosing learning rate", "Learning Rate")
-    Plots.iterations_vs_error_testing(training_ratios,results_linear,epochs_linear, "Linear Perceptron", "Choosing training ratio", "Training Ratio")
+    # Plots.iterations_vs_error_testing(iterations,results_linear,epochs_linear,"Linear Perceptron", "Choosing iterations", "Iterations")
+    # Plots.iterations_vs_error_testing(learning_rates,results_linear,epochs_linear, "Linear Perceptron", "Choosing learning rate", "Learning Rate")
+    # Plots.iterations_vs_error_testing(training_ratios,results_linear,epochs_linear, "Linear Perceptron", "Choosing training ratio", "Training Ratio")
     Plots.iterations_vs_error_testing([200], best_linear, epochs_linear, f'Iteraciones = {200}, learning rate = {0.01}',
                                       "Linear Perceptron", one_value=True)
 
     # Plots.iterations_vs_error_testing(iterations,results_non_linear,epochs_non_linear,"NonLinear Perceptron", "Choosing Iterations", "Iterations")
     # Plots.iterations_vs_error_testing(learning_rates, results_non_linear, epochs_non_linear, "NonLinear Perceptron", "Choosing learning rate", "Learning Rate")
     # Plots.iterations_vs_error_testing(betas, results_non_linear, epochs_non_linear, "NonLinear Perceptron", "Choosing Beta", "Beta")
-    # Plots.iterations_vs_error_testing([100], best_non_linear, epochs_non_linear,
-    #                                   f'Iteraciones = {100}, learning rate = {0.01}, beta = {1}',
-    #                                   "Non Linear Perceptron",
-    #                                   one_value=True)
+    Plots.iterations_vs_error_testing([100], best_non_linear, epochs_non_linear,
+                                      f'Iteraciones = {100}, learning rate = {0.01}, beta = {1}',
+                                      "Non Linear Perceptron",
+                                      one_value=True)
+    # Plots.iterations_vs_error_testing(training_ratios,results_non_linear,epochs_non_linear,"NonLinear Perceptron", "Choosing training ratio", "Training ratio")
+
     # to define learning rate
 
     # NotLinearPerceptron()   # iterations=100, epochs=5000, learning_rate=0.01
