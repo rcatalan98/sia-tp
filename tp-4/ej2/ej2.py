@@ -1,8 +1,7 @@
 import random
-import numpy as np
 
-from hopfield import Hopfield
-from letters import get_letters_patterns
+from ej2.hopfield import Hopfield
+from ej2.letters import get_letters_patterns
 
 
 def ej2():
