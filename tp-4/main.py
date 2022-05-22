@@ -1,4 +1,4 @@
-from ej2 import ej2
+from ej2.ej2 import ej2
 
 
 # Press the green button in the gutter to run the script.
