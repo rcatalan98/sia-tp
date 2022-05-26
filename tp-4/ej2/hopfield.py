@@ -1,5 +1,6 @@
-import math
 import numpy as np
+
+from ej2.utils import print_pattern, sign
 
 
 class Hopfield:
@@ -13,17 +14,24 @@ class Hopfield:
         self.w = np.dot(self.stored_patterns.T, self.stored_patterns) / self.N
         np.fill_diagonal(self.w, 0)
 
-    def run(self, query_pattern):
+    def run(self, query_pattern, print_states=True, max_iter=100):
         # 3 - vector de estados iniciales S(0)
         states = np.array(query_pattern)
         prev_states = np.zeros(self.N)
+        i = 0
+        energies = []
 
         # 4 - iteracion hasta la convergencia: actualizar el vector S(t) hasta que permanezca estable
         # Los pesos permanecen fijos y en cada paso cambian los estados
-        while not np.array_equal(states, prev_states):  # TODO: max iterations?
-            # TODO: print states
+        # Siempre converge pero ponemos una cota para casos borde en los cuales le toma muchos pasos
+        # Dichos casos deberan ser descartados
+        while not np.array_equal(states, prev_states) and i < max_iter:
+            if print_states:
+                print_pattern(states, 5)
+            energies.append(self.calculate_energy(states))
             prev_states = states
             states = self.next_states(states)
+            i += 1
 
         # 5 - salida: el patron asociado al ultimo estado calculado
         spurious_state = True
@@ -33,7 +41,7 @@ class Hopfield:
                 spurious_state = False
                 break
 
-        return states, spurious_state
+        return states, spurious_state, i, energies
 
     def next_states(self, current_states):
         next_states = np.zeros(self.N)
@@ -43,6 +51,16 @@ class Hopfield:
             for j in range(self.N):
                 if not j == i:
                     sum += self.w[i][j] * current_states[j]
-            next_states[i] = math.fabs(sum)
+            next_states[i] = sign(sum)
 
         return next_states
+
+    def calculate_energy(self, states):
+        # H = -sum(j > i, Wij * Si * Sj)
+        h = 0
+
+        for i in range(self.N):
+            for j in range(i + 1, self.N):
+                h += self.w[i][j] * states[i] * states[j]
+
+        return -h
