@@ -8,11 +8,9 @@ import ej2.plots as plots
 
 
 def ej2():
-    probability_list = [0.01, 0.02, 0.05, 0.1, 0.25, 0.5]
-    probability_list = [0.05, 0.2]  # todo: delete
+    probability_list = [0.02, 0.05, 0.1, 0.2, 0.3, 0.4]
     letter_list = ['A', 'L', 'T', 'X']
-    letter_list = ['A', 'L']  # todo: delete
-    times = 20
+    times = 100
 
     patterns = get_letters_patterns(letter_list)
     hopfield = Hopfield(patterns)
@@ -20,7 +18,6 @@ def ej2():
     dictionary = {}
 
     for i in range(len(patterns)):
-        total_spurious_states = 0
         dictionary[letter_list[i]] = {}
         for probability in probability_list:
             inner_dictionary = {
@@ -30,6 +27,7 @@ def ej2():
                     "iterations_avg": 0
             }
             iter_avg = 0
+            total_spurious_states = 0
             for t in range(times):
                 iterations = 100
                 while iterations > 15:  # el ayudante dijo que ignoremos los casos en los que no converge rapido
@@ -49,7 +47,7 @@ def ej2():
                 inner_dictionary.get("hopfield_run").append(aux)
 
                 if spurious_state:
-                    total_spurious_states = total_spurious_states + 1
+                    total_spurious_states += 1
 
             inner_dictionary.update({"total_spurious_states": total_spurious_states})
             inner_dictionary.update({"iterations_avg": iter_avg / times})
@@ -59,30 +57,27 @@ def ej2():
 
 
 def plot(dictionary, times):
-    for letter in dictionary:
-        iterations_avg_list = []
-        spurious_states_list = []
-        probability_list = dictionary[letter].keys()
+    letter = 'A'
+    probability = 0.2
+    energies_list = []
+    iterations_list = []
 
-        for probability in dictionary[letter]:
-            energies_and_iterations_list = []
-            inner_dict = dictionary[letter][probability]
-            iterations_avg_list.append(inner_dict["iterations_avg"])
-            spurious_states_list.append(inner_dict["total_spurious_states"])
+    for run in dictionary[letter][probability]["hopfield_run"]:
+        energies_list.append(run["energies"])
+        iterations_list.append(run["iterations"])
 
-            for run in inner_dict["hopfield_run"]:
-                energies_and_iterations_list.append((run["energies"], run["iterations"]))
+    suptitle = f'Evolución de la energía'
+    title = f'Letra: {letter}, Probabilidad de ruido: {probability}'
+    plots.energy_vs_iterations(energies_list, iterations_list, suptitle, title)
 
-            suptitle = f'Evolución de la energía'
-            title = f'Letra: {letter}, Probabilidad de ruido: {probability}'
-            plots.energy_vs_iterations(energies_and_iterations_list, suptitle, title)
+    suptitle = f'Cantidad de iteraciones promedio variando la probabilidad de ruido'
+    title = f'Ejecuciones (por cada probabilidad): {times}'
+    ylabel = f'Iteraciones promedio'
+    plots.noise_probability_vs_data(dictionary, "iterations_avg", suptitle, title, ylabel)
 
-        suptitle = f'Cantidad de iteraciones promedio variando la probabilidad de ruido'
-        title = f'Letra: {letter}, Ejecuciones (por cada probabilidad): {times}'
-        plots.noise_probability_vs_iterations(probability_list, iterations_avg_list, suptitle, title)
-
-        suptitle = f'Cantidad de estados espureos variando la probabilidad de ruido'
-        plots.noise_probability_vs_spurious_states(probability_list, spurious_states_list, suptitle, title)
+    suptitle = f'Cantidad de estados espureos variando la probabilidad de ruido'
+    ylabel = f'Estados espureos'
+    plots.noise_probability_vs_data(dictionary, "total_spurious_states", suptitle, title, ylabel)
 
 
 def noise(pattern, probability):
