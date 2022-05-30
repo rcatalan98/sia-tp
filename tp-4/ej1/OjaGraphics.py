@@ -11,3 +11,13 @@ def draw_pc1(data, countries):
         ax.barh(country, widths, height=1, label=country)
 
     plt.show()
+
+def draw_autovectors(pca, name_components):
+    fig, ax = plt.subplots(figsize=(20, 10))
+    ax.xaxis.set_visible(True)
+    ax.set_xlim(math.floor(min(pca)), math.ceil(max(pca)))
+
+    for i, autovector in enumerate(pca):
+        ax.barh(name_components[i], autovector, 1, label=name_components[i])
+
+    plt.show()
