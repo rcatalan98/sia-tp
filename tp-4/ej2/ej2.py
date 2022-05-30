@@ -34,8 +34,6 @@ def ej2():
                     pattern_with_noise = noise(patterns[i], probability)    # returns a new array doesn't modify patterns[i]
                     output_pattern, spurious_state, iterations, energies = hopfield.run(pattern_with_noise, print_states=False)
 
-                # TODO: print states
-
                 iter_avg += iterations
                 aux = {
                     "pattern_with_noise": pattern_with_noise,
@@ -68,15 +66,15 @@ def plot(dictionary, times):
 
     suptitle = f'Evolución de la energía'
     title = f'Letra: {letter}, Probabilidad de ruido: {probability}'
-    plots.energy_vs_iterations(energies_list, iterations_list, suptitle, title)
+    plots.energy_vs_iterations(energies_list, iterations_list, suptitle, title, times=5)
 
     suptitle = f'Cantidad de iteraciones promedio variando la probabilidad de ruido'
     title = f'Ejecuciones (por cada probabilidad): {times}'
     ylabel = f'Iteraciones promedio'
     plots.noise_probability_vs_data(dictionary, "iterations_avg", suptitle, title, ylabel)
 
-    suptitle = f'Cantidad de estados espureos variando la probabilidad de ruido'
-    ylabel = f'Estados espureos'
+    suptitle = f'Cantidad de estados espurios variando la probabilidad de ruido'
+    ylabel = f'Estados espurios'
     plots.noise_probability_vs_data(dictionary, "total_spurious_states", suptitle, title, ylabel)
 
 
@@ -99,6 +97,6 @@ def print_dictionary(dictionary):
     #     print(f'patron de salida:')
     #     print_pattern(output_pattern, 5)
     #     print(f'energia: {energies}')
-    # print(f'total de estados espureos: {total_spurious_states}')
+    # print(f'total de estados espurios: {total_spurious_states}')
 
     print()

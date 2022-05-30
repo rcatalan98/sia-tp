@@ -35,8 +35,11 @@ def noise_probability_vs_data(dictionary, field_name, suptitle, title, ylabel):
     plt.show()
 
 
-def energy_vs_iterations(energies_list, iterations_list, suptitle, title):
-    for i in range(1, len(energies_list)):
+def energy_vs_iterations(energies_list, iterations_list, suptitle, title, times=None):
+    if times is None:
+        times = len(energies_list)
+
+    for i in range(times):
         plt.plot(range(iterations_list[i]), energies_list[i], '-o')
 
     plt.xlabel('Iteraciones')
