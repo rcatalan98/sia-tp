@@ -15,7 +15,7 @@ class KohonenNetwork:
         for i in range(n):
             for j in range(n):
                 self.w[i, j] = self.values[random.randint(0, len(values) - 1)] if weightEntries \
-                    else np.random.uniform(0, 0, input_length)
+                    else np.random.uniform(0, 1, input_length)
 
     def train(self, epochs: int):
         for t in range(1, epochs):
@@ -52,6 +52,12 @@ class KohonenNetwork:
         distance = np.empty((self.n, self.n))
         for i, j in np.ndindex(distance.shape):
             distance[i,j] = np.average([np.linalg.norm(self.w[i, j] - n) for n in self.neighboring_neurons(i,j)])
+        return distance
+
+    def distance_matrix_by_feature(self,feature):
+        distance = np.empty((self.n, self.n))
+        for i, j in np.ndindex(distance.shape):
+            distance[i,j] = np.average([np.linalg.norm(self.w[i, j,feature] - n[feature]) for n in self.neighboring_neurons(i,j)])
         return distance
 
     def neighboring_neurons(self,i,j,radius = 1):

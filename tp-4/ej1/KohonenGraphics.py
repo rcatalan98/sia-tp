@@ -27,7 +27,7 @@ def draw_countries_in_neurons(groups):
     plt.figure(figsize=groups.shape)
     plt.xticks(np.arange(float(kohonen_net_size)))
     plt.yticks(np.arange(float(kohonen_net_size)))
-    plt.title("Cantidad de registros que van en cada nodo")
+    # plt.title("Cantidad de registros que van en cada nodo")
 
     im = plt.imshow(groups)
     divider = make_axes_locatable(plt.gca())
@@ -39,7 +39,7 @@ def draw_avg_distance(kohonen_net_size, distance_matrix):
     plt.figure(figsize=(kohonen_net_size , kohonen_net_size ))
     plt.xticks(np.arange(float(kohonen_net_size)))
     plt.yticks(np.arange(float(kohonen_net_size)))
-    plt.title("Distancia promedio entre una neurona y sus vecinas")
+    # plt.title("Distancia promedio entre una neurona y sus vecinas")
     im = plt.imshow(np.squeeze(distance_matrix))
     divider = make_axes_locatable(plt.gca())
     cax = divider.append_axes('right', size='5%', pad=0.05)
@@ -47,14 +47,13 @@ def draw_avg_distance(kohonen_net_size, distance_matrix):
     plt.show()
 
 
-def draw_umatrix_per_feature(features,w,kohonen_net_size):
+def draw_umatrix_per_feature(features,net,kohonen_net_size):
     fig, axs = plt.subplots(4, 2, figsize=(20, 40))
     get_dual_index = lambda x: (int(x / 2), int(x % 2))
     fig.delaxes(axs[get_dual_index(7)])
 
     for i, header in enumerate(features):
-        data = np.array([w[x, y, i] for x, y in np.ndindex((kohonen_net_size, kohonen_net_size))]) \
-            .reshape(kohonen_net_size, kohonen_net_size)
+        data = net.distance_matrix_by_feature(i);
         chart = axs[get_dual_index(i)]
         chart.set_title(header)
         im = chart.imshow(np.squeeze(data))
