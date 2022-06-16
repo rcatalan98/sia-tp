@@ -50,10 +50,14 @@ class NeuralNetwork:
         self.bias = []
         self.activation_functions = []
         self.derived_functions = []
+        self.prev_delta = []
+        self.prev_derivative = []
         for layer in layers:
             self.bias.append(np.random.uniform(-1.0, 1.0, (layer[0], 1)))
             self.activation_functions.append(np.vectorize(layer[1]))
             self.derived_functions.append(np.vectorize(layer[2]))
+            self.prev_delta.append(None)
+            self.prev_derivative.append(None)
 
         self.layer_count = len(layers)
 
@@ -97,17 +101,28 @@ class NeuralNetwork:
         errors.reverse()
 
         input_for_each_layer = [data_point] + output_values
+
         for i in reversed(range(self.layer_count)):
             gradient = self.derived_functions[i](excitement_values[i])
             gradient = gradient * errors[i]
             gradient = gradient * learning_rate
-            self.bias[i] = self.bias[i] + gradient
+
+            derivative_momentum = 0.9 * (self.prev_derivative[i] if self.prev_derivative[i] is not None else 0)
+            self.prev_derivative[i] = self.derived_functions[i](excitement_values[i])
+
+            self.bias[i] += gradient + derivative_momentum
+
             delta_w = np.dot(gradient, input_for_each_layer[i].T)
-            self.w[i] += delta_w
+
+            delta_w_momentum = 0.9 * (self.prev_delta[i]if self.prev_delta[i] is not None else 0)
+
+            self.w[i] += delta_w + delta_w_momentum
+            self.prev_delta[i] = delta_w
+
 
         return self.w, self.bias
 
-    def train_on_dataset(self, dataset, expected_results, epochs, epoch_size, learning_rate):
+    def train_on_dataset(self, dataset, expected_results, epochs, learning_rate):
         errors = []
         best_w = None
         min_error = float("inf")
@@ -115,10 +130,10 @@ class NeuralNetwork:
         b = []
         ws = []
         bs = []
+
         for _ in range(epochs):
-            for _ in range(epoch_size):
-                i = random.randint(0, len(expected_results) - 1)
-                (w, b) = self.train_on_datapoint(dataset[i], expected_results[i], learning_rate)
+            for i,data in enumerate(dataset):
+                (w, b) = self.train_on_datapoint(data, expected_results[i], learning_rate)
             errors.append(self.get_error_on_dataset(dataset, expected_results))
             ws.append(copy.deepcopy(w))
             bs.append(copy.deepcopy(b))
