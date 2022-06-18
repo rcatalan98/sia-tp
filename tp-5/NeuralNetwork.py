@@ -12,9 +12,9 @@ from Utils import chunks, flatten_array
 # Error
 def E(w, *args):
     input, expected_output, layer_count, activation_functions = args
-    s= 0.5 * sum((expected_output[i] - train_on_datapoint_with_params(
+    s= 0.5 * sum(sum((expected_output[i] - train_on_datapoint_with_params(
         input[i], layer_count, w, activation_functions)) ** 2
-               for i in range(len(input)))
+               for i in range(len(input))))
     print(s)
     return s
 
