@@ -4,8 +4,33 @@ import random
 from typing import List, Tuple, Callable
 
 import numpy as np
+from scipy import optimize
 
 from Utils import chunks, flatten_array
+
+
+# Error
+def E(w, *args):
+    input, expected_output, layer_count, activation_functions = args
+    s= 0.5 * sum((expected_output[i] - train_on_datapoint_with_params(
+        input[i], layer_count, w, activation_functions)) ** 2
+               for i in range(len(input)))
+    print(s)
+    return s
+
+
+def train_on_datapoint_with_params(data_point, layer_count, w, activation_functions):
+    data_point = np.array(data_point).reshape((len(data_point), 1))
+    output_values = []
+    entry = data_point
+
+    for i in range(layer_count):
+        value = np.dot(w[i], entry)
+        output = activation_functions[i](value)
+        # output_values.append(output)
+        entry = output
+
+    return entry.reshape(entry.size)
 
 
 class NNBuilder:
@@ -69,7 +94,7 @@ class NeuralNetwork:
 
         entry = data_point
         for i in range(self.layer_count):
-            value = np.dot(w[i], entry) + b[i]
+            value = np.dot(w[i], entry)
             entry = self.activation_functions[i](value)
 
         return entry.reshape(entry.size)
@@ -119,7 +144,6 @@ class NeuralNetwork:
             self.w[i] += delta_w + delta_w_momentum
             self.prev_delta[i] = delta_w
 
-
         return self.w, self.bias
 
     def train_on_dataset(self, dataset, expected_results, epochs, learning_rate):
@@ -131,18 +155,28 @@ class NeuralNetwork:
         ws = []
         bs = []
 
-        for _ in range(epochs):
-            for i,data in enumerate(dataset):
-                (w, b) = self.train_on_datapoint(data, expected_results[i], learning_rate)
-            errors.append(self.get_error_on_dataset(dataset, expected_results))
-            ws.append(copy.deepcopy(w))
-            bs.append(copy.deepcopy(b))
+        # for _ in range(epochs):
+        #     for i,data in enumerate(dataset):
+        #         (w, b) = self.train_on_datapoint(data, expected_results[i], learning_rate)
+        #     errors.append(self.get_error_on_dataset(dataset, expected_results))
+        #     ws.append(copy.deepcopy(w))
+        #     bs.append(copy.deepcopy(b))
+        #
+        #     if errors[-1] < min_error:
+        #         min_error = errors[-1]
+        #         best_w = copy.deepcopy(w)
 
-            if errors[-1] < min_error:
-                min_error = errors[-1]
-                best_w = copy.deepcopy(w)
+        x0 = []
+        for m in self.w:
+            x0 += list(np.asarray(m).reshape(-1))
 
-        self.w = best_w
+        result = optimize.minimize(E, x0=np.asarray(x0), method='Powell', options={'maxiter': 1000, 'disp': True},
+                                   args=(dataset, expected_results, self.layer_count, self.activation_functions))
+
+        self.w = result.x
+        ws = result.x
+        errors = result.fun
+
         return errors, ws, bs
 
     def get_distance_on_datapoint(self, observed_result, expected_result):
