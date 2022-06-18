@@ -19,7 +19,7 @@ def derivative(e):
 if __name__ == '__main__':
     fonts = get_all_fonts(2, True)
     font_count = len(fonts)
-
+    print(f'font_count: {font_count}')
     beta = 0.5
 
     # nn = NNBuilder \
@@ -44,9 +44,9 @@ if __name__ == '__main__':
 
     # np.random.shuffle(fonts)
     idx = math.floor(font_count * .5)
-    training, test = np.array(fonts[:idx]), np.array(fonts[idx:])
+    training, test = np.array(fonts[:5]), np.array(fonts[idx:])
 
-    training_errors, ws, bs = nn.train_on_dataset(training, training, 15000, 0.0005)
+    training_errors, ws = nn.train_on_dataset(training, training)
 
     # print(f"training error: {training_errors[-1]}")
     # print(f"testing error: {nn.get_error_on_dataset(test, test)}")
@@ -54,6 +54,6 @@ if __name__ == '__main__':
     aa = test[0]
     value = nn.feed_forward(aa)
 
-    print_character(aa.reshape(7, 5))
+    print(print_character(aa.reshape(7, 5)))
 
-    print_character(value.reshape(7, 5))
+    print(print_character(value.reshape(7, 5)))

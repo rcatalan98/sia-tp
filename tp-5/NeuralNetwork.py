@@ -4,33 +4,10 @@ import random
 from typing import List, Tuple, Callable
 
 import numpy as np
+from numpy import mean
 from scipy import optimize
 
 from Utils import chunks, flatten_array
-
-
-# Error
-def E(w, *args):
-    input, expected_output, layer_count, activation_functions = args
-    s= 0.5 * sum(sum((expected_output[i] - train_on_datapoint_with_params(
-        input[i], layer_count, w, activation_functions)) ** 2
-               for i in range(len(input))))
-    print(s)
-    return s
-
-
-def train_on_datapoint_with_params(data_point, layer_count, w, activation_functions):
-    data_point = np.array(data_point).reshape((len(data_point), 1))
-    output_values = []
-    entry = data_point
-
-    for i in range(layer_count):
-        value = np.dot(w[i], entry)
-        output = activation_functions[i](value)
-        # output_values.append(output)
-        entry = output
-
-    return entry.reshape(entry.size)
 
 
 class NNBuilder:
@@ -66,17 +43,20 @@ class NeuralNetwork:
         b = flatten_array(a)
         c = b[1:-1]
         d = chunks(c, 2)
+        self.iterations = 0
 
         self.w = []
-
+        self.shapes = []
         for (prev, next) in d:
             self.w.append(np.random.uniform(-1.0, 1.0, (next[0], prev[0])))
+            self.shapes.append((next[0], prev[0]))
 
         self.bias = []
         self.activation_functions = []
         self.derived_functions = []
         self.prev_delta = []
         self.prev_derivative = []
+
         for layer in layers:
             self.bias.append(np.random.uniform(-1.0, 1.0, (layer[0], 1)))
             self.activation_functions.append(np.vectorize(layer[1]))
@@ -139,45 +119,31 @@ class NeuralNetwork:
 
             delta_w = np.dot(gradient, input_for_each_layer[i].T)
 
-            delta_w_momentum = 0.9 * (self.prev_delta[i]if self.prev_delta[i] is not None else 0)
+            delta_w_momentum = 0.9 * (self.prev_delta[i] if self.prev_delta[i] is not None else 0)
 
             self.w[i] += delta_w + delta_w_momentum
             self.prev_delta[i] = delta_w
 
         return self.w, self.bias
 
-    def train_on_dataset(self, dataset, expected_results, epochs, learning_rate):
-        errors = []
-        best_w = None
-        min_error = float("inf")
-        w = []
-        b = []
-        ws = []
-        bs = []
+    def iteration_callback(self, x):
+        self.iterations += 1
+        print(f"ITERATION {self.iterations}")
 
-        # for _ in range(epochs):
-        #     for i,data in enumerate(dataset):
-        #         (w, b) = self.train_on_datapoint(data, expected_results[i], learning_rate)
-        #     errors.append(self.get_error_on_dataset(dataset, expected_results))
-        #     ws.append(copy.deepcopy(w))
-        #     bs.append(copy.deepcopy(b))
-        #
-        #     if errors[-1] < min_error:
-        #         min_error = errors[-1]
-        #         best_w = copy.deepcopy(w)
+    def train_on_dataset(self, dataset, expected_results):
 
         x0 = []
         for m in self.w:
             x0 += list(np.asarray(m).reshape(-1))
 
-        result = optimize.minimize(E, x0=np.asarray(x0), method='Powell', options={'maxiter': 1000, 'disp': True},
-                                   args=(dataset, expected_results, self.layer_count, self.activation_functions))
+        result = optimize.minimize(self.E, x0=np.asarray(x0), method='Powell', options={'maxiter': 50, 'disp': True},
+                                   args=(dataset, expected_results, self.layer_count, self.activation_functions),
+                                   callback=self.iteration_callback)
 
-        self.w = result.x
-        ws = result.x
+        self.w = self.unflatten(result.x)
         errors = result.fun
 
-        return errors, ws, bs
+        return errors, self.w
 
     def get_distance_on_datapoint(self, observed_result, expected_result):
         return expected_result - observed_result
@@ -186,3 +152,39 @@ class NeuralNetwork:
         errors = [self.error_function(self.feed_forward(dataset[i], w=w, b=b), results[i]) for i in
                   range(len(results))]
         return np.average(errors)
+
+    def unflatten(self, w):
+        w_unflatten = []
+        last_pos = 0
+
+        # unflatten w
+        for i in range(len(self.shapes)):
+            next = self.shapes[i][0]
+            prev = self.shapes[i][1]
+            w_unflatten.append(np.reshape(w[last_pos:last_pos + next * prev], self.shapes[i]))
+            last_pos += next * prev
+        return w_unflatten
+
+    # Error
+    def E(self, w, *args):
+        input, expected_output, layer_count, activation_functions = args
+
+        w_unflatten = self.unflatten(w)
+
+        s = np.average(
+                 sum(1/2 * (expected_output[i] - self.train_on_datapoint_with_params(
+                     input[i], layer_count, w_unflatten, activation_functions)) ** 2
+                     for i in range(len(input)))
+                 )
+        return s
+
+    def train_on_datapoint_with_params(self, data_point, layer_count, w, activation_functions):
+        data_point = np.array(data_point).reshape((len(data_point), 1))
+        entry = data_point
+
+        for i in range(layer_count):
+            value = np.dot(w[i], entry)
+            output = activation_functions[i](value)
+            entry = output
+
+        return entry.reshape(entry.size)
