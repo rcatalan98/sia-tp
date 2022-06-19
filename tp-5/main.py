@@ -1,3 +1,5 @@
+from time import perf_counter
+
 from test_fonts import *
 from NeuralNetwork import *
 
@@ -22,34 +24,28 @@ if __name__ == '__main__':
     print(f'font_count: {font_count}')
     beta = 0.5
 
-    # nn = NNBuilder \
-    #     .with_input(7 * 5) \
-    #     .with_hidden_layer(30, activation, derivative) \
-    #     .with_hidden_layer(20, activation, derivative) \
-    #     .with_hidden_layer(10, activation, derivative) \
-    #     .with_hidden_layer(5, activation, derivative) \
-    #     .with_hidden_layer(2, activation, derivative) \
-    #     .with_hidden_layer(5, activation, derivative) \
-    #     .with_hidden_layer(10, activation, derivative) \
-    #     .with_hidden_layer(20, activation, derivative) \
-    #     .with_hidden_layer(30, activation, derivative) \
-    #     .with_output_layer(7 * 5, activation, derivative)
-
     nn = NNBuilder \
         .with_input(7 * 5) \
+        .with_hidden_layer(20, activation, derivative) \
         .with_hidden_layer(10, activation, derivative) \
+        .with_hidden_layer(5, activation, derivative) \
         .with_hidden_layer(2, activation, derivative) \
+        .with_hidden_layer(5, activation, derivative) \
         .with_hidden_layer(10, activation, derivative) \
+        .with_hidden_layer(20, activation, derivative) \
         .with_output_layer(7 * 5, activation, derivative)
 
-    # np.random.shuffle(fonts)
-    idx = math.floor(font_count * .5)
-    training, test = np.array(fonts[:5]), np.array(fonts[idx:])
+    np.random.shuffle(fonts)
+    idx = math.floor(font_count * 0.5)
+    idx = 5
+    training, test = np.array(fonts[:idx]), np.array(fonts[idx:])
 
-    training_errors, ws = nn.train_on_dataset(training, training)
+    t0 = perf_counter()
+    training_errors, ws = nn.train_on_dataset(training, training, 10)
+    tf = perf_counter()
 
-    # print(f"training error: {training_errors[-1]}")
-    # print(f"testing error: {nn.get_error_on_dataset(test, test)}")
+    print(f'execution time: {tf - t0} s')
+    print(f"training error: {training_errors}")
 
     aa = test[0]
     value = nn.feed_forward(aa)

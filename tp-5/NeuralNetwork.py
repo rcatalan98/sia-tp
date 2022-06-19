@@ -130,15 +130,16 @@ class NeuralNetwork:
         self.iterations += 1
         print(f"ITERATION {self.iterations}")
 
-    def train_on_dataset(self, dataset, expected_results):
+    def train_on_dataset(self, dataset, expected_results, maxiter=10):
 
         x0 = []
         for m in self.w:
             x0 += list(np.asarray(m).reshape(-1))
 
-        result = optimize.minimize(self.E, x0=np.asarray(x0), method='Powell', options={'maxiter': 50, 'disp': True},
+        result = optimize.minimize(self.E, x0=np.asarray(x0), method='Powell', options={'maxiter': maxiter, 'disp': True},
                                    args=(dataset, expected_results, self.layer_count, self.activation_functions),
-                                   callback=self.iteration_callback)
+                                   # callback=self.iteration_callback
+                                   )
 
         self.w = self.unflatten(result.x)
         errors = result.fun
