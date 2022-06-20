@@ -73,11 +73,14 @@ class NeuralNetwork:
         data_point = np.array(data_point).reshape((len(data_point), 1))
 
         entry = data_point
+        entry_list = [entry]
+
         for i in range(self.layer_count):
             value = np.dot(w[i], entry)
             entry = self.activation_functions[i](value)
+            entry_list.append(entry.reshape(entry.size))
 
-        return entry.reshape(entry.size)
+        return entry_list
 
     def train_on_datapoint(self, data_point, result, learning_rate: float):
         data_point = np.array(data_point).reshape((len(data_point), 1))
@@ -138,7 +141,7 @@ class NeuralNetwork:
 
         result = optimize.minimize(self.E, x0=np.asarray(x0), method='Powell', options={'maxiter': maxiter, 'disp': True},
                                    args=(dataset, expected_results, self.layer_count, self.activation_functions),
-                                   # callback=self.iteration_callback
+                                   callback=self.iteration_callback
                                    )
 
         self.w = self.unflatten(result.x)
@@ -150,7 +153,7 @@ class NeuralNetwork:
         return expected_result - observed_result
 
     def get_error_on_dataset(self, dataset, results, w=None, b=None, threshold=0.15):
-        errors = [self.error_function(self.feed_forward(dataset[i], w=w, b=b), results[i]) for i in
+        errors = [self.error_function(self.feed_forward(dataset[i], w=w, b=b)[-1], results[i]) for i in
                   range(len(results))]
         return np.average(errors)
 
