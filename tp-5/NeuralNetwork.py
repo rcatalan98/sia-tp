@@ -177,7 +177,7 @@ class NeuralNetwork:
 
         s = np.average(
                  sum(1/2 * (expected_output[i] - self.train_on_datapoint_with_params(
-                     input[i], layer_count, w_unflatten, activation_functions)) ** 2
+                     input[i], layer_count, w_unflatten, activation_functions) ) ** 2
                      for i in range(len(input)))
                  )
         return s
