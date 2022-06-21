@@ -66,7 +66,11 @@ class NeuralNetwork:
 
         self.layer_count = len(layers)
 
-    def feed_forward(self, data_point, w=None, b=None):
+    def feed_forward(self, data_point, w=None, b=None, encode=True, decode=True):
+        latent_space_layer = int(self.layer_count / 2)
+        start = 0 if encode else latent_space_layer
+        stop = self.layer_count if decode else latent_space_layer + 1
+
         w = self.w if w is None else w
         b = self.bias if b is None else b
 
@@ -75,7 +79,7 @@ class NeuralNetwork:
         entry = data_point
         entry_list = [entry]
 
-        for i in range(self.layer_count):
+        for i in range(start, stop):
             value = np.dot(w[i], entry)
             entry = self.activation_functions[i](value)
             entry_list.append(entry.reshape(entry.size))

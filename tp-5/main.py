@@ -28,16 +28,18 @@ if __name__ == '__main__':
 
     nn = NNBuilder \
         .with_input(7 * 5) \
+        .with_hidden_layer(30, activation, derivative) \
         .with_hidden_layer(20, activation, derivative) \
         .with_hidden_layer(10, activation, derivative) \
         .with_hidden_layer(2, activation, derivative) \
         .with_hidden_layer(10, activation, derivative) \
         .with_hidden_layer(20, activation, derivative) \
+        .with_hidden_layer(30, activation, derivative) \
         .with_output_layer(7 * 5, activation, derivative)
 
     # np.random.shuffle(fonts)
     idx = math.floor(font_count * 0.5)
-    idx = 5
+    idx = font_count
     input_fonts = np.array(fonts[:idx])
     expected_output = input_fonts
 
